@@ -1,0 +1,12 @@
+bin
+logs
+project/project
+project/target
+target
+tmp
+*.db
+
+.classpath
+.project
+.settings
+.cache
