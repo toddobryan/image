@@ -17,10 +17,10 @@ private[image] object Poly {
   def shape(vertices: List[Point], close: Boolean) = {
     val tl = Poly.topLeft(vertices)
     val path = new java.awt.geom.Path2D.Double
-    val transVs = (if (close) vertices else vertices.tail).map(p => p.translate(-tl.x, -tl.y))
-    val start = if (close) vertices.last else vertices.head
+    val transVs = vertices.map(p => p.translate(-tl.x, -tl.y))
+    val start = if (close) transVs.last else transVs.head
     path.moveTo(start.x, start.y)
-    for (v <- transVs) {
+    for (v <- (if (close) transVs else transVs.tail)) {
       path.lineTo(v.x, v.y)
     }
     path    
@@ -33,7 +33,12 @@ private[image] class Polygon(paint: Paint, vertices: List[Point]) extends ShapeF
 }
 
 object Polygon {  
-  def apply(paint: Paint, vertices: Point*) = new Polygon(paint, vertices.toList) 
+  def apply(
+      paint: Paint, 
+      vertex1: Point, vertex2: Point, vertex3: Point, 
+      restOfVertices: Point*): Image = {
+    new Polygon(paint, vertex1 :: vertex2 :: vertex3 :: restOfVertices.toList) 
+  }
 }
 
 private[image] class Polyline(pen: Pen, vertices: List[Point]) extends ShapeOutlined(pen) {
@@ -42,7 +47,11 @@ private[image] class Polyline(pen: Pen, vertices: List[Point]) extends ShapeOutl
 }
 
 object Polyline {
-  def apply(pen: Pen, vertices: Point*) = new Polyline(pen, vertices.toList)
-  def apply(color: java.awt.Color, vertices: Point*) = new Polyline(Pen(color), vertices.toList)
+  def apply(pen: Pen, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
+    new Polyline(pen, vertex1 :: vertex2 :: restOfVertices.toList)
+  }
+  def apply(color: java.awt.Color, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
+    new Polyline(Pen(color), restOfVertices.toList)
+  }
 }
 

@@ -43,13 +43,26 @@ abstract class Image {
   def bounds: Bounds
   def render(g2: Graphics2D)
   
+  def width: Double = bounds.width
+  def height: Double = bounds.height
+  
   def stackOn(img: Image): Image = Stack(this, img)
-  def stackOn(img: Image, xAlign: XAlign, yAlign: YAlign) = Stack(this, img, xAlign, yAlign)
-  def stackOn(img: Image, dx: Double, dy: Double) = Stack(this, img, dx, dy)
-  def stackOn(img: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double) = 
+  def stackOn(img: Image, xAlign: XAlign, yAlign: YAlign): Image = Stack(this, img, xAlign, yAlign)
+  def stackOn(img: Image, dx: Double, dy: Double): Image = Stack(this, img, dx, dy)
+  def stackOn(img: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double): Image = 
       Stack(this, img, xAlign, yAlign, dx, dy)
   
   def slideUnder(img: Image): Image = Stack(img, this)
+  def slideUnder(img: Image, xAlign: XAlign, yAlign: YAlign): Image = Stack(img, this, xAlign, yAlign)
+  def slideUnder(img: Image, dx: Double, dy: Double): Image = Stack(img, this, dx, dy)
+  def slideUnder(img: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double): Image = 
+      Stack(img, this, xAlign, yAlign, dx, dy)
+      
+  def beside(img: Image): Image = this.beside(img, YAlign.center)
+  def beside(img: Image, yAlign: YAlign): Image = Stack(img, this, XAlign.left, yAlign, this.width, 0)
+
+  def above(img: Image): Image = this.above(img, XAlign.center)
+  def above(img: Image, xAlign: XAlign): Image = Stack(img, this, xAlign, YAlign.top, 0, this.height)
 }
 
 object Image {

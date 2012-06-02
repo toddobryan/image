@@ -2,7 +2,7 @@ package image
 
 import java.awt.Graphics2D
 
-import math.{min, max}
+import math.{abs, min, max}
 
 sealed abstract class XAlign
 object XAlign {
@@ -19,23 +19,17 @@ object YAlign {
 }
 
 class Stack(front: Image, back: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double) extends Image {
-  lazy val calcBounds: Bounds = {
-    Bounds(Point(min(front.bounds.topLeft.x + dy, back.bounds.topLeft.x),
-        	     min(front.bounds.topLeft.y + dy, back.bounds.topLeft.y)),
-           Point(max(front.bounds.bottomRight.x + dx, back.bounds.bottomRight.x),
-                 max(front.bounds.bottomRight.y + dy, back.bounds.bottomRight.y)))
-  }
+  val (calcBounds, backTopLeft, frontTopLeft) = 
+    Bounds.calcBoundsAndOffsets(front, back, xAlign, yAlign, dx, dy)
   
   def bounds = calcBounds
   
   def render(g2: Graphics2D) {
-    val (dxBack, dyBack) = bounds.calcOffset(back, xAlign, yAlign, 0, 0)
-    g2.translate(dxBack, dyBack)
+    g2.translate(backTopLeft.x, backTopLeft.y)
     back.render(g2)
-    val (dxFront, dyFront) = bounds.calcOffset(front, xAlign, yAlign, dx, dy)
-    g2.translate(dxFront - dxBack, dyFront - dyBack)
+    g2.translate(frontTopLeft.x - backTopLeft.x, frontTopLeft.y - backTopLeft.y)
     front.render(g2)
-    g2.translate(-dxFront, -dyFront)
+    g2.translate(-frontTopLeft.x, -frontTopLeft.y)
   }
 }
 
