@@ -1,6 +1,6 @@
 package image
 
-import java.awt.{BasicStroke, Color, Paint, Stroke}
+import java.awt.{BasicStroke, Paint, Stroke}
 
 case class Pen(paint: Paint, width: Double, cap: Cap, join: Join, dash: Option[Dash]) {
   def asStroke: Stroke = {
@@ -10,6 +10,6 @@ case class Pen(paint: Paint, width: Double, cap: Cap, join: Join, dash: Option[D
 }
 
 object Pen {
-  def apply(color: Color): Pen = Pen(color, 0.0)
-  def apply(color: Color, width: Double): Pen = Pen(color, width, Cap.None, Join.Bevel, None)
+  def apply(color: java.awt.Color): Pen = Pen(color, 0.0)
+  def apply(color: java.awt.Color, width: Double): Pen = Pen(color, width, Cap.None, Join.Bevel, None)
 }

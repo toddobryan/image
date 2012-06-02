@@ -4,7 +4,7 @@ import math.min
 
 import java.awt.Paint
 
-object Poly {
+private[image] object Poly {
   def topLeft(pts: List[Point]): Point = pts match {
     case Nil => throw new Exception("can't create Polygon with no vertices")
     case p :: Nil => p
@@ -27,16 +27,18 @@ object Poly {
   }
 }
 
-class Polygon(paint: Paint, vertices: List[Point]) extends ShapeFilled(paint) {
+private[image] class Polygon(paint: Paint, vertices: List[Point]) extends ShapeFilled(paint) {
   val awtShape = Poly.shape(vertices, true)
+  override def toString = "Polygon(%s, %s)".format(paint, vertices.mkString(", "))
 }
 
 object Polygon {  
   def apply(paint: Paint, vertices: Point*) = new Polygon(paint, vertices.toList) 
 }
 
-class Polyline(pen: Pen, vertices: List[Point]) extends ShapeOutlined(pen) {
+private[image] class Polyline(pen: Pen, vertices: List[Point]) extends ShapeOutlined(pen) {
   val awtShape = Poly.shape(vertices, false)
+  override def toString = "Polyline(%s, %s)".format(pen, vertices.mkString(", "))
 }
 
 object Polyline {

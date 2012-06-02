@@ -2,11 +2,11 @@ package image
 
 import java.awt.Paint
 
-object Ellipse {
+private[image] object Ellipse {
   def shape(width: Double, height: Double) = new java.awt.geom.Ellipse2D.Double(0, 0, width, height)
 }
 
-class EllipseFilled(paint: Paint, width: Double, height: Double) extends ShapeFilled(paint) {
+private[image] class EllipseFilled(paint: Paint, width: Double, height: Double) extends ShapeFilled(paint) {
   val awtShape = Ellipse.shape(width, height)
 }
 
@@ -16,7 +16,7 @@ object EllipseFilled {
   }
 }
 
-class EllipseOutlined(pen: Pen, width: Double, height: Double) extends ShapeOutlined(pen) {
+private[image] class EllipseOutlined(pen: Pen, width: Double, height: Double) extends ShapeOutlined(pen) {
   val awtShape = Ellipse.shape(width, height)
 }
 
@@ -30,7 +30,7 @@ object EllipseOutlined {
   }
 }
 
-class CircleFilled(paint: Paint, radius: Double) extends ShapeFilled(paint) {
+private[image] class CircleFilled(paint: Paint, radius: Double) extends ShapeFilled(paint) {
   val awtShape = Ellipse.shape(2 * radius, 2 * radius)
 }
 
@@ -38,7 +38,7 @@ object CircleFilled {
   def apply(paint: Paint, radius: Double) = new CircleFilled(paint, radius)
 }
 
-class CircleOutlined(pen: Pen, radius: Double) extends ShapeOutlined(pen) {
+private[image] class CircleOutlined(pen: Pen, radius: Double) extends ShapeOutlined(pen) {
   val awtShape = Ellipse.shape(2 * radius, 2 * radius)
 }
 
@@ -47,7 +47,7 @@ object CircleOutlined {
   def apply(color: java.awt.Color, radius: Double) = new CircleOutlined(Pen(color), radius)
 }
 
-object Arc {
+private[image] object Arc {
   import java.awt.geom.Arc2D
   
   val OPEN = Arc2D.OPEN
@@ -62,7 +62,7 @@ object Arc {
   }
 }
 
-class CircularArc(pen: Pen, radius: Double, start: Angle, extent: Angle)
+private[image] class CircularArc(pen: Pen, radius: Double, start: Angle, extent: Angle)
     extends ShapeOutlined(pen) {
  val awtShape = Arc.shape(2 * radius, 2 * radius, start, extent, Arc.OPEN)
 }
@@ -76,7 +76,7 @@ object CircularArc {
   }
 }
 
-class CircularSegment(paint: Paint, radius: Double, start: Angle, extent: Angle)
+private[image] class CircularSegment(paint: Paint, radius: Double, start: Angle, extent: Angle)
     extends ShapeFilled(paint) {
   val awtShape = Arc.shape(2 * radius, 2 * radius, start, extent, Arc.CHORD)
 }
@@ -87,7 +87,7 @@ object CircularSegment {
   }
 }
 
-class CircularWedge(paint: Paint, radius: Double, start: Angle, extent: Angle)
+private[image] class CircularWedge(paint: Paint, radius: Double, start: Angle, extent: Angle)
     extends ShapeFilled(paint) {
   val awtShape = Arc.shape(2 * radius, 2 * radius, start, extent, Arc.PIE)
 }
@@ -98,5 +98,39 @@ object CircularWedge {
   }
 }
 
+private[image] class EllipticalArc(pen: Pen, width: Double, height: Double, start: Angle, extent: Angle)
+    extends ShapeOutlined(pen) {
+ val awtShape = Arc.shape(width, height, start, extent, Arc.OPEN)
+}
 
+object EllipticalArc {
+  def apply(pen: Pen, width: Double, height: Double, start: Angle, extent: Angle) = {
+    new EllipticalArc(pen, width, height, start, extent)
+  }
+  def apply(color: java.awt.Color, width: Double, height: Double, start: Angle, extent: Angle) = {
+    new EllipticalArc(Pen(color), width, height, start, extent)
+  }
+}
+
+private[image] class EllipticalSegment(paint: Paint, width: Double, height: Double, start: Angle, extent: Angle)
+    extends ShapeFilled(paint) {
+  val awtShape = Arc.shape(width, height, start, extent, Arc.CHORD)
+}
+
+object EllipticalSegment {
+  def apply(paint: Paint, width: Double, height: Double, start: Angle, extent: Angle) = {
+    new EllipticalSegment(paint, width, height, start, extent)
+  }
+}
+
+private[image] class EllipticalWedge(paint: Paint, width: Double, height: Double, start: Angle, extent: Angle)
+    extends ShapeFilled(paint) {
+  val awtShape = Arc.shape(width, height, start, extent, Arc.PIE)
+}
+
+object EllipticalWedge {
+  def apply(paint: Paint, width: Double, height: Double, start: Angle, extent: Angle) = {
+    new EllipticalWedge(paint, width, height, start, extent)
+  }
+}
 
