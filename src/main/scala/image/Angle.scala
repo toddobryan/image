@@ -41,6 +41,14 @@ class Angle(val amount: Double, val units: AngleUnit.AngleUnit) {
     }
   }
   
+  def +(that: Angle) = {
+    if (this.units == that.units) Angle(this.amount + that.amount, this.units)
+    else this.units match {
+      case AngleUnit.radians => Angle(this.amount + that.toRadians.amount, AngleUnit.radians)
+      case AngleUnit.degrees => Angle(this.amount + that.toDegrees.amount, AngleUnit.degrees)
+    }
+  }
+  
   def sin: Double = {
     import Angle.~=
     val refRads: Double = refAngle.toRadians.amount
