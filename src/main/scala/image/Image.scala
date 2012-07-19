@@ -66,10 +66,20 @@ abstract class Image {
   def above(img: Image): Image = this.above(img, XAlign.center)
   def above(img: Image, xAlign: XAlign): Image = Stack(img, this, xAlign, YAlign.top, 0, this.height)
   
- /* def flipHorizontal(): Image = {
+  def flipHorizontal: Image = {
+    val transformer = new AffineTransform()
+    transformer.translate(width, 0)
+    transformer.scale(-1, 1)
+    new Transform(this, transformer, this.bounds)
+  }
   
-    
-  } */
+  def flipVertical: Image = {
+    val transformer = new AffineTransform()
+    transformer.translate(0, height)
+    transformer.scale(1, -1)
+    new Transform(this, transformer, this.bounds)
+  }
+  
 }
 object Image {
   def sameBitmap(img: Image, filename: String): Boolean = {
