@@ -83,4 +83,54 @@ object RegularPolygonOutlined {
   }
 }
 
+private[image] object Rectangle {
+  def shape(width: Double, height: Double) = new java.awt.geom.Rectangle2D.Double(0, 0, width, height)
+}
 
+private[image] class RectangleFilled(paint: Paint, width: Double, height: Double) extends ShapeFilled(paint) {
+  val awtShape = Rectangle.shape(width, height)
+}
+
+object RectangleFilled {
+  def apply(paint: Paint, width: Double, height: Double): RectangleFilled =
+    new RectangleFilled(paint, width, height)
+}
+
+private[image] class RectangleOutlined(pen: Pen, width: Double, height: Double) extends ShapeOutlined(pen) {
+  val awtShape = Rectangle.shape(width, height)
+}
+
+object RectangleOutlined {
+  def apply(pen: Pen, width: Double, height: Double): RectangleOutlined = {
+    new RectangleOutlined(pen, width, height)
+  }
+  
+  def apply(color: java.awt.Color, width: Double, height: Double): RectangleOutlined = {
+    new RectangleOutlined(Pen(color), width, height)
+  }
+}
+
+private[image] object Square {
+  def shape(side: Double) = new java.awt.geom.Rectangle2D.Double(0, 0, side, side)
+}
+
+private[image] class SquareFilled(paint: Paint, side: Double) extends ShapeFilled(paint) {
+  val awtShape = Square.shape(side)
+}
+
+object SquareFilled {
+  def apply(paint: Paint, side: Double): SquareFilled = 
+    new SquareFilled(paint, side)
+}
+
+private[image] class SquareOutlined(pen: Pen, side: Double) extends ShapeOutlined(pen) {
+  val awtShape = Square.shape(side)
+}
+
+object SquareOutlined {
+  def apply(pen: Pen, side: Double): SquareOutlined =
+    new SquareOutlined(pen, side)
+  
+  def apply(color: java.awt.Color, side: Double): SquareOutlined =
+    new SquareOutlined(Pen(color), side)
+}

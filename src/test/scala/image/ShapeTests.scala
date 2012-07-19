@@ -53,6 +53,24 @@ class ShapeTests extends FunSuite {
             Point(20, 60), Point(40, 60), Point(40, 20), Point(40, 20), 
             Point(20, 20), Point(20, 0)),
         "/shapes/polygon-plum-tetris.png"))
-    
   }
+  
+  test("rectangle") {
+    assert(Image.sameBitmap(RectangleFilled(Color.aquamarine, 100, 70),
+        "/shapes/rectangle-100-70-aquamarine.png"))
+    assert(Image.sameBitmap(RectangleOutlined(Color.red, 30, 50),
+        "/shapes/rectangle-30-50-red.png"))
+    assert(Image.sameBitmap(RectangleFilled(Color.maroon, 60, 80),
+        "/shapes/rectangle-60-80-maroon.png"))
+  }
+  
+  test("square") {
+    assert(Image.sameBitmap(SquareFilled(Color.green, 30),
+        "/shapes/square-30-green.png"))
+    assert(Image.sameBitmap(SquareFilled(Color.purple, 60),
+        "/shapes/square-60-purple.png"))
+    assert(Image.sameBitmap(SquareOutlined(Color.black, 70),
+        "/shapes/square-70-black.png"))
+  }
+  
 }

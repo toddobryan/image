@@ -4,6 +4,8 @@ import math.ceil
 
 import java.awt.{Graphics2D, RenderingHints}
 import java.awt.image.BufferedImage
+import java.awt.geom._
+import java.awt.image._
 import javax.swing.ImageIcon
 import scala.swing.Dialog
 import javax.imageio.ImageIO
@@ -63,8 +65,12 @@ abstract class Image {
 
   def above(img: Image): Image = this.above(img, XAlign.center)
   def above(img: Image, xAlign: XAlign): Image = Stack(img, this, xAlign, YAlign.top, 0, this.height)
+  
+ /* def flipHorizontal(): Image = {
+  
+    
+  } */
 }
-
 object Image {
   def sameBitmap(img: Image, filename: String): Boolean = {
     val inputStream = getClass.getResourceAsStream(filename)

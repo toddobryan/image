@@ -26,4 +26,17 @@ class AngleTest extends FunSuite {
     assert(135.degrees.tan === -1)
     assert((-240).degrees.cos == -0.5)
   }
+  
+  test("angle addition") {
+    assert(60.degrees + (Pi / 2).radians === 150.degrees)
+    assert(20.degrees + (-Pi / 6).radians === -10.degrees)
+    assert(Pi.radians + (3 * Pi).radians === (4 * Pi).radians)
+  }
+  
+  test("angles.equals function") {
+    assert(45.degrees.equals(45.degrees))
+    assert(45.degrees.equals((Pi / 4).radians))
+    assert(!(45.degrees.equals((Pi / 2).radians)))
+    assert(!(45.degrees.equals("a dog")))
+  }
 }
