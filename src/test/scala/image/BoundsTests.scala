@@ -7,8 +7,8 @@ class BoundsTests extends FunSuite {
   val e2 = EllipseFilled(Color.blue, 30, 50)
   
   test("bound translation") {
-    assert(e1.bounds.translate(20, 30) === Bounds(Point(20, 30), Point(90, 50)))
-    assert(e2.bounds.translate(-10, -20) === Bounds(Point(-10, -20), Point(-20, -40)))
+    assert(e1.bounds.translate(20, 30) === Bounds(Point(20, 30), Point(80, 50)))
+    assert(e2.bounds.translate(-10, -20) === Bounds(Point(-10, -20), Point(20, 30)))
     assert(e1.stackOn(e2).bounds.translate(5, 10) === Bounds(Point(5, 10), Point(65, 60)))
   }
   

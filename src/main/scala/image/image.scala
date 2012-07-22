@@ -1,14 +1,5 @@
 package image
 
-import scala.math._
-import java.awt.image.BufferedImage
-import scala.swing.Dialog
-import javax.swing.ImageIcon
-import java.awt.{Color, Graphics2D}
-import java.awt.Font
-import java.awt.FontMetrics
-import java.awt.RenderingHints
-
 /*
 case class Point(x: Int, y: Int) {
   def translate(dx: Int, dy: Int): Point = Point(x + dx, y + dy)

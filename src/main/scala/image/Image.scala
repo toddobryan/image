@@ -17,7 +17,7 @@ import java.util.Arrays
 
 abstract class Image {  
   lazy val img: BufferedImage = {
-    val image = new BufferedImage(ceil(bounds.width + 1).toInt, ceil(bounds.height + 1).toInt, BufferedImage.TYPE_INT_ARGB)
+    val image = new BufferedImage(ceil(bounds.width).toInt, ceil(bounds.height).toInt, BufferedImage.TYPE_INT_ARGB)
     val g2 = image.getGraphics.asInstanceOf[Graphics2D]
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     render(g2)
@@ -80,13 +80,9 @@ abstract class Image {
     new Transform(this, transformer, this.bounds)
   }
   
-}
-object Image {
-  def sameBitmap(img: Image, filename: String): Boolean = {
-    val inputStream = getClass.getResourceAsStream(filename)
-    val imgBytes = img.bytesPng
-    val bytes: Array[Byte] = new Array[Byte](imgBytes.length)
-    inputStream.read(bytes)
-    Arrays.equals(imgBytes, bytes)
+  def sameBitmap(other: Image): Boolean = {
+    Arrays.equals(this.bytesPng, other.bytesPng)
   }
+  
 }
+

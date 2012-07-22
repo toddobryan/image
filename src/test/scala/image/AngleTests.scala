@@ -29,7 +29,7 @@ class AngleTest extends FunSuite {
   
   test("angle addition") {
     assert(60.degrees + (Pi / 2).radians === 150.degrees)
-    assert(20.degrees + (-Pi / 6).radians === -10.degrees)
+    assert(90.degrees + (-Pi / 6).radians === 60.degrees)
     assert(Pi.radians + (3 * Pi).radians === (4 * Pi).radians)
   }
   
