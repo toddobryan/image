@@ -24,7 +24,8 @@ abstract class ShapeOutlined(val pen: Pen) extends Shape {
     g2.draw(awtShape)
   }
   def displayBounds: Bounds = {
-    val rect = pen.asStroke.createStrokedShape(awtShape).getBounds2D()
+    val myPen = if (pen.width == 0.0) pen.copy(width=1.0) else pen
+    val rect = myPen.asStroke.createStrokedShape(awtShape).getBounds2D()
     Bounds(Point(rect.getMinX, rect.getMinY), Point(rect.getMaxX, rect.getMaxY))
   }
 }
