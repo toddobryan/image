@@ -17,15 +17,21 @@ import java.util.Arrays
 
 abstract class Image {  
   lazy val img: BufferedImage = {
-    val image = new BufferedImage(ceil(bounds.width).toInt, ceil(bounds.height).toInt, BufferedImage.TYPE_INT_ARGB)
+    val image = new BufferedImage(ceil(displayBounds.width).toInt, ceil(displayBounds.height).toInt, BufferedImage.TYPE_INT_ARGB)
     val g2 = image.getGraphics.asInstanceOf[Graphics2D]
+    g2.translate(-displayBounds.topLeft.x, -displayBounds.topLeft.y)
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     render(g2)
     image
   }
   
   def display() {
-    Dialog.showMessage(message = null, icon = new ImageIcon(img))
+    val bg = new BufferedImage(img.getWidth, img.getHeight, BufferedImage.TYPE_INT_ARGB)
+    val g2 = bg.getGraphics.asInstanceOf[Graphics2D]
+    g2.setColor(java.awt.Color.WHITE)
+    g2.fillRect(0, 0, img.getWidth, img.getHeight)
+    g2.drawRenderedImage(img, new AffineTransform())
+    Dialog.showMessage(message = null, icon = new ImageIcon(bg))
   }
   
   def save(filename: String) {
@@ -42,6 +48,7 @@ abstract class Image {
     Base64.encodeBase64String(bytesPng)
   }
   
+  def displayBounds: Bounds
   def bounds: Bounds
   def render(g2: Graphics2D)
   
@@ -70,14 +77,14 @@ abstract class Image {
     val transformer = new AffineTransform()
     transformer.translate(width, 0)
     transformer.scale(-1, 1)
-    new Transform(this, transformer, this.bounds)
+    new Transform(this, transformer)
   }
   
   def flipVertical: Image = {
     val transformer = new AffineTransform()
     transformer.translate(0, height)
     transformer.scale(1, -1)
-    new Transform(this, transformer, this.bounds)
+    new Transform(this, transformer)
   }
   
   def sameBitmap(other: Image): Boolean = {

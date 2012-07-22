@@ -11,6 +11,7 @@ class Bitmap(val input: InputStream) extends Image {
   override lazy val img: BufferedImage = ImageIO.read(input)
 
   def bounds = Bounds(Point(0, 0), Point(img.getWidth, img.getHeight))
+  def displayBounds = bounds
   def render(g2: Graphics2D) = g2.drawRenderedImage(img, new AffineTransform())
 }
 

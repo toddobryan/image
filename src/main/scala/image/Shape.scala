@@ -14,6 +14,7 @@ abstract class ShapeFilled(val paint: Paint) extends Shape {
     g2.setPaint(paint)
     g2.fill(awtShape)
   }
+  def displayBounds: Bounds = bounds
 }
 
 abstract class ShapeOutlined(val pen: Pen) extends Shape {
@@ -21,6 +22,10 @@ abstract class ShapeOutlined(val pen: Pen) extends Shape {
     g2.setPaint(pen.paint)
     g2.setStroke(pen.asStroke)
     g2.draw(awtShape)
+  }
+  def displayBounds: Bounds = {
+    val rect = pen.asStroke.createStrokedShape(awtShape).getBounds2D()
+    Bounds(Point(rect.getMinX, rect.getMinY), Point(rect.getMaxX, rect.getMaxY))
   }
 }
 

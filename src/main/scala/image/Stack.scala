@@ -19,9 +19,10 @@ object YAlign {
 }
 
 class Stack(front: Image, back: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double) extends Image {
-  val (calcBounds, backTopLeft, frontTopLeft) = 
+  val (calcBounds, calcDisplayBounds, backTopLeft, frontTopLeft) = 
     Bounds.calcBoundsAndOffsets(front, back, xAlign, yAlign, dx, dy)
   
+  def displayBounds = calcDisplayBounds
   def bounds = calcBounds
   
   def render(g2: Graphics2D) {
