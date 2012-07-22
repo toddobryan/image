@@ -25,22 +25,26 @@ abstract class Image {
     image
   }
   
-  def display() {
+  lazy val displayedImg: BufferedImage = {
     val bg = new BufferedImage(img.getWidth, img.getHeight, BufferedImage.TYPE_INT_ARGB)
     val g2 = bg.getGraphics.asInstanceOf[Graphics2D]
     g2.setColor(java.awt.Color.WHITE)
     g2.fillRect(0, 0, img.getWidth, img.getHeight)
     g2.drawRenderedImage(img, new AffineTransform())
-    Dialog.showMessage(message = null, icon = new ImageIcon(bg))
+    bg
   }
   
-  def save(filename: String) {
-    ImageIO.write(this.img, "png", new File(filename))
+  def display() {
+    Dialog.showMessage(message = null, icon = new ImageIcon(displayedImg))
+  }
+  
+  def saveAsDisplayed(filename: String) {
+    ImageIO.write(displayedImg, "png", new File(filename))
   }
   
   def bytesPng: Array[Byte] = {
     val bytes: ByteArrayOutputStream = new ByteArrayOutputStream()
-    ImageIO.write(this.img, "png", bytes)
+    ImageIO.write(displayedImg, "png", bytes)
     bytes.toByteArray
   }
   
