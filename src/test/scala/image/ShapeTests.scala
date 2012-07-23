@@ -26,51 +26,49 @@ class ShapeTests extends FunSuite {
         Bitmap.fromWorkspace("/shapes/ellipse-100-50-pink.png")))
   }
   
-  /*test("wedges") {
-    assert(Image.sameBitmap(CircularArc(Pen(Color.green, 3), 50, 30.degrees, 120.degrees),
-        "/shapes/arc-50-30-120-green.png"))
-    assert(Image.sameBitmap(CircularSegment(Color.cyan, 25, -20.degrees, 220.degrees),
-        "/shapes/seg-25-20-220-cyan.png"))
-    assert(Image.sameBitmap(CircularWedge(Color.red, 30, (Pi / 6).radians, (2 * Pi / 3).radians),
-        "/shapes/wedge-30-30-120-red.png"))
+  test("wedges") {
+    assert(CircularArc(Pen(Color.green, 3), 50, 30.degrees, 120.degrees).sameBitmap(
+        Bitmap.fromWorkspace("/shapes/arc-50-30-120-green.png")))
+    assert(CircularSegment(Color.cyan, 25, -20.degrees, 220.degrees).sameBitmap(
+        Bitmap.fromWorkspace("/shapes/seg-25-20-220-cyan.png")))
+    assert(CircularWedge(Color.red, 30, (Pi / 6).radians, (2 * Pi / 3).radians).sameBitmap(
+        Bitmap.fromWorkspace("/shapes/wedge-30-30-120-red.png")))
   }
   
   test("elliptical wedges") {
-    assert(Image.sameBitmap(EllipticalArc(Pen(Color.fireBrick, 3), 50, 80, 30.degrees, 120.degrees),
-        "/shapes/ell-arc-50-80-30-120-fireBrick.png"))
-    assert(Image.sameBitmap(EllipticalSegment(Color.tomato, 35, 25, -20.degrees, 220.degrees),
-        "/shapes/ell-seg-35-25-20-220-tomato.png"))
-    assert(Image.sameBitmap(EllipticalWedge(Color.orange, 30, 100, (Pi / 6).radians, (2 * Pi / 3).radians),
-        "/shapes/ell-wedge-30-100-30-120-red.png")) 
+    assert(EllipticalArc(Pen(Color.fireBrick, 3), 50, 80, 50.degrees, 120.degrees).sameBitmap(
+        Bitmap.fromWorkspace("/shapes/ell-arc-50-80-50-120-brick.png")))
+    assert(EllipticalSegment(Color.tomato, 35, 25, -20.degrees, 270.degrees).sameBitmap(
+        Bitmap.fromWorkspace("/shapes/ell-seg-35-25-20-270-tomato.png")))
+    assert(EllipticalWedge(Color.orange, 30, 100, (Pi / 6).radians, (3 * Pi / 4).radians).sameBitmap(
+        Bitmap.fromWorkspace("/shapes/ell-wedge-30-100-30-135-orange.png")))
   }
   
   test("polygonal") {
-    assert(Image.sameBitmap(
-        Polygon(Color.burlywood, Point(0, 0), Point(-10, 20), Point(60, 0), Point(-10, -20)),
-        "/shapes/polygon-arrow.png"))
-    assert(Image.sameBitmap(
-        Polygon(Color.plum, Point(0, 0), Point(0, 40), Point(20, 40), 
+    assert(Polygon(Color.burlywood, Point(0, 0), Point(-10, 20), Point(60, 0), Point(-10, -20)).sameBitmap(
+        Bitmap.fromWorkspace("/shapes/polygon-arrow.png")))
+    assert(Polygon(Color.plum, Point(0, 0), Point(0, 40), Point(20, 40), 
             Point(20, 60), Point(40, 60), Point(40, 20), Point(40, 20), 
-            Point(20, 20), Point(20, 0)),
-        "/shapes/polygon-plum-tetris.png"))
+            Point(20, 20), Point(20, 0)).sameBitmap(
+        Bitmap.fromWorkspace("/shapes/polygon-plum-tetris.png")))
   }
   
   test("rectangle") {
-    assert(Image.sameBitmap(RectangleFilled(Color.aquamarine, 100, 70),
-        "/shapes/rectangle-100-70-aquamarine.png"))
-    assert(Image.sameBitmap(RectangleOutlined(Color.red, 30, 50),
-        "/shapes/rectangle-30-50-red.png"))
-    assert(Image.sameBitmap(RectangleFilled(Color.maroon, 60, 80),
-        "/shapes/rectangle-60-80-maroon.png"))
+    assert(RectangleFilled(Color.aquamarine, 100, 70).sameBitmap(
+        Bitmap.fromWorkspace("/shapes/rectangle-100-70-aquamarine.png")))
+    assert(RectangleOutlined(Color.red, 30, 50).sameBitmap(
+        Bitmap.fromWorkspace("/shapes/rectangle-30-50-red.png")))
+    assert(RectangleFilled(Color.maroon, 60, 80).sameBitmap(
+        Bitmap.fromWorkspace("/shapes/rectangle-60-80-maroon.png")))
   }
   
   test("square") {
-    assert(Image.sameBitmap(SquareFilled(Color.green, 30),
-        "/shapes/square-30-green.png"))
-    assert(Image.sameBitmap(SquareFilled(Color.purple, 60),
-        "/shapes/square-60-purple.png"))
-    assert(Image.sameBitmap(SquareOutlined(Color.black, 70),
-        "/shapes/square-70-black.png"))
-  }*/
+    assert(SquareFilled(Color.green, 30).sameBitmap(
+        Bitmap.fromWorkspace("/shapes/square-30-green.png")))
+    assert(SquareFilled(Color.purple, 60).sameBitmap(
+        Bitmap.fromWorkspace("/shapes/square-60-purple.png")))
+    assert(SquareOutlined(Color.black, 70).sameBitmap(
+        Bitmap.fromWorkspace("/shapes/square-70-black.png")))
+  }
   
 }
