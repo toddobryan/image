@@ -2,6 +2,7 @@ package image
 
 import math.{abs, min, max}
 import java.awt.geom.Rectangle2D
+import java.awt.geom.AffineTransform
 
 case class Bounds(topLeft: Point, bottomRight: Point) {
   def width: Double = bottomRight.x - topLeft.x
@@ -25,19 +26,12 @@ case class Bounds(topLeft: Point, bottomRight: Point) {
     case YAlign.bottom => -this.bottomRight.y
   })
   
-  /*def calcOffset(img: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double): (Double, Double) = {
-    val xOffset = dx + (xAlign match {
-      case XAlign.left => 0
-      case XAlign.center => (this.width - (img.bounds.width + abs(dx))) / 2.0
-      case XAlign.right => this.width - (img.bounds.width + abs(dx))
-    })
-    val yOffset = dy + (yAlign match {
-      case YAlign.top => 0
-      case YAlign.center => (this.height - (img.bounds.height + abs(dy))) / 2.0
-      case YAlign.bottom => (this.height - (img.bounds.height + abs(dy)))
-    })
-    (xOffset, yOffset)
-  }*/
+  def transformed(transform: AffineTransform): Bounds = {
+   val boundRect = this.asRect2D
+    val newBoundRect = transform.createTransformedShape(boundRect).getBounds2D
+    Bounds(Point(newBoundRect.getMinX(), newBoundRect.getMinY()),
+           Point(newBoundRect.getMaxX(), newBoundRect.getMaxY()))
+  }
 }
 
 object Bounds {

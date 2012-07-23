@@ -91,6 +91,18 @@ abstract class Image {
     new Transform(this, transformer)
   }
   
+  def scale(xFactor: Double, yFactor: Double): Image = {
+    val transformer = new AffineTransform()
+    transformer.scale(xFactor, yFactor)
+    transformer.translate(
+      if (xFactor < 0) -width * xFactor else 0,
+      if (yFactor < 0) -height * yFactor else 0
+    )
+    new Transform(this, transformer)
+  }
+  def scaleX(xFactor: Double): Image = scale(xFactor, 1.0)
+  def scaleY(yFactor: Double): Image = scale(1.0, yFactor)
+  
   def sameBitmap(other: Image): Boolean = {
     Arrays.equals(this.bytesPng, other.bytesPng)
   }
