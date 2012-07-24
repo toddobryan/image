@@ -1,6 +1,7 @@
 package image
 
 import math.ceil
+import math.Pi
 
 import java.awt.{Graphics2D, RenderingHints}
 import java.awt.image.BufferedImage
@@ -102,6 +103,17 @@ abstract class Image {
   }
   def scaleX(xFactor: Double): Image = scale(xFactor, 1.0)
   def scaleY(yFactor: Double): Image = scale(1.0, yFactor)
+  
+  def rotateCW(factor: Angle): Image = {
+    val transformer = new AffineTransform()
+    transformer.rotate(factor.toRadians.amount)
+    new Transform(this, transformer)
+  }
+  
+  def rotateCCW(factor: Angle): Image = {
+    val angleAmount = factor.toRadians.amount;
+    this.rotateCW(Angle(((2*Pi) - angleAmount), AngleUnit.radians))
+  }
   
   def sameBitmap(other: Image): Boolean = {
     Arrays.equals(this.bytesPng, other.bytesPng)
