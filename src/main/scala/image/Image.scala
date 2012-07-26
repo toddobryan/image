@@ -104,15 +104,18 @@ abstract class Image {
   def scaleX(xFactor: Double): Image = scale(xFactor, 1.0)
   def scaleY(yFactor: Double): Image = scale(1.0, yFactor)
   
-  def rotateCW(factor: Angle): Image = {
+  def rotate(factor: Angle): Image = {
     val transformer = new AffineTransform()
     transformer.rotate(factor.toRadians.amount)
-    new Transform(this, transformer)
+    val wrongShape = new Transform(this, transformer)
+    val wrongBounds = wrongShape.displayBounds
+    wrongShape.translate(-wrongBounds.topLeft.x,-wrongBounds.topLeft.y)
   }
   
-  def rotateCCW(factor: Angle): Image = {
-    val angleAmount = factor.toRadians.amount;
-    this.rotateCW(Angle(((2*Pi) - angleAmount), AngleUnit.radians))
+  def translate(x: Double, y: Double): Image = {
+    val transformer = new AffineTransform()
+    transformer.translate(x,y)
+    new Transform(this, transformer)
   }
   
   def sameBitmap(other: Image): Boolean = {
