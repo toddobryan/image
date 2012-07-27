@@ -39,7 +39,7 @@ private[image] object Poly {
   }
 }
 
-private[image] class Polygon(paint: Paint, vertices: List[Point]) extends ShapeFilled(paint) {
+private[image] class Polygon(paint: Paint, vertices: List[Point]) extends FigureFilled(paint) {
   val awtShape = Poly.shape(vertices, true)
   override def toString = "Polygon(%s, %s)".format(paint, vertices.mkString(", "))
 }
@@ -53,7 +53,7 @@ object Polygon {
   }
 }
 
-private[image] class Polyline(pen: Pen, vertices: List[Point]) extends ShapeOutlined(pen) {
+private[image] class Polyline(pen: Pen, vertices: List[Point]) extends FigureOutlined(pen) {
   val awtShape = Poly.shape(vertices, false)
   override def toString = "Polyline(%s, %s)".format(pen, vertices.mkString(", "))
 }
@@ -87,7 +87,7 @@ private[image] object Rectangle {
   def shape(width: Double, height: Double) = new java.awt.geom.Rectangle2D.Double(0, 0, width, height)
 }
 
-private[image] class RectangleFilled(paint: Paint, width: Double, height: Double) extends ShapeFilled(paint) {
+private[image] class RectangleFilled(paint: Paint, width: Double, height: Double) extends FigureFilled(paint) {
   val awtShape = Rectangle.shape(width, height)
 }
 
@@ -96,7 +96,7 @@ object RectangleFilled {
     new RectangleFilled(paint, width, height)
 }
 
-private[image] class RectangleOutlined(pen: Pen, width: Double, height: Double) extends ShapeOutlined(pen) {
+private[image] class RectangleOutlined(pen: Pen, width: Double, height: Double) extends FigureOutlined(pen) {
   val awtShape = Rectangle.shape(width, height)
 }
 
@@ -114,7 +114,7 @@ private[image] object Square {
   def shape(side: Double) = new java.awt.geom.Rectangle2D.Double(0, 0, side, side)
 }
 
-private[image] class SquareFilled(paint: Paint, side: Double) extends ShapeFilled(paint) {
+private[image] class SquareFilled(paint: Paint, side: Double) extends FigureFilled(paint) {
   val awtShape = Square.shape(side)
 }
 
@@ -123,7 +123,7 @@ object SquareFilled {
     new SquareFilled(paint, side)
 }
 
-private[image] class SquareOutlined(pen: Pen, side: Double) extends ShapeOutlined(pen) {
+private[image] class SquareOutlined(pen: Pen, side: Double) extends FigureOutlined(pen) {
   val awtShape = Square.shape(side)
 }
 

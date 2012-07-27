@@ -2,7 +2,6 @@ package image
 
 import math.ceil
 import math.Pi
-
 import java.awt.{Graphics2D, RenderingHints}
 import java.awt.image.BufferedImage
 import java.awt.geom._
@@ -15,12 +14,13 @@ import java.io.ByteArrayOutputStream
 import org.apache.commons.codec.binary.Base64
 import java.io.FileInputStream
 import java.util.Arrays
+import java.awt.Shape
 
 abstract class Image {  
   lazy val img: BufferedImage = {
-    val image = new BufferedImage(ceil(displayBounds.width).toInt, ceil(displayBounds.height).toInt, BufferedImage.TYPE_INT_ARGB)
+    val image = new BufferedImage(ceil(displayBounds.getWidth).toInt, ceil(displayBounds.getHeight).toInt, BufferedImage.TYPE_INT_ARGB)
     val g2 = image.getGraphics.asInstanceOf[Graphics2D]
-    g2.translate(-displayBounds.topLeft.x, -displayBounds.topLeft.y)
+    g2.translate(-displayBounds.getX, -displayBounds.getY)
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     render(g2)
     image
@@ -53,12 +53,12 @@ abstract class Image {
     Base64.encodeBase64String(bytesPng)
   }
   
-  def displayBounds: Bounds
-  def bounds: Bounds
+  def displayBounds: Rectangle2D = bounds.getBounds2D
+  def bounds: Shape
   def render(g2: Graphics2D)
   
-  def width: Double = bounds.width
-  def height: Double = bounds.height
+  def width: Double = displayBounds.getWidth
+  def height: Double = displayBounds.getHeight
   
   def stackOn(img: Image): Image = Stack(this, img)
   def stackOn(img: Image, xAlign: XAlign, yAlign: YAlign): Image = Stack(this, img, xAlign, yAlign)
@@ -104,15 +104,10 @@ abstract class Image {
   def scaleX(xFactor: Double): Image = scale(xFactor, 1.0)
   def scaleY(yFactor: Double): Image = scale(1.0, yFactor)
   
-  def rotateCW(factor: Angle): Image = {
+  def rotate(factor: Angle): Image = {
     val transformer = new AffineTransform()
     transformer.rotate(factor.toRadians.amount)
     new Transform(this, transformer)
-  }
-  
-  def rotateCCW(factor: Angle): Image = {
-    val angleAmount = factor.toRadians.amount;
-    this.rotateCW(Angle(((2*Pi) - angleAmount), AngleUnit.radians))
   }
   
   def sameBitmap(other: Image): Boolean = {
