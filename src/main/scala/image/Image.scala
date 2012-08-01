@@ -107,7 +107,16 @@ abstract class Image {
   def rotate(factor: Angle): Image = {
     val transformer = new AffineTransform()
     transformer.rotate(factor.toRadians.amount)
-    new Transform(this, transformer)
+    val wrongShape = new Transform(this, transformer)
+    val wrongBounds = wrongShape.displayBounds
+    val unmoved = new Transform(this,transformer)
+    unmoved.translate(-wrongBounds.getX,-wrongBounds.getY)
+  }
+  
+  def translate(x: Double, y: Double): Image = {
+    val transformer = new AffineTransform()
+    transformer.translate(x, y)
+    new Transform(this,transformer)
   }
   
   def sameBitmap(other: Image): Boolean = {
