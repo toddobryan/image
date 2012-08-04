@@ -119,6 +119,30 @@ abstract class Image {
     new Transform(this,transformer)
   }
   
+  def crop(x: Double, y: Double, cropWidth: Double, cropHeight: Double): Image = {
+    new Cropped(this, x, y, cropWidth, cropHeight)
+  }
+  def cropLeft(numPixels: Double): Image = {
+    if (numPixels < 0 || numPixels > width) {
+      throw new Exception("numPixels must be a non-negative number less than the width of this image (%d).".format(width))
+    } else this.crop(numPixels, 0, width - numPixels, height)
+  }
+  def cropRight(numPixels: Double): Image = {
+    if (numPixels < 0 || numPixels > width) {
+      throw new Exception("numPixels must be a non-negative number less than the width of this image (%d).".format(width))
+    } else this.crop(0, 0, width - numPixels, height)    
+  }
+  def cropTop(numPixels: Double): Image = {
+    if (numPixels < 0 || numPixels > height) {
+      throw new Exception("numPixels must be a non-negative number less than the height of this image (%d).".format(height))
+    } else this.crop(0, numPixels, width, height - numPixels)
+  }
+  def cropBottom(numPixels: Double): Image = {
+    if (numPixels < 0 || numPixels > height) {
+      throw new Exception("numPixels must be a non-negative number less than the height of this image (%d).".format(height))
+    } else this.crop(0, 0, width, height - numPixels)
+  }
+  
   def sameBitmap(other: Image): Boolean = {
     Arrays.equals(this.bytesPng, other.bytesPng)
   }
