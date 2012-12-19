@@ -1,3 +1,5 @@
+import scala.language.implicitConversions
+
 package object image {
   import AngleUnit._
   

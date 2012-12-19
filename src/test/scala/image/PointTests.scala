@@ -1,7 +1,7 @@
 package image
 
 import org.scalatest.FunSuite
-import Math.Pi
+import math.Pi
 
 class PointTests extends FunSuite {
 	val p1 = Point(5,10)
