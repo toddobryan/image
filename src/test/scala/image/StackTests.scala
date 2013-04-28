@@ -3,8 +3,8 @@ package image
 import org.scalatest.FunSuite
 
 class StackTests extends FunSuite {
-  val e1 = EllipseFilled(Color.deepSkyBlue, 70, 40)
-  val e2 = EllipseFilled(Color.darkGray, 20, 80)
+  val e1 = EllipseFilled(Color.DeepSkyBlue, 70, 40)
+  val e2 = EllipseFilled(Color.DarkGray, 20, 80)
   
   test("centered") {
     assert(e1.stackOn(e2).sameBitmap(Bitmap.fromWorkspace("/stacked/e1-e2.png")))

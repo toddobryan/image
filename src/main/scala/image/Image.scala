@@ -145,7 +145,6 @@ abstract class Image {
   
   def sameBitmap(other: Image): Boolean = {
     Arrays.equals(this.bytesPng, other.bytesPng)
-  }
-  
+  } 
 }
 

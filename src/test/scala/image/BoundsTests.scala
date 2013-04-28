@@ -3,8 +3,8 @@ package image
 import org.scalatest.FunSuite
 
 class BoundsTests extends FunSuite {
-  val e1 = EllipseFilled(Color.black, 60, 20)
-  val e2 = EllipseFilled(Color.blue, 30, 50)
+  val e1 = EllipseFilled(Color.Black, 60, 20)
+  val e2 = EllipseFilled(Color.Blue, 30, 50)
   
   /*test("bound translation") {
     assert(e1.bounds.translate(20, 30) === Bounds(Point(20, 30), Point(80, 50)))
