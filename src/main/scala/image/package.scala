@@ -1,6 +1,7 @@
+import scala.language.implicitConversions
+
 package object image {
   import AngleUnit._
-  type Color = java.awt.Color
   
   implicit def doubleToAngleBuilder(d: Double) = new AngleBuilder(d)
   

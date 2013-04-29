@@ -1,8 +1,6 @@
 package image
 
-import math.{min, Pi}
-
-import java.awt.Paint
+import scala.math.{min, Pi}
 
 private[image] object Poly {
   def topLeft(pts: List[Point]): Point = pts match {
@@ -62,7 +60,7 @@ object Polyline {
   def apply(pen: Pen, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
     new Polyline(pen, vertex1 :: vertex2 :: restOfVertices.toList)
   }
-  def apply(color: java.awt.Color, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
+  def apply(color: Color, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
     Polyline(Pen(color), vertex1, vertex2, restOfVertices: _*)
   }
 }
@@ -78,7 +76,7 @@ object RegularPolygonOutlined {
     val vts = Poly.regular(sideLength, numSides)
     new Polyline(pen, vts.last :: vts)
   }
-  def apply(color: java.awt.Color, sideLength: Double, numSides: Int): Image = {
+  def apply(color: Color, sideLength: Double, numSides: Int): Image = {
     RegularPolygonOutlined(Pen(color), sideLength, numSides)
   }
 }
@@ -105,7 +103,7 @@ object RectangleOutlined {
     new RectangleOutlined(pen, width, height)
   }
   
-  def apply(color: java.awt.Color, width: Double, height: Double): RectangleOutlined = {
+  def apply(color: Color, width: Double, height: Double): RectangleOutlined = {
     new RectangleOutlined(Pen(color), width, height)
   }
 }
@@ -131,6 +129,6 @@ object SquareOutlined {
   def apply(pen: Pen, side: Double): SquareOutlined =
     new SquareOutlined(pen, side)
   
-  def apply(color: java.awt.Color, side: Double): SquareOutlined =
+  def apply(color: Color, side: Double): SquareOutlined =
     new SquareOutlined(Pen(color), side)
 }

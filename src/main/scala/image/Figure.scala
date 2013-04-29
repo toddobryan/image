@@ -1,5 +1,5 @@
 package image
-import java.awt.{Graphics2D, Paint, RenderingHints}
+import java.awt.{Graphics2D, RenderingHints}
 import java.awt.Shape
 import java.awt.geom.Rectangle2D
 
@@ -10,14 +10,14 @@ abstract class Figure extends Image {
 
 abstract class FigureFilled(val paint: Paint) extends Figure {
   def render(g2: Graphics2D) = {
-    g2.setPaint(paint)
+    g2.setPaint(paint.awtPaint)
     g2.fill(awtShape)
   }
 }
 
 abstract class FigureOutlined(val pen: Pen) extends Figure {
   def render(g2: Graphics2D) = {
-    g2.setPaint(pen.paint)
+    g2.setPaint(pen.paint.awtPaint)
     g2.setStroke(pen.asStroke)
     g2.draw(awtShape)
   }

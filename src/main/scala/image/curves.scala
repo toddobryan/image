@@ -1,7 +1,5 @@
 package image
 
-import java.awt.Paint
-
 private[image] object Ellipse {
   def shape(width: Double, height: Double) = new java.awt.geom.Ellipse2D.Double(0, 0, width, height)
 }
@@ -25,7 +23,7 @@ object EllipseOutlined {
     new EllipseOutlined(pen, width, height)
   }
   
-  def apply(color: java.awt.Color, width: Double, height: Double): EllipseOutlined = {
+  def apply(color: Color, width: Double, height: Double): EllipseOutlined = {
     new EllipseOutlined(Pen(color), width, height)
   }
 }
@@ -44,7 +42,7 @@ private[image] class CircleOutlined(pen: Pen, radius: Double) extends FigureOutl
 
 object CircleOutlined {
   def apply(pen: Pen, radius: Double) = new CircleOutlined(pen, radius)
-  def apply(color: java.awt.Color, radius: Double) = new CircleOutlined(Pen(color), radius)
+  def apply(color: Color, radius: Double) = new CircleOutlined(Pen(color), radius)
 }
 
 private[image] object Arc {
@@ -71,7 +69,7 @@ object CircularArc {
   def apply(pen: Pen, radius: Double, start: Angle, extent: Angle) = {
     new CircularArc(pen, radius, start, extent)
   }
-  def apply(color: java.awt.Color, radius: Double, start: Angle, extent: Angle) = {
+  def apply(color: Color, radius: Double, start: Angle, extent: Angle) = {
     new CircularArc(Pen(color), radius, start, extent)
   }
 }
@@ -107,7 +105,7 @@ object EllipticalArc {
   def apply(pen: Pen, width: Double, height: Double, start: Angle, extent: Angle) = {
     new EllipticalArc(pen, width, height, start, extent)
   }
-  def apply(color: java.awt.Color, width: Double, height: Double, start: Angle, extent: Angle) = {
+  def apply(color: Color, width: Double, height: Double, start: Angle, extent: Angle) = {
     new EllipticalArc(Pen(color), width, height, start, extent)
   }
 }
