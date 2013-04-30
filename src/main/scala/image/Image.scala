@@ -40,7 +40,8 @@ abstract class Image {
   }
   
   def saveAsDisplayed(filename: String) {
-    ImageIO.write(displayedImg, "png", new File(filename))
+    val filenameWithExt = if (filename.endsWith(".png")) filename else filename + ".png"
+    ImageIO.write(displayedImg, "png", new File(filenameWithExt))
   }
   
   def bytesPng: Array[Byte] = {
