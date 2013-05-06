@@ -1,10 +1,26 @@
 package image
 
-class Color private[image] (val hex: Int, hasAlpha: Boolean = false) extends Paint {
-  lazy val awtColor: java.awt.Color = new java.awt.Color(hex, hasAlpha)
+/**
+ * represents RGB(A) colors. Use the companion object to construct `Color` instances.
+ */
+class Color private[image] (private[this] val hex: Int, hasAlpha: Boolean = false) extends Paint {
+  private[this] lazy val awtColor: java.awt.Color = new java.awt.Color(hex, hasAlpha)
 
-  def awtPaint: java.awt.Paint = awtColor
+  private[image] def awtPaint: java.awt.Paint = awtColor
   
+  /**
+   * returns this `Color` as a `String`.
+   * 
+   * If the value is an HTML color, produces `Color.Green`, `Color.Red`, `Color.BlanchedAlmond`,
+   * etc. Be warned that a few HTML colors have identical RGB values, so, for example,
+   * `Color.Fuchsia.toString` results in `Color.Magenta`.
+   * 
+   * If the value is not an HTML color, produces `Color(red = r, green = g, blue = b)` where
+   * `r`, `g`, and `b` all represent values from `0` to `255`.
+   * 
+   * By default, the alpha value for a color is `255`, representing completely opaque. If the
+   * alpha value is anything else, it will be displayed after the blue value.
+   */
   override def toString: String = {
     if (!hasAlpha && Color.hexToName.contains(hex)) "Color.%s".format(Color.hexToName(hex))
     else "Color(red = %d, green = %d, blue = %d%s)".format(
@@ -13,7 +29,16 @@ class Color private[image] (val hex: Int, hasAlpha: Boolean = false) extends Pai
   }
 }
 
+/**
+ * The factory for constructing `Color` instances. It also contains values
+ * for all HTML color names.
+ */
 object Color {
+  /**
+   * returns a new `Color` with the given RGBA values. All values should
+   * be `Int`s from `0` to `255` inclusive, and an error will occur if 
+   * values outside that range are provided.
+   */
   def apply(red: Int = 0, green: Int = 0, blue: Int = 0, alpha: Int = 255): Color = {
     require(0 <= red && red <= 255, "red value must be between 0 and 255 inclusive")
     require(0 <= green && green <= 255, "green value must be between 0 and 255 inclusive")
@@ -169,8 +194,8 @@ object Color {
     (0x9acd32, "YellowGreen")
   )
 
-  lazy val hexToName: Map[Int, String] = Map(hexNameTuples: _*)
-  lazy val nameToHex: Map[String, Int] = 
+  private[image] lazy val hexToName: Map[Int, String] = Map(hexNameTuples: _*)
+  private[image] lazy val nameToHex: Map[String, Int] = 
     Map(hexNameTuples.map((is: (Int, String)) => (is._2, is._1)): _*)
   
   val AliceBlue: Color = new Color(0xf0f8ff)

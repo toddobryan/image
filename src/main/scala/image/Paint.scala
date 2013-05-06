@@ -1,5 +1,5 @@
 package image
 
 abstract class Paint {
-  def awtPaint: java.awt.Paint
+  private[image] def awtPaint: java.awt.Paint
 }

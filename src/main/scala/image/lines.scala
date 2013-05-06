@@ -2,6 +2,7 @@ package image
 
 import scala.math.{min, Pi}
 
+/** a class with convenience methods for polygons */
 private[image] object Poly {
   def topLeft(pts: List[Point]): Point = pts match {
     case Nil => throw new Exception("can't create Polygon with no vertices")
@@ -37,44 +38,45 @@ private[image] object Poly {
   }
 }
 
-private[image] class Polygon(paint: Paint, vertices: List[Point]) extends FigureFilled(paint) {
+private[image] class PolygonFilled(paint: Paint, vertices: List[Point]) extends FigureFilled(paint) {
   val awtShape = Poly.shape(vertices, true)
   override def toString = "Polygon(%s, %s)".format(paint, vertices.mkString(", "))
 }
 
-object Polygon {  
+/** a factory for creating filled polygons */
+object PolygonFilled {  
   def apply(
       paint: Paint, 
       vertex1: Point, vertex2: Point, vertex3: Point, 
       restOfVertices: Point*): Image = {
-    new Polygon(paint, vertex1 :: vertex2 :: vertex3 :: restOfVertices.toList) 
+    new PolygonFilled(paint, vertex1 :: vertex2 :: vertex3 :: restOfVertices.toList) 
   }
 }
 
-private[image] class Polyline(pen: Pen, vertices: List[Point]) extends FigureOutlined(pen) {
+private[image] class PolygonOutlined(pen: Pen, vertices: List[Point]) extends FigureOutlined(pen) {
   val awtShape = Poly.shape(vertices, false)
   override def toString = "Polyline(%s, %s)".format(pen, vertices.mkString(", "))
 }
 
-object Polyline {
+object PolygonOutlined {
   def apply(pen: Pen, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
-    new Polyline(pen, vertex1 :: vertex2 :: restOfVertices.toList)
+    new PolygonOutlined(pen, vertex1 :: vertex2 :: restOfVertices.toList)
   }
   def apply(color: Color, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
-    Polyline(Pen(color), vertex1, vertex2, restOfVertices: _*)
+    PolygonOutlined(Pen(color), vertex1, vertex2, restOfVertices: _*)
   }
 }
 
 object RegularPolygonFilled {
   def apply(paint: Paint, sideLength: Double, numSides: Int): Image = {
-    new Polygon(paint, Poly.regular(sideLength, numSides))
+    new PolygonFilled(paint, Poly.regular(sideLength, numSides))
   }
 }
 
 object RegularPolygonOutlined {
   def apply(pen: Pen, sideLength: Double, numSides: Int): Image = {
     val vts = Poly.regular(sideLength, numSides)
-    new Polyline(pen, vts.last :: vts)
+    new PolygonOutlined(pen, vts.last :: vts)
   }
   def apply(color: Color, sideLength: Double, numSides: Int): Image = {
     RegularPolygonOutlined(Pen(color), sideLength, numSides)

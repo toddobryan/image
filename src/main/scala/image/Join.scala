@@ -1,21 +1,29 @@
 package image
 import java.awt.BasicStroke
 
-sealed abstract class Join {
-  def toBsJoin: Int
+/** parent class for style to use when lines are joined */
+sealed abstract class Join private[image]() {
+  private[image] def toBsJoin: Int
 }
 
+/** companion class containing the three styles used for joining lines */
 object Join {
+  /** this style "cuts the corner" where two lines meet */
   object Bevel extends Join {
-    def toBsJoin = BasicStroke.JOIN_BEVEL
+    private[image] def toBsJoin = BasicStroke.JOIN_BEVEL
+    /** returns `"Join.Bevel"` */
     override def toString = "Join.Bevel"
   }
+  /** this style extends lines until they meet at a point */
   object Miter extends Join {
-    def toBsJoin = BasicStroke.JOIN_MITER
+    private[image] def toBsJoin = BasicStroke.JOIN_MITER
+    /** returns `"Join.Miter"` */
     override def toString = "Join.Miter"
   }
+  /** this style rounds the corner where two lines meet */
   object Round extends Join {
-    def toBsJoin = BasicStroke.JOIN_ROUND
+    private[image] def toBsJoin = BasicStroke.JOIN_ROUND
+    /** returns `"Join.Round"` */
     override def toString = "Join.Round"
   }
 }

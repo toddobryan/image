@@ -31,7 +31,7 @@ class ShapeTests extends FunSuite {
         Bitmap.fromWorkspace("/shapes/arc-50-30-120-green.png")))
     assert(CircularSegment(Color.Cyan, 25, -20.degrees, 220.degrees).sameBitmap(
         Bitmap.fromWorkspace("/shapes/seg-25-20-220-cyan.png")))
-    assert(CircularWedge(Color.Red, 30, (Pi / 6).radians, (2 * Pi / 3).radians).sameBitmap(
+    assert(CircularSector(Color.Red, 30, (Pi / 6).radians, (2 * Pi / 3).radians).sameBitmap(
         Bitmap.fromWorkspace("/shapes/wedge-30-30-120-red.png")))
   }
   
@@ -40,14 +40,14 @@ class ShapeTests extends FunSuite {
         Bitmap.fromWorkspace("/shapes/ell-arc-50-80-50-120-brick.png")))
     assert(EllipticalSegment(Color.Tomato, 35, 25, -20.degrees, 270.degrees).sameBitmap(
         Bitmap.fromWorkspace("/shapes/ell-seg-35-25-20-270-tomato.png")))
-    assert(EllipticalWedge(Color.Orange, 30, 100, (Pi / 6).radians, (3 * Pi / 4).radians).sameBitmap(
+    assert(EllipticalSector(Color.Orange, 30, 100, (Pi / 6).radians, (3 * Pi / 4).radians).sameBitmap(
         Bitmap.fromWorkspace("/shapes/ell-wedge-30-100-30-135-orange.png")))
   }
   
   test("polygonal") {
-    assert(Polygon(Color.Burlywood, Point(0, 0), Point(-10, 20), Point(60, 0), Point(-10, -20)).sameBitmap(
+    assert(PolygonFilled(Color.Burlywood, Point(0, 0), Point(-10, 20), Point(60, 0), Point(-10, -20)).sameBitmap(
         Bitmap.fromWorkspace("/shapes/polygon-arrow.png")))
-    assert(Polygon(Color.Plum, Point(0, 0), Point(0, 40), Point(20, 40), 
+    assert(PolygonFilled(Color.Plum, Point(0, 0), Point(0, 40), Point(20, 40), 
             Point(20, 60), Point(40, 60), Point(40, 20), Point(40, 20), 
             Point(20, 20), Point(20, 0)).sameBitmap(
         Bitmap.fromWorkspace("/shapes/polygon-plum-tetris.png")))
