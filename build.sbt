@@ -14,3 +14,7 @@ scalacOptions += "-deprecation"
 
 scalacOptions += "-feature"
 
+site.settings
+
+site.pamfletSupport()
+
