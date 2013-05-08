@@ -58,7 +58,7 @@ abstract class Image private[image] () {
   }
   
   /** returns the binary value of the image as PNG image, encoded as a base64 String */
-  private[image] def base64png: String = {
+  def base64png: String = {
     Base64.encodeBase64String(bytesPng)
   }
   
