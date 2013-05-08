@@ -9,7 +9,7 @@ scalaVersion := "2.10.1"
 
 libraryDependencies += "org.scala-lang" % "scala-swing" % "2.10.1"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "1.9.1" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "1.9.1"
 
 libraryDependencies += "commons-codec" % "commons-codec" % "1.6"
 

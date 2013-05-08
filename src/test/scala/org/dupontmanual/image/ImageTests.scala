@@ -7,21 +7,34 @@ class ImageTests extends FunSuite with ShouldMatchers {
   val cat = Bitmap.fromWorkspace("/bitmaps/cat.png")
   val pizza = Bitmap.fromWorkspace("/bitmaps/pizza.png")
   
+  test("toString") {
+    cat.toString should endWith ("cat.png\")")
+    pizza.toString should endWith ("pizza.png\")")
+    Hacker.toString should be === ("Hacker")
+  }
+  
   test("flip") {
-    assert(cat.flipHorizontal.sameBitmap(Bitmap.fromWorkspace("/bitmaps/cat-flip-hor.png")))
-    assert(cat.flipHorizontal.flipHorizontal.sameBitmap(cat))
-    assert(cat.flipVertical.sameBitmap(Bitmap.fromWorkspace("/bitmaps/cat-flip-ver.png")))
+    cat.flipHorizontal should have (sameBitmapAs 
+        (Bitmap.fromWorkspace("/bitmaps/cat-flip-hor.png")))
+    cat.flipHorizontal.flipHorizontal should have (sameBitmapAs (cat))
+    cat.flipVertical should have (sameBitmapAs 
+        (Bitmap.fromWorkspace("/bitmaps/cat-flip-ver.png")))
     
-    assert(pizza.flipHorizontal.sameBitmap(Bitmap.fromWorkspace("/bitmaps/pizza-flip-hor.png")))
-    assert(pizza.flipVertical.sameBitmap(Bitmap.fromWorkspace("/bitmaps/pizza-flip-ver.png")))
-    assert(pizza.flipVertical.flipVertical.sameBitmap(pizza)) 
+    pizza.flipHorizontal should have (sameBitmapAs 
+        (Bitmap.fromWorkspace("/bitmaps/pizza-flip-hor.png")))
+    pizza.flipVertical should have (sameBitmapAs 
+        (Bitmap.fromWorkspace("/bitmaps/pizza-flip-ver.png")))
+    pizza.flipVertical.flipVertical should have (sameBitmapAs (pizza)) 
   }
   
   test("scale") {
-    assert(cat.scale(3,3).sameBitmap(Bitmap.fromWorkspace("/bitmaps/cat-scale3x3y.png")))
-    assert(cat.scale(.5,.5).sameBitmap(Bitmap.fromWorkspace("/bitmaps/cat-scale.5x.5y.png")))
-    assert(cat.scaleX(3).sameBitmap(Bitmap.fromWorkspace("/bitmaps/cat-scalex3.png")))
-    assert(cat.scaleY(3).sameBitmap(Bitmap.fromWorkspace("/bitmaps/cat-scaley3.png")))
+    cat.scale(3,3) should have (sameBitmapAs 
+        (Bitmap.fromWorkspace("/bitmaps/cat-scale3x3y.png")))
+    cat.scale(.5,.5) should have (sameBitmapAs
+        (Bitmap.fromWorkspace("/bitmaps/cat-scale.5x.5y.png")))
+    cat.scaleX(3) should have (sameBitmapAs
+        (Bitmap.fromWorkspace("/bitmaps/cat-scalex3.png")))
+    cat.scaleY(3) should have (sameBitmapAs
+        (Bitmap.fromWorkspace("/bitmaps/cat-scaley3.png")))
   }
-  
 }
