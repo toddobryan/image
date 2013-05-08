@@ -42,4 +42,21 @@ package object image {
 
   /** a 129x44 pixel picture of an old-fashioned train engine with a coal car */
   lazy val TrainEngine = Bitmap.fromWorkspace("/train_engine.png")
+  
+  private[image] def repr(s: String): String = {
+    if (s == null) "null"
+    else s.toList.map {
+      case '\0' => "\\0"
+      case '\t' => "\\t"
+      case '\n' => "\\n"
+      case '\r' => "\\r"
+      case '\"' => "\\\""
+      case '\\' => "\\\\"
+      case ch if (' ' <= ch && ch <= '\u007e') => ch.toString
+      case ch => {
+        val hex = Integer.toHexString(ch.toInt)
+        "\\u%s%s".format("0" * (4 - hex.length), hex)
+      }
+    }.mkString("\"", "", "\"")
+  }
 }

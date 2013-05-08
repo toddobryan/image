@@ -1,8 +1,9 @@
 package org.dupontmanual.image
 
 import org.scalatest.FunSuite
+import org.scalatest.matchers.ShouldMatchers
 
-class ImageTests extends FunSuite {
+class ImageTests extends FunSuite with ShouldMatchers {
   val cat = Bitmap.fromWorkspace("/bitmaps/cat.png")
   val pizza = Bitmap.fromWorkspace("/bitmaps/pizza.png")
   

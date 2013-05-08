@@ -1,3 +1,6 @@
+import de.johoop.jacoco4sbt._
+import JacocoPlugin._
+
 name := "image"
 
 version := "0.1"
@@ -16,5 +19,8 @@ scalacOptions += "-feature"
 
 site.settings
 
+site.includeScaladoc()
+
 site.pamfletSupport()
 
+seq(jacoco.settings : _*)
