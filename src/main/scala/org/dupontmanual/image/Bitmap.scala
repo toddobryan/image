@@ -13,7 +13,7 @@ import java.net.URL
 /**
  * represents a bitmap image
  */
-class Bitmap private[image](val pathOrUrl: Either[File, URL]) extends Image {
+class Bitmap private[image](val pathOrUrl: Either[File, URL], val name: Option[String] = None) extends Image {
   override protected lazy val img: BufferedImage = {
     val temp = Option(pathOrUrl match {
       case Left(path) => ImageIO.read(path)
@@ -25,9 +25,12 @@ class Bitmap private[image](val pathOrUrl: Either[File, URL]) extends Image {
   private[image] def bounds = new Rectangle2D.Double(0, 0, img.getWidth, img.getHeight)
   private[image] def render(g2: Graphics2D) = g2.drawRenderedImage(img, new AffineTransform())
   
-  override def toString: String = pathOrUrl match {
-    case Left(path) => "Bitmap(%s)".format(repr(path.getPath()))
-    case Right(url) => "Bitmap.fromUrl(%s)".format(repr(url.toString()))
+  override def toString: String = name match {
+    case Some(str) => str
+    case None => pathOrUrl match {
+      case Left(path) => "Bitmap(%s)".format(repr(path.getPath()))
+      case Right(url) => "Bitmap.fromUrl(%s)".format(repr(url.toString()))
+    }
   }
 }
 
@@ -39,17 +42,23 @@ object Bitmap {
    * produces a `Bitmap` representing the image file at the given path.
    * Any format recognized by `javax.imageio.ImageIO` is acceptable.
    */
-  def apply(path: String): Bitmap = new Bitmap(Left(new File(path)))
+  def apply(path: String, name: Option[String] = None): Bitmap = {
+    new Bitmap(Left(new File(path)), name)
+  }
   
   /**
    * produces a `Bitmap` representing the image at the given URL. The
    * image is fetched over the network, so the URL must be reachable.
    * Any format recognized by `javax.imageio.ImageIO` is acceptable.
    */
-  def fromUrl(url: String): Bitmap = new Bitmap(Right(new URL(url)))
+  def fromUrl(url: String, name: Option[String] = None): Bitmap = {
+    new Bitmap(Right(new URL(url)), name)
+  }
   
   /**
    * reads a file from the jar (for included images)
    */
-  private[image] def fromWorkspace(path: String): Bitmap = new Bitmap(Right(getClass.getResource(path)))
+  private[image] def fromWorkspace(path: String, name: Option[String] = None): Bitmap = {
+    new Bitmap(Right(getClass.getResource(path)), name)
+  }
 }
