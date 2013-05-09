@@ -1,5 +1,7 @@
 package org.dupontmanual.image
 
+import scala.xml.NodeSeq
+
 import math.ceil
 import math.Pi
 import java.awt.{Graphics2D, RenderingHints}
@@ -60,6 +62,10 @@ abstract class Image private[image] () {
   /** returns the binary value of the image as PNG image, encoded as a base64 String */
   def base64png: String = {
     Base64.encodeBase64String(bytesPng)
+  }
+  
+  def inlineImgTag: NodeSeq = {
+    <img src={ "data:image/png;base64,%s".format(this.base64png) } />
   }
   
   /** the bounding box */
