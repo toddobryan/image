@@ -32,10 +32,10 @@ object EllipseOutlined {
   
   /** 
    * returns an outlined ellipse with the given characteristics.
-   * It is drawn with `Pen(color)`.
+   * It is drawn with `Pen(paint)`.
    */
-  def apply(color: Color, width: Double, height: Double): Image = {
-    new EllipseOutlined(Pen(color), width, height)
+  def apply(paint: Paint, width: Double, height: Double): Image = {
+    new EllipseOutlined(Pen(paint), width, height)
   }
 }
 
@@ -62,9 +62,9 @@ object CircleOutlined {
   
   /** 
    * returns an outlined circle with the given characteristics.
-   * The circle is drawn with `Pen(color)`. 
+   * The circle is drawn with `Pen(paint)`. 
    */
-  def apply(color: Color, radius: Double) = new CircleOutlined(Pen(color), radius)
+  def apply(paint: Paint, radius: Double) = new CircleOutlined(Pen(paint), radius)
 }
 
 /** an object with convenience methods for arcs */
@@ -98,10 +98,10 @@ object CircularArc {
   
   /** 
    * returns a circular arc with the given characteristics.
-   * The arc is drawn with `Pen(color)`.
+   * The arc is drawn with `Pen(paint)`.
    */
-  def apply(color: Color, radius: Double, start: Angle, extent: Angle): Image = {
-    new CircularArc(Pen(color), radius, start, extent)
+  def apply(paint: Paint, radius: Double, start: Angle, extent: Angle): Image = {
+    new CircularArc(Pen(paint), radius, start, extent)
   }
 }
 
@@ -157,10 +157,10 @@ object EllipticalArc {
   
   /** 
    * returns an elliptical arc with the given characteristics. The arc is drawn
-   * with `Pen(color)`.
+   * with `Pen(paint)`.
    */
-  def apply(color: Color, width: Double, height: Double, start: Angle, extent: Angle): Image = {
-    new EllipticalArc(Pen(color), width, height, start, extent)
+  def apply(paint: Paint, width: Double, height: Double, start: Angle, extent: Angle): Image = {
+    new EllipticalArc(Pen(paint), width, height, start, extent)
   }
 }
 

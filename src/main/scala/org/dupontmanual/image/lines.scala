@@ -88,12 +88,12 @@ object LineDrawing {
   }
   /**
    * returns an image consisting of lines connecting the vertices in order, drawn
-   * with `Pen(color)`.
+   * with `Pen(paint)`.
    * 
    * This method requires at least two `Point` arguments, but will accept more.
    */
-  def apply(color: Color, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
-    LineDrawing(Pen(color), vertex1, vertex2, restOfVertices: _*)
+  def apply(paint: Paint, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
+    LineDrawing(Pen(paint), vertex1, vertex2, restOfVertices: _*)
   }
 }
 
@@ -124,13 +124,13 @@ object RegularPolygonOutlined {
     LineDrawing(pen, vts.last, vts.head, vts.tail: _*)
   }
   /**
-   * returns an image of an outlined regular polygon drawn in `Pen(color)`.
+   * returns an image of an outlined regular polygon drawn in `Pen(paint)`.
    * 
    * The polygon is drawn so that the bottom edge is horizontal. `numSides`
    * must be greater than 2.
    */
-  def apply(color: Color, sideLength: Double, numSides: Int): Image = {
-    RegularPolygonOutlined(Pen(color), sideLength, numSides)
+  def apply(paint: Paint, sideLength: Double, numSides: Int): Image = {
+    RegularPolygonOutlined(Pen(paint), sideLength, numSides)
   }
 }
 
@@ -163,9 +163,9 @@ object RectangleOutlined {
     new RectangleOutlined(pen, width, height)
   }
   
-  /** returns an image of an outlined rectangle drawn with `Pen(color)`. */
-  def apply(color: Color, width: Double, height: Double): Image = {
-    new RectangleOutlined(Pen(color), width, height)
+  /** returns an image of an outlined rectangle drawn with `Pen(paint)`. */
+  def apply(paint: Paint, width: Double, height: Double): Image = {
+    new RectangleOutlined(Pen(paint), width, height)
   }
 }
 
@@ -197,7 +197,7 @@ object SquareOutlined {
   def apply(pen: Pen, side: Double): Image =
     new SquareOutlined(pen, side)
   
-  /** returns an image of an outlined square drawn with `Pen(color)`. */
-  def apply(color: Color, side: Double): Image =
-    new SquareOutlined(Pen(color), side)
+  /** returns an image of an outlined square drawn with `Pen(paint)`. */
+  def apply(paint: Paint, side: Double): Image =
+    new SquareOutlined(Pen(paint), side)
 }

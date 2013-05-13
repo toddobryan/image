@@ -82,6 +82,11 @@ scala> EllipseOutlined(Pen(Color.Cyan, 5), 200, 25)
 Squares, rectangles, and regular polygons get special treatment, and they're
 very similar to circles and ellipses.
 
+## Squares, Rectangles, and Regular Polygons
+
+Squares, rectangles, and regular polygons get special treatment, and they're
+very similar to circles and ellipses.
+
 ### Squares
 
 ```scala
@@ -93,6 +98,16 @@ SquareOutlined(pen: Pen, side: Double): Image
 The second argument to `SquareFilled` or `SquareOutlined` is the square's
 side length.
 
+```scala
+scala> SquareFilled(Color.Goldenrod, 40)
+```  
+@SquareFilled(Color.Goldenrod, 40).inlineImgTag
+
+```scala
+scala> SquareOutlined(Pen(Color.Purple, 3), 60)
+```  
+@SquareOutlined(Pen(Color.Purple, 3), 60).inlineImgTag
+
 ### Rectangles
 
 ```scala
@@ -100,6 +115,19 @@ RectangleFilled(color: Paint, width: Double, height: Double): Image
 RectangleOutlined(color: Paint, width: Double, height: Double): Image
 RectangleOutlined(pen: Pen, width: Double, height: Double): Image
 ```
+
+The second and third arguments to `RectangleFilled` and `RectangleOutlined` are
+the width and height of the rectangles.
+
+```scala
+scala> RectangleFilled(Color.Orange, 50, 60)
+```  
+@RectangleFilled(Color.Orange, 50, 60).inlineImgTag
+
+```scala
+scala> RectangleOutlined(Pen(Color.YellowGreen, 3), 20, 100)
+```  
+@RectangleOutlined(Pen(Color.YellowGreen, 3), 20, 100).inlineImgTag
 
 ### RegularPolygons
 
@@ -109,3 +137,16 @@ RegularPolygonOutlined(color: Paint, sideLength: Double, numSides: Double): Imag
 RegularPolygonOutlined(pen: Pen, sideLength: Double, numSides: Double): Image
 ```
 
+The second and third arguments of `RegularPolygonFilled` and `RegularPolygonOutlined`
+are the length of each side and the number of sides. The polygon is situated so
+that the bottom edge is horizontal.
+
+```scala
+scala> RegularPolygonFilled(Color.Yellow, 100, 3)
+```  
+@RegularPolygonFilled(Color.Yellow, 100, 3).inlineImgTag
+
+```scala
+scala> RegularPolygonOutlined(Pen(Color.Black, 10), 50, 10)
+```  
+@RegularPolygonOutlined(Pen(Color.Black, 10), 50, 10).inlineImgTag

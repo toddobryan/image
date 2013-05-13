@@ -1,0 +1,262 @@
+@()
+
+@import org.dupontmanual.image._
+
+Fancy Stuff
+===========
+
+In addition to the bitmaps and basic shapes we've already covered, the
+library contains some pretty fancy stuff. As you'd probably expect, these
+features are a little more complicated to use, but the results are worth
+it. (Or at least they'd better be, given how long it took to get them
+working.)
+
+## Pieces of Circles and Ellipses
+
+The first fancy shapes we'll discuss are based on circles and ellipses.
+You can create arcs, sectors (pie wedges), and segments (pieces cut off
+the edge of the circle or ellipse). But before we discuss how to make
+these, we should discuss angles.
+
+### Angles
+
+After you import everything from `org.dupontmanual.image._`, you can
+call `.degrees` or `.radians` on a number to create an `Angle`.
+
+```scala
+scala> 45.degrees
+res1: org.dupontmanual.image.Angle = 45.000000 degrees
+
+scala> (math.Pi / 2).radians
+res2: org.dupontmanual.image.Angle = 1.570796 radians
+```
+
+Angles are measured as they normally are in trigonometry. Zero degrees 
+(or radians) is due east, and the angles increase in the counter-clockwise
+direction: `45.degrees` is northeast, `90.degrees` is north, etc.
+
+Once you have an `Angle` object, you can convert `.toDegrees` or `.toRadians`
+if you're more comfortable with one unit than another.
+
+```scala
+scala> 180.degrees.toRadians
+res3: org.dupontmanual.image.Angle = 3.141593 radians
+
+scala> (math.Pi / 4).radians.toDegrees
+res4: org.dupontmanual.image.Angle = 45.000000 degrees
+```
+
+You can also add `Angle`s using `+`, and you can find the sine, cosine, or
+tangent of an `Angle` using `.sin`, `.cos`, or `.tan`. (Note that, if the 
+tangent is undefined, you'll get the `Double` value `NaN`, which stands for
+"Not a Number".)
+
+```scala
+scala> 60.degrees + (math.Pi / 6).radians
+res5: org.dupontmanual.image.Angle = 90.000000 degrees
+
+scala> (math.Pi / 4).radians + 45.degrees
+res6: org.dupontmanual.image.Angle = 1.570796 radians
+
+scala> (math.Pi / 6).radians.sin
+res8: Double = 0.5
+
+scala> 60.degrees.cos
+res9: Double = 0.5
+
+scala> 90.degrees.tan
+res10: Double = NaN
+```
+
+### Circle Pieces
+
+```scala
+CircularArc(paint: Paint, radius: Double, start: Angle, extent: Angle): Image
+CircularArc(pen: Pen, radius: Double, start: Angle, extent: Angle): Image
+CircularSector(paint: Paint, radius: Double, start: Angle, extent: Angle): Image
+CircularSegment(paint: Paint, radius: Double, start: Angle, extent: Angle): Image
+```
+
+For all of these object's `apply()` methods, the first and second arguments
+are just what you'd expect. The third and fourth arguments represent the angle
+at which the arc, sector, or segment should begin, and the angle length of the
+arc it cuts off. Both the start angle and the size of the angle can be positive
+or negative.
+
+A `CircularSector` looks like a pie wedge and a `CircularSegment` is what you get
+when you connect the ends of an arc and fill in the area. Currently, there's
+no way to draw the outline version of these shapes, unless you draw the lines and
+arcs individually, but a future version may fix that.
+
+```scala
+scala> CircularArc(Color.Black, 100, 0.degrees, 180.degrees)
+```   
+@CircularArc(Color.Black, 100, 0.degrees, 180.degrees).inlineImgTag
+
+```scala
+scala> CircularSector(Color.LimeGreen, 50, (math.Pi / 4).radians, (math.Pi/ 2).radians)
+```  
+@CircularSector(Color.LimeGreen, 50, (math.Pi / 4).radians, (math.Pi/ 2).radians).inlineImgTag
+
+```scala
+scala> CircularSegment(Color.Lavender, 100, -30.degrees, 100.degrees)
+```  
+@CircularSegment(Color.Lavender, 100, -30.degrees, 100.degrees).inlineImgTag
+
+### Ellipse Pieces
+
+```scala
+EllipticalArc(paint: Paint, width: Double, height: Double, start: Angle, extent: Angle): Image
+EllipticalArc(pen: Pen, width: Double, height: Double, start: Angle, extent: Angle): Image
+EllipticalSector(paint: Paint, width: Double, height: Double, start: Angle, extent: Angle): Image
+EllipticalSegment(paint: Paint, width: Double, height: Double, start: Angle, extent: Angle): Image
+```  
+
+The elliptical arc, sector, and segment builders are similar to the circular versions.
+Remember, however, that `width` and `height` represent the width and height of the whole
+ellipse, not the radius (like with the circular versions), and not just the part of the 
+ellipse that you're drawing.
+
+```scala
+scala> EllipticalArc(Pen(Color.Magenta, 3), 200, 100, -90.degrees, -45.degrees)
+```  
+@EllipticalArc(Pen(Color.Magenta, 3), 200, 100, -90.degrees, -45.degrees).inlineImgTag
+
+```scala
+scala> EllipticalSector(Color.DeepPink, 100, 200, -45.degrees, 180.degrees)
+```  
+@EllipticalSector(Color.DeepPink, 100, 200, -45.degrees, 180.degrees).inlineImgTag
+
+```scala
+scala> EllipticalSegment(Color.Beige, 75, 100, 45.degrees, 90.degrees)
+```  
+@EllipticalSegment(Color.Beige, 300, 100, 45.degrees, 90.degrees).inlineImgTag
+
+## Shapes with Straight Lines
+
+There are two classes that let you draw straight-lined shapes with almost
+complete flexibility--`LineDrawing` and `PolygonFilled`. Both of these let
+you describe the drawing in terms of an arbitrary number of `Point`s.
+
+### Points
+
+```scala
+case class Point(x: Double, y: Double)
+  .translate(dx: Double, dy: Double): Point
+```
+
+The basic class for creating points is `Point`. Since it's a case class, you create
+a specific point by writing `Point(x, y)` and filling in the values you want for
+`x` and `y`.
+
+Computer graphics are a little weird. When you see a window or a panel, the top left
+corner is considered `Point(0, 0)`. The x-coordinates increase as you go to the right,
+just as you're used to from math. However, the y-coordinates increase as you go
+*down*, not up. If you can remember this weird fact, you'll do fine.
+
+Once you've created a `Point` instance, you can get its `x` and `y` values. There is
+also a method called `.translate(dx, dy)` that will give you a new `Point` object
+that has been moved `dx` pixels to the right and `dy` pixels down from the 
+original `Point`. You can also check if two `Points` are equal to each other by
+using the `==` method.
+
+Here are some examples:
+
+```scala
+scala> val p1 = Point(10, 20)
+p1: org.dupontmanual.image.Point = Point(10.0,20.0)
+
+scala> p1.x
+res0: Double = 10.0
+
+scala> p1.y
+res1: Double = 20.0
+
+scala> p1.translate(-5, 10)
+res2: org.dupontmanual.image.Point = Point(5.0,30.0)
+
+scala> p1 == Point(10, 20)
+res3: Boolean = true
+```
+
+Sometimes it's easier to think of points on a circle, instead of in a grid. For those
+cases, there's a point in polar coordinates:
+
+```scala
+case class PointPolar(r: Double, theta: Angle)
+  .toCartesian: Point
+```
+
+`PointPolar` makes a point given the distance from the origin and the angle from the
+positive x-axis. Once you've made a `PointPolar`, you can convert it back to a
+Cartesian coordinate using the `.toCartesian` method.
+
+```scala
+scala> val p1 = PointPolar(3, 180.degrees)
+p1: org.dupontmanual.image.PointPolar = PointPolar(3.0,180.000000 degrees)
+
+scala> p1.toCartesian
+res0: org.dupontmanual.image.Point = Point(-3.0,0.0)
+
+scala> p1.r
+res1: Double = 3.0
+
+scala> p1.theta
+res2: org.dupontmanual.image.Angle = 180.000000 degrees
+```
+
+As you might have guessed, `PointPolar` came in handy when we wrote the code
+to create regular polygons, since the easiest way to create them was to space
+the vertices around a circle at equal angles.
+
+Unfortunately, you can't use `PointPolar` directly when you're creating lined
+shapes, but have to call its `toCartesian` method. Also, you can't compare
+`Point` and `PointPolar` with `==`. Since they're different classes, they'll
+always be different than one another, even if they represent the same point.
+
+### Filled Polygons
+
+```scala
+PolygonFilled(paint: Paint, vertex1: Point, vertex2: Point, vertex3: Point, restOfVertices: Point*): Image
+```
+
+To create a filled polygon of any shape, use the `PolygonFilled` object's `apply` method.
+It requires at least four arguments: a `Paint` and three vertices. The final argument
+`restOfVertices: Point*` means that you can add as many points as you'd like, from none
+to lots.
+
+The result of this method call is a filled-in polygon that connects all the points in order.
+Since the polygon is filled in, the last point is connected back to the first
+automatically.
+
+Here are some examples:
+
+```scala
+scala> PolygonFilled(Color.Khaki, Point(0, 10), Point(30, 50), Point(20, 150), Point(40, 30))
+```  
+@PolygonFilled(Color.Khaki, Point(0, 10), Point(30, 50), Point(20, 150), Point(40, 30)).inlineImgTag
+
+```scala
+scala> PolygonFilled(Color.Plum, Point(0, 0), Point(0, 40), Point(20, 40), Point(20, 60), 
+     |  Point(40, 60), Point(40, 20), Point(20, 20), Point(20, 0))
+```  
+@PolygonFilled(Color.Plum, Point(0, 0), Point(0, 40), Point(20, 40), Point(20, 60), Point(40, 60), 
+Point(40, 20), Point(20, 20), Point(20, 0)).inlineImgTag
+
+One weirdness that you have to consider with filled polygons is what you do if the polygon's
+edges cross over themselves. In this case, the whole interior of the polygon is filled in, so
+if you have edges in the middle, you won't see them.
+
+```scala
+scala> PolygonFilled(Color.LemonChiffon, Point(-25, -25), Point(40, 10), 
+     |  Point(-40, 10), Point(25, -25), Point(0, 30))
+```  
+@PolygonFilled(Color.LemonChiffon, Point(-25, -25), Point(40, 10), Point(-40, 10), Point(25, -25), Point(0, 30)).inlineImgTag
+
+### Line Drawings
+
+```scala
+LineDrawing(paint: Paint, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image
+LineDrawing(pen: Pen, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image
+```
+
