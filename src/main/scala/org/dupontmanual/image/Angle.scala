@@ -116,7 +116,7 @@ class Angle private[image] (val magnitude: Double, val units: AngleUnit.AngleUni
    * (`radians` or `degrees`).
    */
   override def toString: String = {
-    "%f %s".format(magnitude, units)
+    f"$magnitude%f $units%s"
   }
   
   /** returns `true` if `other.isInstanceOf[Angle]`. */

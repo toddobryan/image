@@ -46,11 +46,19 @@ private[image] class Stack(front: Image, back: Image, xAlign: XAlign, yAlign: YA
   def bounds = new Rectangle2D.Double(0, 0, newWidth, newHeight)
   
   def render(g2: Graphics2D) {
-    g2.translate(backTopLeft.x, backTopLeft.y)
+    val backOutRect: Rectangle2D = back.displayBounds
+    val backInRect: Rectangle2D = back.bounds.getBounds2D
+    val frontOutRect: Rectangle2D = front.displayBounds
+    val frontInRect: Rectangle2D = front.bounds.getBounds2D
+    val backDx = (backTopLeft.x + (backOutRect.getWidth - backInRect.getWidth) / 2)
+    val backDy = (backTopLeft.y + (backOutRect.getHeight - backInRect.getHeight) / 2)
+    val frontDx = (frontTopLeft.x + (frontOutRect.getWidth - frontInRect.getWidth) / 2)
+    val frontDy = (frontTopLeft.y + (frontOutRect.getHeight - frontInRect.getHeight) / 2)
+    g2.translate(backDx, backDy)
     back.render(g2)
-    g2.translate(frontTopLeft.x - backTopLeft.x, frontTopLeft.y - backTopLeft.y)
+    g2.translate(frontDx - backDx, frontDy - backDy)
     front.render(g2)
-    g2.translate(-frontTopLeft.x, -frontTopLeft.y)
+    g2.translate(-frontDx, -frontDy)
   }
 }
 

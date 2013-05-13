@@ -22,14 +22,14 @@ class Bitmap private[image](val pathOrUrl: Either[File, URL], val name: Option[S
     temp.getOrElse(throw new IllegalArgumentException("no image at the source indicated"))
   }
   
-  private[image] def bounds = new Rectangle2D.Double(0, 0, img.getWidth, img.getHeight)
+  /*private[image]*/ def bounds = new Rectangle2D.Double(0, 0, img.getWidth, img.getHeight)
   private[image] def render(g2: Graphics2D) = g2.drawRenderedImage(img, new AffineTransform())
   
   override def toString: String = name match {
     case Some(str) => str
     case None => pathOrUrl match {
-      case Left(path) => "Bitmap(%s)".format(repr(path.getPath()))
-      case Right(url) => "Bitmap.fromUrl(%s)".format(repr(url.toString()))
+      case Left(path) => s"Bitmap(${repr(path.getPath())})"
+      case Right(url) => s"Bitmap.fromUrl(${repr(url.toString())})"
     }
   }
 }

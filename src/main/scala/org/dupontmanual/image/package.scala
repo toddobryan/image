@@ -55,8 +55,8 @@ package object image {
       case '\\' => "\\\\"
       case ch if (' ' <= ch && ch <= '\u007e') => ch.toString
       case ch => {
-        val hex = Integer.toHexString(ch.toInt)
-        "\\u%s%s".format("0" * (4 - hex.length), hex)
+        val hex = ch.toInt
+        f"\\u$hex%04x"
       }
     }.mkString("\"", "", "\"")
   }
