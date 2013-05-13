@@ -151,7 +151,7 @@ private[image] class EllipticalArc(pen: Pen, width: Double, height: Double, star
 /** a factory for elliptical arcs */
 object EllipticalArc {
   /** returns an elliptical arc with the given characteristics */
-  def apply(pen: Pen, width: Double, height: Double, start: Angle, extent: Angle) = {
+  def apply(pen: Pen, width: Double, height: Double, start: Angle, extent: Angle): Image = {
     new EllipticalArc(pen, width, height, start, extent)
   }
   
@@ -159,7 +159,7 @@ object EllipticalArc {
    * returns an elliptical arc with the given characteristics. The arc is drawn
    * with `Pen(color)`.
    */
-  def apply(color: Color, width: Double, height: Double, start: Angle, extent: Angle) = {
+  def apply(color: Color, width: Double, height: Double, start: Angle, extent: Angle): Image = {
     new EllipticalArc(Pen(color), width, height, start, extent)
   }
 }
