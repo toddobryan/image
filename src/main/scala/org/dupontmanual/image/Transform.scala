@@ -16,5 +16,5 @@ private[image] class Transform(image: Image, transform: AffineTransform) extends
     g2.transform(inverse)
   }
   
-  def bounds: Shape = transform.createTransformedShape(image.bounds)
+  def bounds: Shape = transform.createTransformedShape(image.displayBounds)
 }

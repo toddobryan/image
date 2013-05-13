@@ -1,0 +1,111 @@
+@()
+
+@import org.dupontmanual.image._
+
+Shapes
+======
+
+Most shapes have filled and outlined versions and are created by using the
+`apply()` method of a convenience object.
+
+The first argument for a filled shape is always a `Color`, which is, 
+not surprisingly, the color of the shape's interior. (Hopefully this will be
+enhanced later to allow for patterns and gradients, so the type you'll see
+in the documentation is actually `Paint`. Right now, the only kind of `Paint`
+you can use is a `Color`.)
+
+We explain more about `Color`s later, but for right now, know that you can use
+all of the HTML color names by writing `Color.Name`. If you just have to know
+all of the possible colors, go to the [Scaladoc API](latest/api/) and click on
+the `Color` object to see the complete list. Or just keep reading and you'll
+see several in the examples below.
+
+The first argument to an outlined shape is either a `Color` or a `Pen`. By
+default, all outlines are drawn so that they appear exactly one pixel wide,
+no matter how large or small you magnify the image. If you'd like a beefier
+line, create a `Pen(color, width)`, where `color` is the pen's color and 
+`width` is how wide the line will appear in pixels.
+
+Sizes are always expressed in pixels. Since the sizes are `Double`s, fractional
+pixels are allowed, but they'll be fit into the pixels of your display device,
+so they might do something different than you expect.
+
+## Curves
+
+There are four basic curvy shapes: circles and ellipses, filled and outlined.
+
+### Circles
+
+```scala
+CircleFilled(color: Paint, radius: Double): Image  
+CircleOutlined(color: Paint, radius: Double): Image
+CircleOutlined(pen: Pen, radius: Double): Image
+```
+
+For circles, the two required arguments are a `Color` or `Pen` and the size of
+the radius. (In the examples that follow, I'm going to show you the code you'd
+use to create an `Image` and the image that would result. Remember that if you
+actually want to see the image, you'll have to call it's `.display()` method.)
+
+```scala
+scala> CircleFilled(Color.Blue, 30)
+```  
+@CircleFilled(Color.Blue, 30).inlineImgTag  
+```scala
+scala> CircleOutlined(Color.Red, 25)
+```  
+@CircleOutlined(Color.Red, 25).inlineImgTag
+
+### Ellipses
+
+```scala
+EllipseFilled(color: Paint, width: Double, height: Double): Image
+EllipseOutlined(color: Paint, width: Double, height: Double): Image
+EllipseOutlined(pen: Pen, width: Double, height: Double): Image
+```
+
+For ellipses, there are three required arguments, the color, the width, and
+the height. Note that these are the total width and height, so a circle with
+radius 30 would have a width and height of 60.
+
+```scala
+scala> EllipseFilled(Color.Aquamarine, 50, 100)
+```  
+@EllipseFilled(Color.Aquamarine, 50, 100).inlineImgTag  
+```scala
+scala> EllipseOutlined(Pen(Color.Cyan, 5), 200, 25)
+```  
+@EllipseOutlined(Pen(Color.Cyan, 5), 200, 25).inlineImgTag
+
+## Squares, Rectangles, and Regular Polygons
+
+Squares, rectangles, and regular polygons get special treatment, and they're
+very similar to circles and ellipses.
+
+### Squares
+
+```scala
+SquareFilled(color: Paint, side: Double): Image
+SquareOutlined(color: Paint, side: Double): Image
+SquareOutlined(pen: Pen, side: Double): Image
+```
+
+The second argument to `SquareFilled` or `SquareOutlined` is the square's
+side length.
+
+### Rectangles
+
+```scala
+RectangleFilled(color: Paint, width: Double, height: Double): Image
+RectangleOutlined(color: Paint, width: Double, height: Double): Image
+RectangleOutlined(pen: Pen, width: Double, height: Double): Image
+```
+
+### RegularPolygons
+
+```scala
+RegularPolygonFilled(color: Paint, sideLength: Double, numSides: Double): Image
+RegularPolygonOutlined(color: Paint, sideLength: Double, numSides: Double): Image
+RegularPolygonOutlined(pen: Pen, sideLength: Double, numSides: Double): Image
+```
+

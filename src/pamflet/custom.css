@@ -1,0 +1,9 @@
+body {
+    font-size: 12pt;
+    font-family: DejaVu Serif, Times New Roman, serif;
+    padding: 0 1em;
+}
+pre, code, tt {
+	font-size: 10pt;
+    font-family: DejaVu Sans Mono, Courier New, monospace
+}

@@ -25,6 +25,7 @@ private[image] abstract class FigureOutlined(val pen: Pen) extends Figure {
     val myPen = if (pen.width == 0.0) pen.copy(width=1.0) else pen
     myPen.asStroke.createStrokedShape(awtShape).getBounds2D()
   }
+  override def penWidth: Double = pen.width
 }
 
 

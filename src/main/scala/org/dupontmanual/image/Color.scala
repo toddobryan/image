@@ -22,10 +22,14 @@ class Color private[image] (private[this] val hex: Int, hasAlpha: Boolean = fals
    * alpha value is anything else, it will be displayed after the blue value.
    */
   override def toString: String = {
-    if (!hasAlpha && Color.hexToName.contains(hex)) "Color.%s".format(Color.hexToName(hex))
-    else "Color(red = %d, green = %d, blue = %d%s)".format(
-        awtColor.getRed, awtColor.getGreen, awtColor.getBlue, 
-        if (!hasAlpha) "" else ", alpha = %d".format(awtColor.getAlpha))
+    if (!hasAlpha && Color.hexToName.contains(hex)) s"Color.${Color.hexToName(hex)}"
+    else {
+      val red = awtColor.getRed
+      val green = awtColor.getGreen
+      val blue = awtColor.getBlue
+      val alpha = if (!hasAlpha) "" else f", alpha = ${awtColor.getAlpha}%d"
+      f"Color(red = $red%d, green = $green%d, blue = $blue%d$alpha%s)"
+    }
   }
 }
 

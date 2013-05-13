@@ -1,6 +1,7 @@
 package org.dupontmanual.image
 
 import scala.math.{min, Pi}
+import java.awt.Shape
 
 /** a class with convenience methods for polygons */
 private[image] object Poly {
@@ -13,15 +14,16 @@ private[image] object Poly {
     }
   }
 
-  def shape(vertices: List[Point], close: Boolean) = {
+  def shape(vertices: List[Point], close: Boolean): Shape = {
     val tl = Poly.topLeft(vertices)
     val path = new java.awt.geom.Path2D.Double
     val transVs = vertices.map(p => p.translate(-tl.x, -tl.y))
-    val start = if (close) transVs.last else transVs.head
+    val start = transVs.head
     path.moveTo(start.x, start.y)
-    for (v <- (if (close) transVs else transVs.tail)) {
+    for (v <- transVs.tail) {
       path.lineTo(v.x, v.y)
     }
+    if (close) path.closePath()
     path    
   }
   
@@ -41,7 +43,7 @@ private[image] object Poly {
 /** the parent class for filled polygons */
 private[image] class PolygonFilled(paint: Paint, vertices: List[Point]) extends FigureFilled(paint) {
   val awtShape = Poly.shape(vertices, true)
-  override def toString = "Polygon(%s, %s)".format(paint, vertices.mkString(", "))
+  override def toString = s"Polygon($paint, ${vertices.mkString(", ")})"
 }
 
 /** a factory for creating filled polygons */
@@ -62,9 +64,12 @@ object PolygonFilled {
 }
 
 /** the parent class for connected lines */
-private[image] class LineDrawing(pen: Pen, vertices: List[Point]) extends FigureOutlined(pen) {
-  val awtShape = Poly.shape(vertices, false)
-  override def toString = "Polyline(%s, %s)".format(pen, vertices.mkString(", "))
+private[image] class LineDrawing(pen: Pen, vertices: List[Point], isClosed: Boolean) extends FigureOutlined(pen) {
+  val awtShape = Poly.shape(vertices, isClosed)
+  override def toString = {
+    val verts = if (isClosed) vertices.last :: vertices else vertices
+    s"LineDrawing($pen, ${verts.mkString(", ")})"
+  }
 }
 
 /** a factory for creating an image consisting of connected lines */
@@ -76,7 +81,10 @@ object LineDrawing {
    * This method requires at least two `Point` arguments, but will accept more.
    */
   def apply(pen: Pen, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
-    new LineDrawing(pen, vertex1 :: vertex2 :: restOfVertices.toList)
+    val vertices = vertex1 :: vertex2 :: restOfVertices.toList
+    val isClosed = vertices.head == vertices.last
+    val neededVertices = if (isClosed) vertices.init else vertices
+    new LineDrawing(pen, neededVertices, isClosed)
   }
   /**
    * returns an image consisting of lines connecting the vertices in order, drawn
@@ -111,8 +119,9 @@ object RegularPolygonOutlined {
    * must be greater than 2.
    */
   def apply(pen: Pen, sideLength: Double, numSides: Int): Image = {
+    require(numSides > 2, "a polygon must have more than 2 sides")
     val vts = Poly.regular(sideLength, numSides)
-    new LineDrawing(pen, vts.last :: vts)
+    LineDrawing(pen, vts.last, vts.head, vts.tail: _*)
   }
   /**
    * returns an image of an outlined regular polygon drawn in `Pen(color)`.

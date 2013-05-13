@@ -24,3 +24,5 @@ site.includeScaladoc()
 site.pamfletSupport()
 
 seq(jacoco.settings : _*)
+
+seq(Twirl.settings: _*)

@@ -1,5 +1,6 @@
+@()
 
-
+@import org.dupontmanual.image._
 
 Image Class
 =====

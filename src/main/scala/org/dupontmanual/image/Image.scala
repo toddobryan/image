@@ -32,7 +32,7 @@ abstract class Image private[image] () {
   private[image] lazy val displayedImg: BufferedImage = {
     val bg = new BufferedImage(img.getWidth, img.getHeight, BufferedImage.TYPE_INT_ARGB)
     val g2 = bg.getGraphics.asInstanceOf[Graphics2D]
-    g2.setColor(java.awt.Color.WHITE)
+    g2.setPaint(java.awt.Color.WHITE)
     g2.fillRect(0, 0, img.getWidth, img.getHeight)
     g2.drawRenderedImage(img, new AffineTransform())
     bg
@@ -65,15 +65,17 @@ abstract class Image private[image] () {
   }
   
   def inlineImgTag: NodeSeq = {
-    <img src={ "data:image/png;base64,%s".format(this.base64png) } />
+    <img src={ s"data:image/png;base64,${this.base64png}" } />
   }
   
+  private[image] def penWidth: Double = 0.0
+  
   /** the bounding box */
-  private[image] def displayBounds: Rectangle2D = bounds.getBounds2D
+  /*private[image]*/ def displayBounds: Rectangle2D = bounds.getBounds2D
   /** the actual bounds of the image (may not be rectangular) */
-  private[image] def bounds: Shape
+  /*private[image]*/ def bounds: Shape
   /** renders the image to the given `Graphics2D` instance */
-  private[image] def render(g2: Graphics2D)
+  private[image] def render(g2: Graphics2D): Unit
   
   /** returns the width of this `Image` */
   def width: Double = displayBounds.getWidth
@@ -192,22 +194,22 @@ abstract class Image private[image] () {
   }
   /** produces the `Image` obtained by cutting `numPixels` off the left side of this `Image` */
   def cropLeft(numPixels: Double): Image = {
-    require(numPixels >= 0 && numPixels <= width, "numPixels must be a non-negative number less than the width of this image (%d).".format(width))
+    require(numPixels >= 0 && numPixels <= width, s"numPixels must be a non-negative number less than the width of this image ($width).")
     this.crop(numPixels, 0, width - numPixels, height)
   }
   /** produces the `Image` obtained by cutting `numPixels` off the right side of this `Image` */
   def cropRight(numPixels: Double): Image = {
-    require(numPixels >= 0 && numPixels <= width, "numPixels must be a non-negative number less than the width of this image (%d).".format(width))
+    require(numPixels >= 0 && numPixels <= width, s"numPixels must be a non-negative number less than the width of this image ($width).")
     this.crop(0, 0, width - numPixels, height)    
   }
   /** produces the `Image` obtained by cutting `numPixels` off the top side of this `Image` */
   def cropTop(numPixels: Double): Image = {
-    require(numPixels >= 0 && numPixels <= height, "numPixels must be a non-negative number less than the height of this image (%d).".format(height))
+    require(numPixels >= 0 && numPixels <= height, s"numPixels must be a non-negative number less than the height of this image ($height).")
     this.crop(0, numPixels, width, height - numPixels)
   }
   /** produces the `Image` obtained by cutting `numPixels` off the bottom side of this `Image` */
   def cropBottom(numPixels: Double): Image = {
-    require(numPixels >= 0 && numPixels <= height, "numPixels must be a non-negative number less than the height of this image (%d).".format(height))
+    require(numPixels >= 0 && numPixels <= height, s"numPixels must be a non-negative number less than the height of this image ($height).")
     this.crop(0, 0, width, height - numPixels)
   }
   
