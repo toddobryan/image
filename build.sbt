@@ -17,6 +17,8 @@ scalacOptions += "-deprecation"
 
 scalacOptions += "-feature"
 
+scalacOptions in (Compile, doc) := List("-skip-packages", "org.dupontmanual.image.txt")
+
 site.settings
 
 site.includeScaladoc()

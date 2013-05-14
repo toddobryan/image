@@ -99,9 +99,9 @@ scala> CircularSector(Color.LimeGreen, 50, (math.Pi / 4).radians, (math.Pi/ 2).r
 @CircularSector(Color.LimeGreen, 50, (math.Pi / 4).radians, (math.Pi/ 2).radians).inlineImgTag
 
 ```scala
-scala> CircularSegment(Color.Lavender, 100, -30.degrees, 100.degrees)
+scala> CircularSegment(Color.Violet, 100, -30.degrees, 100.degrees)
 ```  
-@CircularSegment(Color.Lavender, 100, -30.degrees, 100.degrees).inlineImgTag
+@CircularSegment(Color.Violet, 100, -30.degrees, 100.degrees).inlineImgTag
 
 ### Ellipse Pieces
 
@@ -128,9 +128,9 @@ scala> EllipticalSector(Color.DeepPink, 100, 200, -45.degrees, 180.degrees)
 @EllipticalSector(Color.DeepPink, 100, 200, -45.degrees, 180.degrees).inlineImgTag
 
 ```scala
-scala> EllipticalSegment(Color.Beige, 75, 100, 45.degrees, 90.degrees)
+scala> EllipticalSegment(Color.LightCoral, 75, 100, 45.degrees, 90.degrees)
 ```  
-@EllipticalSegment(Color.Beige, 300, 100, 45.degrees, 90.degrees).inlineImgTag
+@EllipticalSegment(Color.LightCoral, 300, 100, 45.degrees, 90.degrees).inlineImgTag
 
 ## Shapes with Straight Lines
 
@@ -248,10 +248,10 @@ edges cross over themselves. In this case, the whole interior of the polygon is 
 if you have edges in the middle, you won't see them.
 
 ```scala
-scala> PolygonFilled(Color.LemonChiffon, Point(-25, -25), Point(40, 10), 
+scala> PolygonFilled(Color.Gold, Point(-25, -25), Point(40, 10), 
      |  Point(-40, 10), Point(25, -25), Point(0, 30))
 ```  
-@PolygonFilled(Color.LemonChiffon, Point(-25, -25), Point(40, 10), Point(-40, 10), Point(25, -25), Point(0, 30)).inlineImgTag
+@PolygonFilled(Color.Gold, Point(-25, -25), Point(40, 10), Point(-40, 10), Point(25, -25), Point(0, 30)).inlineImgTag
 
 ### Line Drawings
 
