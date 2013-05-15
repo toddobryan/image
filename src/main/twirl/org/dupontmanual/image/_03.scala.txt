@@ -8,11 +8,10 @@ Shapes
 Most shapes have filled and outlined versions and are created by using the
 `apply()` method of a convenience object.
 
-The first argument for a filled shape is always a `Color`, which is, 
-not surprisingly, the color of the shape's interior. (Hopefully this will be
-enhanced later to allow for patterns and gradients, so the type you'll see
-in the documentation is actually `Paint`. Right now, the only kind of `Paint`
-you can use is a `Color`.)
+The first argument for a filled shape is always a `Paint`. Currently, the only
+kind of `Paint` available is a `Color`. (Hopefully this will be enhanced later
+to allow for patterns and gradients.) Unsurprisingly, this argument
+represents the color in which the shape will be filled.
 
 We explain more about `Color`s later, but for right now, know that you can use
 all of the HTML color names by writing `Color.Name`. If you just have to know
@@ -20,10 +19,10 @@ all of the possible colors, go to the [Scaladoc API](latest/api/) and click on
 the `Color` object to see the complete list. Or just keep reading and you'll
 see several in the examples below.
 
-The first argument to an outlined shape is either a `Color` or a `Pen`. By
+The first argument to an outlined shape is either a `Paint` or a `Pen`. By
 default, all outlines are drawn so that they appear exactly one pixel wide,
 no matter how large or small you magnify the image. If you'd like a beefier
-line, create a `Pen(color, width)`, where `color` is the pen's color and 
+line, create a `Pen(paint, width)`, where `paint` is the pen's color and 
 `width` is how wide the line will appear in pixels.
 
 Sizes are always expressed in pixels. Since the sizes are `Double`s, fractional
@@ -37,15 +36,15 @@ There are four basic curvy shapes: circles and ellipses, filled and outlined.
 ### Circles
 
 ```scala
-CircleFilled(color: Paint, radius: Double): Image  
-CircleOutlined(color: Paint, radius: Double): Image
+CircleFilled(paint: Paint, radius: Double): Image  
+CircleOutlined(paint: Paint, radius: Double): Image
 CircleOutlined(pen: Pen, radius: Double): Image
 ```
 
-For circles, the two required arguments are a `Color` or `Pen` and the size of
+For circles, the two required arguments are a `Paint` or `Pen` and the size of
 the radius. (In the examples that follow, I'm going to show you the code you'd
 use to create an `Image` and the image that would result. Remember that if you
-actually want to see the image, you'll have to call it's `.display()` method.)
+actually want to see the image, you'll have to call its `.display()` method.)
 
 ```scala
 scala> CircleFilled(Color.Blue, 30)
@@ -59,8 +58,8 @@ scala> CircleOutlined(Color.Red, 25)
 ### Ellipses
 
 ```scala
-EllipseFilled(color: Paint, width: Double, height: Double): Image
-EllipseOutlined(color: Paint, width: Double, height: Double): Image
+EllipseFilled(paint: Paint, width: Double, height: Double): Image
+EllipseOutlined(paint: Paint, width: Double, height: Double): Image
 EllipseOutlined(pen: Pen, width: Double, height: Double): Image
 ```
 
@@ -82,16 +81,11 @@ scala> EllipseOutlined(Pen(Color.Cyan, 5), 200, 25)
 Squares, rectangles, and regular polygons get special treatment, and they're
 very similar to circles and ellipses.
 
-## Squares, Rectangles, and Regular Polygons
-
-Squares, rectangles, and regular polygons get special treatment, and they're
-very similar to circles and ellipses.
-
 ### Squares
 
 ```scala
-SquareFilled(color: Paint, side: Double): Image
-SquareOutlined(color: Paint, side: Double): Image
+SquareFilled(paint: Paint, side: Double): Image
+SquareOutlined(paint: Paint, side: Double): Image
 SquareOutlined(pen: Pen, side: Double): Image
 ```
 
@@ -101,8 +95,7 @@ side length.
 ```scala
 scala> SquareFilled(Color.Goldenrod, 40)
 ```  
-@SquareFilled(Color.Goldenrod, 40).inlineImgTag
-
+@SquareFilled(Color.Goldenrod, 40).inlineImgTag  
 ```scala
 scala> SquareOutlined(Pen(Color.Purple, 3), 60)
 ```  
@@ -111,8 +104,8 @@ scala> SquareOutlined(Pen(Color.Purple, 3), 60)
 ### Rectangles
 
 ```scala
-RectangleFilled(color: Paint, width: Double, height: Double): Image
-RectangleOutlined(color: Paint, width: Double, height: Double): Image
+RectangleFilled(paint: Paint, width: Double, height: Double): Image
+RectangleOutlined(paint: Paint, width: Double, height: Double): Image
 RectangleOutlined(pen: Pen, width: Double, height: Double): Image
 ```
 
@@ -122,18 +115,17 @@ the width and height of the rectangles.
 ```scala
 scala> RectangleFilled(Color.Orange, 50, 60)
 ```  
-@RectangleFilled(Color.Orange, 50, 60).inlineImgTag
-
+@RectangleFilled(Color.Orange, 50, 60).inlineImgTag  
 ```scala
 scala> RectangleOutlined(Pen(Color.YellowGreen, 3), 20, 100)
 ```  
-@RectangleOutlined(Pen(Color.YellowGreen, 3), 20, 100).inlineImgTag
+@RectangleOutlined(Pen(Color.YellowGreen, 3), 20, 100).inlineImgTag  
 
 ### RegularPolygons
 
 ```scala
-RegularPolygonFilled(color: Paint, sideLength: Double, numSides: Double): Image
-RegularPolygonOutlined(color: Paint, sideLength: Double, numSides: Double): Image
+RegularPolygonFilled(paint: Paint, sideLength: Double, numSides: Double): Image
+RegularPolygonOutlined(paint: Paint, sideLength: Double, numSides: Double): Image
 RegularPolygonOutlined(pen: Pen, sideLength: Double, numSides: Double): Image
 ```
 
@@ -144,9 +136,11 @@ that the bottom edge is horizontal.
 ```scala
 scala> RegularPolygonFilled(Color.Yellow, 100, 3)
 ```  
-@RegularPolygonFilled(Color.Yellow, 100, 3).inlineImgTag
-
+@RegularPolygonFilled(Color.Yellow, 100, 3).inlineImgTag  
 ```scala
 scala> RegularPolygonOutlined(Pen(Color.Black, 10), 50, 10)
 ```  
 @RegularPolygonOutlined(Pen(Color.Black, 10), 50, 10).inlineImgTag
+
+These are all the basic shapes. In the next chapter, we talk about slightly
+fancier sorts of images.

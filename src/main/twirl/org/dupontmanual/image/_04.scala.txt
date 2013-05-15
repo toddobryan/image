@@ -11,6 +11,40 @@ features are a little more complicated to use, but the results are worth
 it. (Or at least they'd better be, given how long it took to get them
 working.)
 
+## Text
+
+```scala
+Text(text: String): Image
+Text(paint: Paint, text: String): Image
+Text(paint: Paint, size: Int, text: String): Image
+```
+
+All three of these methods create images of text in a generic [serif 
+font](https://en.wikipedia.org/wiki/Serif), with the latter two versions
+letting you alter the `Paint` (or color) of the font and its size. (These
+default to `Color.Black` and 18.) Here are some examples:
+
+```scala
+scala> Text("Hello")
+```  
+@Text("Hello").inlineImgTag  
+```scala
+scala> Text(Color.Red, "Warning")
+```  
+@Text(Color.Red, "Warning").inlineImgTag  
+```scala
+scala> Text(Color.HotPink, 48, "Pink Power!!!")
+```  
+@Text(Color.HotPink, 48, "Pink Power!!!").inlineImgTag  
+```scala
+scala> Text(Color.Gray, 9, "quiet, please...")
+```  
+@Text(Color.Gray, 9, "quiet, please...").inlineImgTag
+
+
+
+
+
 ## Pieces of Circles and Ellipses
 
 The first fancy shapes we'll discuss are based on circles and ellipses.
@@ -91,13 +125,11 @@ arcs individually, but a future version may fix that.
 ```scala
 scala> CircularArc(Color.Black, 100, 0.degrees, 180.degrees)
 ```   
-@CircularArc(Color.Black, 100, 0.degrees, 180.degrees).inlineImgTag
-
+@CircularArc(Color.Black, 100, 0.degrees, 180.degrees).inlineImgTag  
 ```scala
 scala> CircularSector(Color.LimeGreen, 50, (math.Pi / 4).radians, (math.Pi/ 2).radians)
 ```  
-@CircularSector(Color.LimeGreen, 50, (math.Pi / 4).radians, (math.Pi/ 2).radians).inlineImgTag
-
+@CircularSector(Color.LimeGreen, 50, (math.Pi / 4).radians, (math.Pi/ 2).radians).inlineImgTag  
 ```scala
 scala> CircularSegment(Color.Violet, 100, -30.degrees, 100.degrees)
 ```  
@@ -110,7 +142,7 @@ EllipticalArc(paint: Paint, width: Double, height: Double, start: Angle, extent:
 EllipticalArc(pen: Pen, width: Double, height: Double, start: Angle, extent: Angle): Image
 EllipticalSector(paint: Paint, width: Double, height: Double, start: Angle, extent: Angle): Image
 EllipticalSegment(paint: Paint, width: Double, height: Double, start: Angle, extent: Angle): Image
-```  
+```
 
 The elliptical arc, sector, and segment builders are similar to the circular versions.
 Remember, however, that `width` and `height` represent the width and height of the whole
@@ -120,13 +152,11 @@ ellipse that you're drawing.
 ```scala
 scala> EllipticalArc(Pen(Color.Magenta, 3), 200, 100, -90.degrees, -45.degrees)
 ```  
-@EllipticalArc(Pen(Color.Magenta, 3), 200, 100, -90.degrees, -45.degrees).inlineImgTag
-
+@EllipticalArc(Pen(Color.Magenta, 3), 200, 100, -90.degrees, -45.degrees).inlineImgTag  
 ```scala
 scala> EllipticalSector(Color.DeepPink, 100, 200, -45.degrees, 180.degrees)
 ```  
 @EllipticalSector(Color.DeepPink, 100, 200, -45.degrees, 180.degrees).inlineImgTag
-
 ```scala
 scala> EllipticalSegment(Color.LightCoral, 75, 100, 45.degrees, 90.degrees)
 ```  
@@ -143,6 +173,7 @@ you describe the drawing in terms of an arbitrary number of `Point`s.
 ```scala
 case class Point(x: Double, y: Double)
   .translate(dx: Double, dy: Double): Point
+  .==(that: Point): Boolean
 ```
 
 The basic class for creating points is `Point`. Since it's a case class, you create
@@ -217,7 +248,8 @@ always be different than one another, even if they represent the same point.
 ### Filled Polygons
 
 ```scala
-PolygonFilled(paint: Paint, vertex1: Point, vertex2: Point, vertex3: Point, restOfVertices: Point*): Image
+PolygonFilled(paint: Paint, vertex1: Point, vertex2: Point, 
+    vertex3: Point, restOfVertices: Point*): Image
 ```
 
 To create a filled polygon of any shape, use the `PolygonFilled` object's `apply` method.
@@ -234,14 +266,13 @@ Here are some examples:
 ```scala
 scala> PolygonFilled(Color.Khaki, Point(0, 10), Point(30, 50), Point(20, 150), Point(40, 30))
 ```  
-@PolygonFilled(Color.Khaki, Point(0, 10), Point(30, 50), Point(20, 150), Point(40, 30)).inlineImgTag
-
+@PolygonFilled(Color.Khaki, Point(0, 10), Point(30, 50), Point(20, 150), Point(40, 30)).inlineImgTag  
 ```scala
 scala> PolygonFilled(Color.Plum, Point(0, 0), Point(0, 40), Point(20, 40), Point(20, 60), 
      |  Point(40, 60), Point(40, 20), Point(20, 20), Point(20, 0))
 ```  
 @PolygonFilled(Color.Plum, Point(0, 0), Point(0, 40), Point(20, 40), Point(20, 60), Point(40, 60), 
-Point(40, 20), Point(20, 20), Point(20, 0)).inlineImgTag
+Point(40, 20), Point(20, 20), Point(20, 0)).inlineImgTag  
 
 One weirdness that you have to consider with filled polygons is what you do if the polygon's
 edges cross over themselves. In this case, the whole interior of the polygon is filled in, so
@@ -260,3 +291,25 @@ LineDrawing(paint: Paint, vertex1: Point, vertex2: Point, restOfVertices: Point*
 LineDrawing(pen: Pen, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image
 ```
 
+A `LineDrawing` connects all the points you give in order. The last point is
+*not* connected back to the first point, so you'll have to include the starting
+point again at the end, if you'd like that to happen.
+
+Here are the same images as above, but with `LineDrawing` instead of
+`PolygonFilled`.
+
+```scala
+scala> LineDrawing(Pen(Color.Khaki, 5), Point(0, 10), Point(30, 50), Point(20, 150), Point(40, 30))
+```  
+@LineDrawing(Pen(Color.Khaki, 5), Point(0, 10), Point(30, 50), Point(20, 150), Point(40, 30)).inlineImgTag  
+```scala
+scala> LineDrawing(Pen(Color.Plum, 2), Point(0, 0), Point(0, 40), Point(20, 40), Point(20, 60), 
+     |  Point(40, 60), Point(40, 20), Point(20, 20), Point(20, 0))
+```  
+@LineDrawing(Pen(Color.Plum, 2), Point(0, 0), Point(0, 40), Point(20, 40), Point(20, 60), Point(40, 60), 
+Point(40, 20), Point(20, 20), Point(20, 0)).inlineImgTag  
+```scala
+scala> LineDrawing(Pen(Color.Gold, 3), Point(-25, -25), Point(40, 10), 
+     |  Point(-40, 10), Point(25, -25), Point(0, 30))
+```  
+@LineDrawing(Pen(Color.Gold, 3), Point(-25, -25), Point(40, 10), Point(-40, 10), Point(25, -25), Point(0, 30)).inlineImgTag
