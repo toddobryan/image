@@ -22,7 +22,7 @@ Text(paint: Paint, size: Int, text: String): Image
 All three of these methods create images of text in a generic [serif 
 font](https://en.wikipedia.org/wiki/Serif), with the latter two versions
 letting you alter the `Paint` (or color) of the font and its size. (These
-default to `Color.Black` and 18.) Here are some examples:
+default to `Color.Black` and `18`.) Here are some examples:
 
 ```scala
 scala> Text("Hello")
@@ -41,10 +41,36 @@ scala> Text(Color.Gray, 9, "quiet, please...")
 ```  
 @Text(Color.Gray, 9, "quiet, please...").inlineImgTag
 
+If you're feeling adventurous, you can take full control of how the text looks
+by specifying the font more completely.
 
+### Fonts - Built In
 
+```scala
+Font(name: BuiltIn, style: Style, size: Int): Font
+```
 
+There are three fonts built in to every version of Java and Scala:
 
+```scala
+Font.Serif
+Font.SansSerif
+Font.Monospaced
+```
+
+These are constants, and are defined in the `Font` object, so they're
+guaranteed to work, no matter what computer your program is running on.
+They're not very exciting, but that's okay, because they work.
+
+### Fonts - Style
+
+You can also specify the `Style` that a font is drawn in. There are four
+available:
+
+```scala
+Font.Plain
+Font.Italic
+Font.
 ## Pieces of Circles and Ellipses
 
 The first fancy shapes we'll discuss are based on circles and ellipses.
