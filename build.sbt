@@ -1,30 +1,25 @@
-import de.johoop.jacoco4sbt._
-import JacocoPlugin._
-
-name := "image"
+name := "dm-image"
 
 version := "0.1"
 
-scalaVersion := "2.10.1"
+scalaVersion := "2.10.2"
 
-libraryDependencies += "org.scala-lang" % "scala-swing" % "2.10.1"
+libraryDependencies += "org.scala-lang" % "scala-swing" % "2.10.2"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "1.9.1"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.0.M6"
 
-libraryDependencies += "commons-codec" % "commons-codec" % "1.6"
+libraryDependencies += "commons-codec" % "commons-codec" % "1.8"
 
-scalacOptions += "-deprecation"
-
-scalacOptions += "-feature"
+scalacOptions ++= Seq("-deprecation", "-feature")
 
 scalacOptions in (Compile, doc) := List("-skip-packages", "org.dupontmanual.image.txt")
 
 site.settings
 
+site.sphinxSupport()
+
 site.includeScaladoc()
 
-site.pamfletSupport()
+ghpages.settings
 
-seq(jacoco.settings : _*)
-
-seq(Twirl.settings: _*)
+git.remoteRepo := "git@github.com:dupontmanual/dm-image.git"

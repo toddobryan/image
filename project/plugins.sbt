@@ -1,7 +1,8 @@
+resolvers += "jgit-repo" at "http://download.eclipse.org/jgit/maven"
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.5.2")
+
 addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "2.2.0")
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "0.6.2")
+addSbtPlugin("com.typesafe.sbt" % "sbt-site" % "0.7.1")
 
-addSbtPlugin("de.johoop" % "jacoco4sbt" % "2.0.0")
-
-addSbtPlugin("io.spray" % "sbt-twirl" % "0.6.1")
