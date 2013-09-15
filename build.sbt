@@ -2,7 +2,7 @@ name := "dM Image"
 
 normalizedName := "dm-image"
 
-description := "an image manipulation library based on Robby Findler's 2htdp/image library in Racket"
+description := "a Scala port (mostly) of the Racket image library by Robby Findler"
 
 organization := "org.dupontmanual"
 
@@ -16,9 +16,8 @@ scalacOptions ++= Seq("-deprecation", "-feature")
 
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-swing" % "2.10.2",
-  "org.scalautils" %% "scalautils" % "2.0.M6",
-  "commons-codec" % "commons-codec" % "1.8",
-  "org.scalatest" %% "scalatest" % "2.0.M6" % "test"
+  "org.scalatest" %% "scalatest" % "2.0.M7",
+  "commons-codec" % "commons-codec" % "1.8"
 )
 
 site.settings
@@ -57,10 +56,6 @@ pomExtra := (
     <url>git://github.com/dupontmanual/dm-image.git</url>
     <connection>scm:git://github.com/dupontmanual/dm-image.git</connection>
   </scm>
-  <organization>
-    <name>duPont Manual High School Computer Science Department</name>
-    <url>http://dupontmanual.github.io/</url>
-  </organization>
   <developers>
     <developer>
       <name>Jim Miller</name>
