@@ -58,13 +58,13 @@ private[image] class CircleOutlined(pen: Pen, radius: Double) extends FigureOutl
 /** a factory for outlined circles */
 object CircleOutlined {
   /** returns an outlined circle with the given characteristics */
-  def apply(pen: Pen, radius: Double) = new CircleOutlined(pen, radius)
+  def apply(pen: Pen, radius: Double): Image = new CircleOutlined(pen, radius)
   
   /** 
    * returns an outlined circle with the given characteristics.
    * The circle is drawn with `Pen(paint)`. 
    */
-  def apply(paint: Paint, radius: Double) = new CircleOutlined(Pen(paint), radius)
+  def apply(paint: Paint, radius: Double): Image = new CircleOutlined(Pen(paint), radius)
 }
 
 /** an object with convenience methods for arcs */

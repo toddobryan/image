@@ -19,6 +19,9 @@ Contents:
    :maxdepth: 2
 
    overview
+   bitmaps
+   basicShapes
+   text
 
 
 Indices and tables

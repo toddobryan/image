@@ -108,11 +108,17 @@ object Text {
   /** returns a text image with the given characteristics */
   def apply(paint: Paint, font: Font, text: String): Image = new Text(paint, font.javaFont, text)
   
+  /** returns the text in the given font in black */
+  def apply(font: Font, text: String): Image = Text(Color.Black, font, text)
+  
   /** returns a text image in Font.Serif with the given color and size */
   def apply(paint: Paint, size: Int, text: String): Image = Text(paint, Font(Font.Serif, Font.Plain, size), text)
   
   /** returns a text image in the given color. The font is Font.Serif, size 18 */
   def apply(paint: Paint, text: String): Image = Text(paint, defaultFont, text)
+  
+  /** returns a text image in the given size. The font is Font.Serif and black */
+  def apply(size: Int, text: String): Image = Text(Color.Black, size, text)
   
   /** returns a text image in Font.Serif, size 18, black */
   def apply(text: String): Image = Text(Color.Black, defaultFont, text)

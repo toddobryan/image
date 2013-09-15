@@ -1,7 +1,7 @@
 package org.dupontmanual
 
 import scala.language.implicitConversions
-import org.scalatest.matchers.{ HavePropertyMatcher, HavePropertyMatchResult }
+import org.scalautils.Equality
 
 /**
  * A Scala port (mostly) of the image library created in Racket by Robby Findler,
@@ -61,15 +61,10 @@ package object image {
     }.mkString("\"", "", "\"")
   }
   
-  def sameBitmapAs(expectedValue: Image) =
-    new HavePropertyMatcher[Image, Image] {
-      def apply(image: Image) =
-        HavePropertyMatchResult(
-          image.sameBitmap(expectedValue),
-          "sameBitmapAs",
-          expectedValue,
-          image
-        )
+  implicit val imageEquality = new Equality[Image] {
+    def areEqual(img1: Image, any: Any): Boolean = any match {
+      case img2: Image => img1.sameBitmapAs(img2) 
+      case _ => false
     }
-
+  }
 }

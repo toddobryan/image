@@ -53,7 +53,7 @@ abstract class Image private[image] () {
   }
   
   /** returns a byte array representing the image as a PNG file */
-  private[image] def bytesPng: Array[Byte] = {
+  def bytesPng: Array[Byte] = {
     val bytes: ByteArrayOutputStream = new ByteArrayOutputStream()
     ImageIO.write(displayedImg, "png", bytes)
     bytes.toByteArray
@@ -214,8 +214,9 @@ abstract class Image private[image] () {
   }
   
   /** produces whether this `Image` is bitmap-identical to `other` */
-  def sameBitmap(other: Image): Boolean = {
+  def sameBitmapAs(other: Image): Boolean = {
     Arrays.equals(this.bytesPng, other.bytesPng)
   } 
 }
+
 

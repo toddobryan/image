@@ -1,4 +1,5 @@
 package org.dupontmanual.image
+
 import java.awt.{Graphics2D, RenderingHints}
 import java.awt.Shape
 import java.awt.geom.Rectangle2D
