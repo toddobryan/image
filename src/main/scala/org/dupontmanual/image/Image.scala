@@ -127,7 +127,7 @@ abstract class Image private[image] () {
   def above(img: Image, xAlign: XAlign): Image = Stack(img, this, xAlign, YAlign.Top, 0, this.height)
   
   /** produces the `Image` obtained by reflecting this `Image` left to right */
-  def flipHorizontal: Image = {
+  def flipHorizontal(): Image = {
     val transformer = new AffineTransform()
     transformer.translate(width, 0)
     transformer.scale(-1, 1)
@@ -135,7 +135,7 @@ abstract class Image private[image] () {
   }
   
   /** produces the `Image` obtained by reflecting this `Image` top to bottom */
-  def flipVertical: Image = {
+  def flipVertical(): Image = {
     val transformer = new AffineTransform()
     transformer.translate(0, height)
     transformer.scale(1, -1)

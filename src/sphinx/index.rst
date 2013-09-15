@@ -22,6 +22,7 @@ Contents:
    bitmaps
    basicShapes
    text
+   image
 
 
 Indices and tables
