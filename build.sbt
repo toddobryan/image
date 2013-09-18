@@ -14,6 +14,10 @@ scalaVersion := "2.10.2"
 
 scalacOptions ++= Seq("-deprecation", "-feature")
 
+unmanagedSourceDirectories in Compile <<= Seq(scalaSource in Compile).join
+
+unmanagedSourceDirectories in Test <<= Seq(scalaSource in Test).join
+
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-swing" % "2.10.2",
   "org.scalatest" %% "scalatest" % "2.0.M8",
