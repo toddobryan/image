@@ -16,7 +16,7 @@ scalacOptions ++= Seq("-deprecation", "-feature")
 
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-swing" % "2.10.2",
-  "org.scalatest" %% "scalatest" % "2.0.M7",
+  "org.scalatest" %% "scalatest" % "2.0.M8",
   "commons-codec" % "commons-codec" % "1.8"
 )
 
