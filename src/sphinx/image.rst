@@ -104,13 +104,27 @@ TODO: examples
 Rotations
 ^^^^^^^^^
 
-::
+The ``rotate`` method takes an ``Angle`` argument. If you've imported everything
+from the ``org.dupontmanual.image`` package, then the easiest way to make an angle
+is to call the ``degrees`` method on a number. There is also a ``radians`` method
+if you'd prefer to work in radians. For example::
+
+    scala> 45.degrees
+    res2: org.dupontmanual.image.Angle = 45.000000 degrees
+
+    scala> 90.degrees
+    res3: org.dupontmanual.image.Angle = 90.000000 degrees
+
+    scala> 90.degrees == (math.Pi / 2).radians
+    res4: Boolean = true
+    
+To rotate an image counter-clockwise, use the ``rotate`` method with a positive angle.
+Negative angles rotate in a clockwise direction::
 
      rotate(factor: Angle): Image
 
 This method returns an image that is ``this`` image rotated by a given
-``factor`` around the image's center. Positive values rotate
-counter-clockwise, while negative values rotate clockwise.
+``factor`` around the image's center.
 
 TODO: examples
 
@@ -208,11 +222,32 @@ TODO: examples
     def stackOn(img: Image, xAlign: XAlign, yAlign: YAlign): Image
     def slideUnder(img: Image, xAlign: XAlign, yAlign: YAlign): Image
     
-    
+Creates a new ``Image``, which is ``this`` image overlaid on top of ``img``.
+The two ``Image``\ s are aligned according to the values of ``xAlign`` and 
+``yAlign``. (The legal values of ``xAlign`` are ``XAlign.Left``, ``XAlign.Center``,
+and ``XAlign.Right``, and the legal values of ``yAlign`` are ``YAlign.Top``,
+``YAlign.Center``, and ``YAlign.Bottom``. ``img1.slideUnder(img2, xAlign, yAlign)``
+is equivalent to ``img2.stackOn(img1, xAlign, yAlign)``.    
 
+::
 
     def stackOn(img: Image, dx: Double, dy: Double): Image
-    def stackOn(img: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double): Image
-
     def slideUnder(img: Image, dx: Double, dy: Double): Image
-    def slideUnder(    
+    
+Creates a new ``Image``, which is ``this`` image overlaid on top of ``img``, but offset
+``dx`` pixels to the right and ``dy`` pixels down from what they would be if they were 
+aligned at the center. (Use negative numbers to move the top image to the left or up.)
+Note that ``img1.stackOn(img2, dx, dy)`` is equivalent to ``img2.slideUnder(img1, dx, dy)``
+and that both move the image that ends up on top the given number of pixels in each
+direction.
+
+::
+
+    def stackOn(img: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double): Image
+    def slideUnder(img: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double): Image
+    
+Creates a new ``Image``, which is ``this`` image overlaid on top of ``img``, aligned
+according to ``xAlign`` and ``yAlign``, but offset ``dx`` pixels to the right and ``dy``
+pixels down. (Use negative numbers for left and up.) Whether you use ``stackOn`` or
+``slideUnder``, it is the top image that is moved the given number of pixels.
+
