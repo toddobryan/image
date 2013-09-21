@@ -3,13 +3,12 @@
 
 The ``Image`` class is the superclass of all displayable shapes and bitmap 
 images in the package. This means that the members of this class are key to
-manipulating or combining any type of picture created in the package. 
-
-Members of ``Image``
---------------------
+manipulating or combining any type of picture created in the package. You
+can create interesting images just using the ``Bitmap`` images and the
+methods you find in the ``Image`` class.
 
 Properties
-^^^^^^^^^^
+----------
 
 ::
 
@@ -18,18 +17,13 @@ Properties
  
 Return the width and height of ``this`` image. For example::
 
-    scala> val circ: Image = CircleFilled(Color.Green, 50)
-    scala> circ.width
-    res0: Double = 100.0
-    scala> circ.height
-    res1: Double = 100.0
     scala> Glyphs.width
     res4: Double = 45.0    
     scala> Glyphs.height
     res5: Double = 68.0
 
 Utility Methods
-^^^^^^^^^^^^^^^
+---------------
 
 ::
 
@@ -154,7 +148,7 @@ Translation
      translate(x: Double, y: Double): Image
 
 This method returns an image that is ``this`` image moved ``x`` pixels
-right and ``y`` pixels down. You can use negative numbers to translate
+right and ``y`` pixels down. Use negative numbers to translate
 the image left and up.
 
 TODO: examples

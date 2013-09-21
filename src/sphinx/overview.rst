@@ -16,3 +16,9 @@ To use ``dm-image`` in your own SBT project, the library dependency is::
     "org.dupontmanual" %% "dm-image" % "0.1-SNAPSHOT"
     
 For the latest version as of this writing.
+
+ScalaDoc API
+------------
+
+The `Scaladoc API <latest/api/>`_ lists all the classes and methods in
+the library.

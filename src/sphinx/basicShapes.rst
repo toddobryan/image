@@ -27,8 +27,8 @@ Sizes are always expressed in pixels. Since the sizes are ``Double``\ s, fractio
 pixels are allowed, but they'll be fit into the pixels of your display device,
 so they might do something different than you expect.
 
-Curves
-------
+Circles and Ellipses
+--------------------
 
 There are four basic curvy shapes: circles and ellipses, filled and outlined.
 
@@ -86,7 +86,7 @@ radius 30 would have a width and height of 60.
 Squares, Rectangles, and Regular Polygons
 -----------------------------------------
 
-Squares, rectangles, and regular polygons get special treatment, and they're
+Squares, rectangles, and regular polygons get special treatment, but they're
 very similar to circles and ellipses.
 
 Squares

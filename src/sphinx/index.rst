@@ -20,9 +20,11 @@ Contents:
 
    overview
    bitmaps
+   image
    basicShapes
    text
-   image
+   angles
+   circlePieces
 
 
 Indices and tables
