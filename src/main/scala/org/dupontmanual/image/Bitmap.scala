@@ -42,7 +42,7 @@ object Bitmap {
    * produces a `Bitmap` representing the image file at the given path.
    * Any format recognized by `javax.imageio.ImageIO` is acceptable.
    */
-  def apply(path: String, name: Option[String] = None): Bitmap = {
+  def apply(path: String, name: Option[String] = None): Image = {
     new Bitmap(Left(new File(path)), name)
   }
   

@@ -10,13 +10,13 @@ organizationName := "duPont Manual High School"
 
 version := "0.1-SNAPSHOT"
 
-scalaVersion := "2.10.2"
+scalaVersion := "2.10.3"
 
 scalacOptions ++= Seq("-deprecation", "-feature")
 
 libraryDependencies ++= Seq(
-  "org.scala-lang" % "scala-swing" % "2.10.2",
-  "org.scalatest" %% "scalatest" % "2.0.M7",
+  "org.scala-lang" % "scala-swing" % "2.10.3",
+  "org.scalatest" %% "scalatest" % "2.0.RC2",
   "commons-codec" % "commons-codec" % "1.8"
 )
 
