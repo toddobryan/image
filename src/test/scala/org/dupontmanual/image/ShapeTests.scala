@@ -27,7 +27,7 @@ class ShapeTests extends FunSuite with Matchers {
   test("wedges") {
     CircularArc(Pen(Color.Green, 3), 50, 30.degrees, 120.degrees) shouldEqual 
         Bitmap.fromWorkspace("/shapes/arc-50-30-120-green.png")
-    CircularSegment(Color.Cyan, 25, -20.degrees, 220.degrees) shouldEqual 
+    CircularSegmentFilled(Color.Cyan, 25, -20.degrees, 220.degrees) shouldEqual 
         Bitmap.fromWorkspace("/shapes/seg-25-20-220-cyan.png")
     CircularSector(Color.Red, 30, (Pi / 6).radians, (2 * Pi / 3).radians) shouldEqual 
         Bitmap.fromWorkspace("/shapes/wedge-30-30-120-red.png")

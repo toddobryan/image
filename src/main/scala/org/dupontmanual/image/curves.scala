@@ -106,7 +106,7 @@ object CircularArc {
 }
 
 /** the parent class for circular segments */
-private[image] class CircularSegment(paint: Paint, radius: Double, start: Angle, extent: Angle)
+private[image] class CircularSegmentFilled(paint: Paint, radius: Double, start: Angle, extent: Angle)
     extends FigureFilled(paint) {
   val awtShape = Arc.shape(2 * radius, 2 * radius, start, extent, Arc.CHORD)
 }
@@ -117,10 +117,25 @@ private[image] class CircularSegment(paint: Paint, radius: Double, start: Angle,
  * to the point at `start + extent`, and the arc of the circle connecting
  * the same two points
  */
-object CircularSegment {
+object CircularSegmentFilled {
   /** returns a circular segment with the given characteristics */
   def apply(paint: Paint, radius: Double, start: Angle, extent: Angle): Image = {
-    new CircularSegment(paint, radius, start, extent)
+    new CircularSegmentFilled(paint, radius, start, extent)
+  }
+}
+
+private[image] class CircularSegmentOutlined(pen: Pen, radius: Double, start: Angle, extent:Angle)
+    extends FigureOutlined(pen) {
+  val awtShape = Arc.shape(2 * radius, 2 * radius, start, extent, Arc.CHORD)
+}
+
+object CircularSegmentOutlined {
+  def apply(paint: Paint, radius: Double, start: Angle, extent: Angle): Image = {
+    new CircularSegmentOutlined(Pen(paint), radius, start, extent)
+  }
+  
+  def apply(pen: Pen, radius: Double, start: Angle, extent: Angle): Image = {
+    new CircularSegmentOutlined(pen, radius, start, extent)
   }
 }
 

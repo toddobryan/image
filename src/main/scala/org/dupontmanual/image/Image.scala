@@ -115,6 +115,39 @@ abstract class Image private[image] () {
   /** equivalent to `img.stackOn(this, xAlign, yAlign, dx, dy)` */
   def slideUnder(img: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double): Image = 
       Stack(img, this, xAlign, yAlign, dx, dy)
+      
+  /** produces a new `Image` by placing `img` on this `Image`. `x` and `y` represent how far
+   *  to the right and down the `img` is placed. The final image is restricted to the portion
+   *  that would have shown on this `Image`, so you're guaranteed that the new `Image` created
+   *  will be exactly the same size as this `Image`. The center of `img` is placed at the point
+   *  (`x`, `y`) on the new `Image`. */
+  def placeImage(img: Image, x: Double, y: Double): Image = this.placeImage(img, x, y, XAlign.Center, YAlign.Center)    
+  /** produces a new `Image` by placing `img` on this `Image`. `x` and `y` represent how far
+   *  to the right and down the point designated by `xAlign` and `yAlign` are offset from the
+   *  top left of this `Image`. Any portion of `img` that would extend outside the bounds of
+   *  this `Image` is not retained, so you're guaranteed that the new `Image` will be exactly
+   *  the same size as this `Image`. */
+  def placeImage(img: Image, x: Double, y: Double, xAlign: XAlign, yAlign: YAlign): Image = {
+    val xOffset: Double = img.width * (xAlign match {
+      case XAlign.Left => 0.0
+      case XAlign.Center => -0.5
+      case XAlign.Right => -1.0
+    })
+    val yOffset: Double = img.height * (yAlign match {
+      case YAlign.Top => 0.0
+      case YAlign.Center => -0.5
+      case YAlign.Bottom => -1.0
+    })
+    val scene = Stack(img, this, XAlign.Left, YAlign.Top, x + xOffset, y + yOffset)
+    // check to see if img even appears in the new scene; if not, we'll return the old one
+    val bg = scene.backBounds
+    if (scene.frontBounds.intersects(bg)) {
+      val btl = scene.backTopLeft
+      scene.crop(btl.x, btl.y, bg.getWidth, bg.getHeight)
+    } else {
+      this
+    }
+  }
   
   /** produces a new `Image` with `img` to the right of this `Image`, centered vertically */
   def beside(img: Image): Image = this.beside(img, YAlign.Center)
