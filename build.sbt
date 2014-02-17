@@ -18,10 +18,15 @@ unmanagedSourceDirectories in Compile <<= Seq(scalaSource in Compile).join
 
 unmanagedSourceDirectories in Test <<= Seq(scalaSource in Test).join
 
+unmanagedJars in Compile += Attributed.blank(
+    file(scala.util.Properties.javaHome) / "lib" / "jfxrt.jar")
+
+fork in run := true
+
 libraryDependencies ++= Seq(
-  "org.scala-lang" % "scala-swing" % "2.10.2",
-  "org.scalatest" %% "scalatest" % "2.0.M8",
-  "commons-codec" % "commons-codec" % "1.8"
+  "org.scalatest" %% "scalatest" % "2.0",
+  "commons-codec" % "commons-codec" % "1.8",
+  "org.scalafx" %% "scalafx" % "1.0.0-M7"
 )
 
 site.settings

@@ -10,11 +10,5 @@ private[image] class Cropped(val image: Image, val x: Double, val y: Double, val
   require(w >= 0 && x + w <= image.width, f"Illegal width $w (must be at least zero and $x + width must be less than ${image.width}).")
   require(h >= 0 && y + h <= image.height, f"Illegal height $h (must be at least zero and $y + height must be less than ${image.height}).")
 
-  private[image] def render(g2: Graphics2D) = {
-    val origClip = g2.getClip
-    g2.setClip(new Rectangle2D.Double(0, 0, w, h))
-    g2.drawRenderedImage(image.displayedImg, AffineTransform.getTranslateInstance(-x, -y))
-    g2.setClip(origClip)
-  }
   /*private[image]*/ def bounds: Shape = new Rectangle2D.Double(0, 0, w, h)
 }

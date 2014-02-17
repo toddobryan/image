@@ -1,30 +1,21 @@
 package org.dupontmanual.image
 
-import java.io.InputStream
-import javax.imageio.ImageIO
-import java.awt.Graphics2D
-import java.awt.geom.AffineTransform
-import java.io.FileInputStream
 import java.io.File
-import java.awt.image.BufferedImage
-import java.awt.geom.Rectangle2D
 import java.net.URL
+import scalafx.scene.image.{ Image => SfxImage }
 
 /**
  * represents a bitmap image
  */
 class Bitmap private[image](val pathOrUrl: Either[File, URL], val name: Option[String] = None) extends Image {
-  override protected lazy val img: BufferedImage = {
+  private[image] val img: SfxImage = {
     val temp = Option(pathOrUrl match {
-      case Left(path) => ImageIO.read(path)
-      case Right(url) => ImageIO.read(url)
+      case Left(path) => new SfxImage(path.getCanonicalPath())
+      case Right(url) => new SfxImage(url.getPath())
     })
     temp.getOrElse(throw new IllegalArgumentException("no image at the source indicated"))
   }
-  
-  /*private[image]*/ def bounds = new Rectangle2D.Double(0, 0, img.getWidth, img.getHeight)
-  private[image] def render(g2: Graphics2D) = g2.drawRenderedImage(img, new AffineTransform())
-  
+    
   override def toString: String = name match {
     case Some(str) => str
     case None => pathOrUrl match {

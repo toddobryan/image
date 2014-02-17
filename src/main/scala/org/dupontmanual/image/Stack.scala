@@ -1,8 +1,9 @@
 package org.dupontmanual.image
 
-import java.awt.Graphics2D
 import math.{abs, min, max}
-import java.awt.geom.Rectangle2D
+import scalafx.geometry.Rectangle2D
+import scalafx.geometry.Bounds
+import scalafx.geometry.BoundingBox
 
 /** the parent class for horizontal alignments */
 sealed abstract class XAlign private[image] ()
@@ -30,7 +31,7 @@ object YAlign {
 
 /** represent two images, one in front of the other */
 private[image] class Stack(front: Image, back: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double) extends Image {
-  val backBounds = Stack.translateRect(back.displayBounds, 
+  val backBounds = Stack.translateRect(back.bounds, 
 		  							   Stack.dx(back.displayBounds, xAlign, 0), 
 		  							   Stack.dy(back.displayBounds, yAlign, 0))
   val frontBounds = Stack.translateRect(front.displayBounds,
@@ -43,7 +44,7 @@ private[image] class Stack(front: Image, back: Image, xAlign: XAlign, yAlign: YA
   val backTopLeft = Point(backBounds.getX - newX, backBounds.getY - newY)
   val frontTopLeft = Point(frontBounds.getX - newX, frontBounds.getY - newY)
   
-  def bounds = new Rectangle2D.Double(0, 0, newWidth, newHeight)
+  val img: Node = new Group(back)
   
   def render(g2: Graphics2D) {
     val backOutRect: Rectangle2D = back.displayBounds
@@ -71,19 +72,19 @@ private[image] object Stack {
   def apply(front: Image, back: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double) =
       new Stack(front, back, xAlign, yAlign, dx, dy)
   
-  def translateRect(rect: Rectangle2D, dx: Double, dy: Double): Rectangle2D = {
-    new Rectangle2D.Double(rect.getX + dx, rect.getY + dy, rect.getWidth, rect.getHeight)
+  def translateRect(rect: Bounds, dx: Double, dy: Double): Bounds = {
+    new BoundingBox(rect.minX + dx, rect.minY + dy, rect.width, rect.height)
   }
   
   def dx(rect: Rectangle2D, xAlign: XAlign, xOffset: Double): Double = xOffset + (xAlign match {
     case XAlign.Left => 0
-    case XAlign.Center => -0.5 * (rect.getX + rect.getMaxX)
-    case XAlign.Right => -rect.getMaxX
+    case XAlign.Center => -0.5 * (rect.minX + rect.maxX)
+    case XAlign.Right => -rect.maxX
   })
   
   def dy(rect: Rectangle2D, yAlign: YAlign, yOffset: Double): Double = yOffset + (yAlign match {
     case YAlign.Top => 0
-    case YAlign.Center => -0.5 * (rect.getY + rect.getMaxY)
-    case YAlign.Bottom => -rect.getMaxY
+    case YAlign.Center => -0.5 * (rect.minY + rect.maxY)
+    case YAlign.Bottom => -rect.maxY
   })
 }

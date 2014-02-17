@@ -1,47 +1,59 @@
 package org.dupontmanual.image
 
 import scala.xml.NodeSeq
-
 import math.ceil
 import math.Pi
-import java.awt.{Graphics2D, RenderingHints}
-import java.awt.image.BufferedImage
-import java.awt.geom._
-import java.awt.image._
-import javax.swing.ImageIcon
-import scala.swing.Dialog
-import javax.imageio.ImageIO
 import java.io.File
 import java.io.ByteArrayOutputStream
 import org.apache.commons.codec.binary.Base64
 import java.io.FileInputStream
 import java.util.Arrays
-import java.awt.Shape
+import scalafx.Includes._
+import scalafx.scene.Scene
+import scalafx.scene.Node
+import scalafx.stage.Stage
+import scalafx.scene.Parent
+import scalafx.scene.layout.VBox
+import scalafx.scene.control.Button
+import scalafx.scene.image.WritableImage
+import scalafx.scene.Group
+import javax.imageio.ImageIO
+import javafx.embed.swing.SwingFXUtils
+import java.awt.image.RenderedImage
+import scalafx.geometry.BoundingBox
+import scalafx.geometry.Bounds
+import scalafx.scene.shape.Shape
+import scalafx.scene.transform.{ Transform => SfxTransform }
 
 /** represents an image */
-abstract class Image private[image] () {  
-  protected lazy val img: BufferedImage = {
-    val image = new BufferedImage(ceil(displayBounds.getWidth).toInt, ceil(displayBounds.getHeight).toInt, BufferedImage.TYPE_INT_ARGB)
-    val g2 = image.getGraphics.asInstanceOf[Graphics2D]
-    g2.translate(-displayBounds.getX, -displayBounds.getY)
-    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-    render(g2)
-    image
-  }
-  
-  private[image] lazy val displayedImg: BufferedImage = {
-    val bg = new BufferedImage(img.getWidth, img.getHeight, BufferedImage.TYPE_INT_ARGB)
-    val g2 = bg.getGraphics.asInstanceOf[Graphics2D]
-    g2.setPaint(java.awt.Color.WHITE)
-    g2.fillRect(0, 0, img.getWidth, img.getHeight)
-    g2.drawRenderedImage(img, new AffineTransform())
-    bg
-  }
-  
+abstract class Image private[image] () { 
+  private[image] val img: Node
+    
   /** displays the image in a dialog box */
   def display() {
-    Dialog.showMessage(message = null, icon = new ImageIcon(displayedImg))
+    /** Show a `message` in a dialog box, wait till dialog is closed */
+    val dialogStage = new Stage {
+      outer =>
+      title = "Image"
+      scene = new Scene {
+        root = new VBox {
+          content = List(img, 
+              new Button {
+                text = "OK"
+                onAction = handle { outer.close() }
+              })
+        }
+      }
+    }
+    dialogStage.showAndWait()
   }
+  
+  protected lazy val writableImg: WritableImage = new Scene {
+    root = new Group(img)
+  }.snapshot(null)
+  
+  protected lazy val savableImg: RenderedImage = SwingFXUtils.fromFXImage(writableImg, null)
+  
   
   /**
    * saves the image as a `.png` file. If the filename doesn't already end
@@ -49,13 +61,13 @@ abstract class Image private[image] () {
    */
   def saveAsDisplayed(filename: String) {
     val filenameWithExt = if (filename.endsWith(".png")) filename else filename + ".png"
-    ImageIO.write(displayedImg, "png", new File(filenameWithExt))
+    ImageIO.write(savableImg, "png", new File(filenameWithExt))
   }
   
   /** returns a byte array representing the image as a PNG file */
   def bytesPng: Array[Byte] = {
     val bytes: ByteArrayOutputStream = new ByteArrayOutputStream()
-    ImageIO.write(displayedImg, "png", bytes)
+    ImageIO.write(savableImg, "png", bytes)
     bytes.toByteArray
   }
   
@@ -70,17 +82,15 @@ abstract class Image private[image] () {
   
   private[image] def penWidth: Double = 0.0
   
-  /** the bounding box */
-  /*private[image]*/ def displayBounds: Rectangle2D = bounds.getBounds2D
   /** the actual bounds of the image (may not be rectangular) */
-  /*private[image]*/ def bounds: Shape
-  /** renders the image to the given `Graphics2D` instance */
-  private[image] def render(g2: Graphics2D): Unit
+  /*private[image]*/ def bounds: Bounds = img.layoutBounds.value
+  /** the bounding box */
+  /*private[image]*/ def displayBounds: Bounds = img.boundsInParent.value
   
   /** returns the width of this `Image` */
-  def width: Double = displayBounds.getWidth
+  def width: Double = displayBounds.width
   /** returns the height of this `Image` */
-  def height: Double = displayBounds.getHeight
+  def height: Double = displayBounds.height
   
   /** returns a new `Image` with this `Image` centered and superimposed on `img` */
   def stackOn(img: Image): Image = Stack(this, img)
@@ -160,34 +170,20 @@ abstract class Image private[image] () {
   def above(img: Image, xAlign: XAlign): Image = Stack(img, this, xAlign, YAlign.Top, 0, this.height)
   
   /** produces the `Image` obtained by reflecting this `Image` left to right */
-  def flipHorizontal(): Image = {
-    val transformer = new AffineTransform()
-    transformer.translate(width, 0)
-    transformer.scale(-1, 1)
-    new Transform(this, transformer)
-  }
+  def flipHorizontal(): Image = 
+    new Transform(this, List(SfxTransform.translate(width, 0), SfxTransform.scale(-1, 1)))
   
   /** produces the `Image` obtained by reflecting this `Image` top to bottom */
-  def flipVertical(): Image = {
-    val transformer = new AffineTransform()
-    transformer.translate(0, height)
-    transformer.scale(1, -1)
-    new Transform(this, transformer)
-  }
+  def flipVertical(): Image = 
+    new Transform(this, List(SfxTransform.translate(0, height), SfxTransform.scale(1, -1)))
   
   /** 
    * produces the `Image` obtained by scaling this `Image` horizontally
    * by `xFactor` and vertically by `yFactor`
    */
-  def scale(xFactor: Double, yFactor: Double): Image = {
-    val transformer = new AffineTransform()
-    transformer.scale(xFactor, yFactor)
-    transformer.translate(
-      if (xFactor < 0) -width * xFactor else 0,
-      if (yFactor < 0) -height * yFactor else 0
-    )
-    new Transform(this, transformer)
-  }
+  def scale(xFactor: Double, yFactor: Double): Image = 
+    new Transform(this, List(SfxTransform.scale(xFactor, yFactor)))
+  
   /** produces the `Image` obtained by scaling this `Image` horizontally by `xFactor` */
   def scaleX(xFactor: Double): Image = scale(xFactor, 1.0)
   /** produces the `Image` obtained by scaling this `Image` vertically by `yFactor` */
@@ -195,26 +191,24 @@ abstract class Image private[image] () {
   
   /** 
    * produces the `Image` obtained by rotating this `Image` by the angle `factor`
-   * around its center
-   */
+   * around the point (`pivotX`, `pivotY`) */
+  def rotate(factor: Angle, pivotX: Double, pivotY: Double): Image = 
+    new Transform(this, List(SfxTransform.rotate(factor.toDegrees.magnitude, pivotX, pivotY)))
+  /**
+   * produces the `Image` obtained by rotating this `Image` by the angle `factor`
+   * around its center */
   def rotate(factor: Angle): Image = {
-    val transformer = new AffineTransform()
-    transformer.rotate(factor.toRadians.magnitude)
-    val wrongShape = new Transform(this, transformer)
-    val wrongBounds = wrongShape.displayBounds
-    val unmoved = new Transform(this,transformer)
-    unmoved.translate(-wrongBounds.getX,-wrongBounds.getY)
+    val pivotX = (bounds.minX + bounds.maxX) / 2.0
+    val pivotY = (bounds.minY + bounds.maxY) / 2.0
+    new Transform(this, List(SfxTransform.rotate(factor.toDegrees.magnitude, pivotX, pivotY)))
   }
   
   /** 
    * produces the `Image` obtained by moving this `Image` `x` pixels right
    * and `y` pixels down. (`x` and `y` may be negative.)
    */
-  def translate(x: Double, y: Double): Image = {
-    val transformer = new AffineTransform()
-    transformer.translate(x, y)
-    new Transform(this,transformer)
-  }
+  def translate(x: Double, y: Double): Image = 
+    new Transform(this, List(SfxTransform.translate(x, y)))
   
   /**
    * produces the `Image` obtained by cutting a rectangle `cropWidth` pixels
