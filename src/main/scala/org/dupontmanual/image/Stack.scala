@@ -4,6 +4,9 @@ import math.{abs, min, max}
 import scalafx.geometry.Rectangle2D
 import scalafx.geometry.Bounds
 import scalafx.geometry.BoundingBox
+import scalafx.scene.image.ImageView
+import scalafx.scene.{ Group, Node }
+import scalafx.scene.transform.Transform
 
 /** the parent class for horizontal alignments */
 sealed abstract class XAlign private[image] ()
@@ -31,36 +34,29 @@ object YAlign {
 
 /** represent two images, one in front of the other */
 private[image] class Stack(front: Image, back: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double) extends Image {
-  val backBounds = Stack.translateRect(back.bounds, 
+  val backBounds = Stack.translateRect(back.displayBounds, 
 		  							   Stack.dx(back.displayBounds, xAlign, 0), 
 		  							   Stack.dy(back.displayBounds, yAlign, 0))
   val frontBounds = Stack.translateRect(front.displayBounds,
              							Stack.dx(front.displayBounds, xAlign, dx),
              							Stack.dy(front.displayBounds, yAlign, dy))
-  val newX = min(backBounds.getX, frontBounds.getX)
-  val newY = min(backBounds.getY, frontBounds.getY)
-  val newWidth = max(backBounds.getMaxX, frontBounds.getMaxX) - newX
-  val newHeight = max(backBounds.getMaxY, frontBounds.getMaxY) - newY
-  val backTopLeft = Point(backBounds.getX - newX, backBounds.getY - newY)
-  val frontTopLeft = Point(frontBounds.getX - newX, frontBounds.getY - newY)
+  val newX = min(backBounds.minX, frontBounds.minX)
+  val newY = min(backBounds.minY, frontBounds.minY)
+  val newWidth = max(backBounds.maxX, frontBounds.maxX) - newX
+  val newHeight = max(backBounds.maxY, frontBounds.maxY) - newY
+  val backTopLeft = Point(backBounds.minX - newX, backBounds.minY - newY)
+  val frontTopLeft = Point(frontBounds.minX - newX, frontBounds.minY - newY)
   
-  val img: Node = new Group(back)
+  val backDx = backTopLeft.x + back.displayBounds.width / 2
+  val backDy = backTopLeft.y + back.displayBounds.height / 2
+  val backTransform = Transform.translate(backDx, backDy)
+  val frontDx = frontTopLeft.x + front.displayBounds.width / 2
+  val frontDy = frontTopLeft.y + front.displayBounds.height / 2
+  val frontTransform = Transform.translate(frontDx, frontDy)
   
-  def render(g2: Graphics2D) {
-    val backOutRect: Rectangle2D = back.displayBounds
-    val backInRect: Rectangle2D = back.bounds.getBounds2D
-    val frontOutRect: Rectangle2D = front.displayBounds
-    val frontInRect: Rectangle2D = front.bounds.getBounds2D
-    val backDx = (backTopLeft.x + (backOutRect.getWidth - backInRect.getWidth) / 2)
-    val backDy = (backTopLeft.y + (backOutRect.getHeight - backInRect.getHeight) / 2)
-    val frontDx = (frontTopLeft.x + (frontOutRect.getWidth - frontInRect.getWidth) / 2)
-    val frontDy = (frontTopLeft.y + (frontOutRect.getHeight - frontInRect.getHeight) / 2)
-    g2.translate(backDx, backDy)
-    back.render(g2)
-    g2.translate(frontDx - backDx, frontDy - backDy)
-    front.render(g2)
-    g2.translate(-frontDx, -frontDy)
-  }
+  val backView = new Node(back.img) { transforms = List(backTransform) }
+  val frontView = new Node(front.img) { transforms = List(frontTransform) }
+  val img: Node = new Group(backView, frontView)
 }
 
 private[image] object Stack {
@@ -76,13 +72,13 @@ private[image] object Stack {
     new BoundingBox(rect.minX + dx, rect.minY + dy, rect.width, rect.height)
   }
   
-  def dx(rect: Rectangle2D, xAlign: XAlign, xOffset: Double): Double = xOffset + (xAlign match {
+  def dx(rect: Bounds, xAlign: XAlign, xOffset: Double): Double = xOffset + (xAlign match {
     case XAlign.Left => 0
     case XAlign.Center => -0.5 * (rect.minX + rect.maxX)
     case XAlign.Right => -rect.maxX
   })
   
-  def dy(rect: Rectangle2D, yAlign: YAlign, yOffset: Double): Double = yOffset + (yAlign match {
+  def dy(rect: Bounds, yAlign: YAlign, yOffset: Double): Double = yOffset + (yAlign match {
     case YAlign.Top => 0
     case YAlign.Center => -0.5 * (rect.minY + rect.maxY)
     case YAlign.Bottom => -rect.maxY

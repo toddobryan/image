@@ -15,7 +15,7 @@ import scalafx.stage.Stage
 import scalafx.scene.Parent
 import scalafx.scene.layout.VBox
 import scalafx.scene.control.Button
-import scalafx.scene.image.WritableImage
+import scalafx.scene.image.{ Image => SfxImage, ImageView, WritableImage }
 import scalafx.scene.Group
 import javax.imageio.ImageIO
 import javafx.embed.swing.SwingFXUtils
@@ -85,7 +85,8 @@ abstract class Image private[image] () {
   /** the actual bounds of the image (may not be rectangular) */
   /*private[image]*/ def bounds: Bounds = img.layoutBounds.value
   /** the bounding box */
-  /*private[image]*/ def displayBounds: Bounds = img.boundsInParent.value
+  /*private[image]*/ def displayBounds: BoundingBox = 
+    new BoundingBox(bounds.minX, bounds.minY, bounds.width, bounds.height)
   
   /** returns the width of this `Image` */
   def width: Double = displayBounds.width
