@@ -122,6 +122,7 @@ abstract class Image private[image] () {
    *  will be exactly the same size as this `Image`. The center of `img` is placed at the point
    *  (`x`, `y`) on the new `Image`. */
   def placeImage(img: Image, x: Double, y: Double): Image = this.placeImage(img, x, y, XAlign.Center, YAlign.Center)    
+
   /** produces a new `Image` by placing `img` on this `Image`. `x` and `y` represent how far
    *  to the right and down the point designated by `xAlign` and `yAlign` are offset from the
    *  top left of this `Image`. Any portion of `img` that would extend outside the bounds of
@@ -147,6 +148,20 @@ abstract class Image private[image] () {
     } else {
       this
     }
+  }
+  
+  def addLine(startX: Double, startY: Double, endX: Double, endY: Double): Image = {
+    this.addLine(Color.Black, startX, startY, endX, endY)
+  }
+  
+  def addLine(paint: Paint, startX: Double, startY: Double, endX: Double, endY: Double): Image = {
+    this.addLine(Pen(paint), startX, startY, endX, endY)
+  }
+  
+  def addLine(pen: Pen, startX: Double, startY: Double, endX: Double, endY: Double): Image = {
+    import math.min
+    this.placeImage(LineDrawing(pen, Point(startX, startY), Point(endX, endY)), 
+        min(startX, endX), min(startY, endY), XAlign.Left, YAlign.Top)
   }
   
   /** produces a new `Image` with `img` to the right of this `Image`, centered vertically */
