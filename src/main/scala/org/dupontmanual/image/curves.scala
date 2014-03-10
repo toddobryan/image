@@ -1,6 +1,8 @@
 package org.dupontmanual.image
 
-/** an convenience object with a shape method for java.awt.geom.Ellipse2D */
+/*
+
+/** a convenience object with a shape method for java.awt.geom.Ellipse2D */
 private[image] object Ellipse {
   def shape(width: Double, height: Double) = new java.awt.geom.Ellipse2D.Double(0, 0, width, height)
 }
@@ -215,3 +217,4 @@ object EllipticalSector {
   }
 }
 
+*/

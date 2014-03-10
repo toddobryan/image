@@ -2,6 +2,16 @@ package org.dupontmanual
 
 import scala.language.implicitConversions
 import org.scalautils.Equality
+import javafx.embed.swing.JFXPanel
+import scalafx.Includes._
+import scalafx.scene.Node
+import scalafx.application.Platform
+import scalafx.stage.Stage
+import scalafx.stage.StageStyle
+import scalafx.scene.Scene
+import scalafx.scene.layout.BorderPane
+import scalafx.geometry.Insets
+import scalafx.scene.control.Button
 
 /**
  * A Scala port (mostly) of the image library created in Racket by Robby Findler,
@@ -12,6 +22,9 @@ import org.scalautils.Equality
  */
 package object image {
   import AngleUnit._
+  
+  // initializes the toolkit when the object is imported
+  new JFXPanel()
 
   /**
    * converts a `Double` to an `[[AngleBuilder]]`.
@@ -43,6 +56,31 @@ package object image {
 
   /** a 129x44 pixel picture of an old-fashioned train engine with a coal car */
   lazy val TrainEngine = Bitmap.fromWorkspace("/train_engine.png", name = Some("TrainEngine"))
+  
+  def displayNode(node: Node) = {
+    Platform.runLater {
+
+      // Create dialog
+      val dialogStage = new Stage(StageStyle.UTILITY) {
+        outer =>
+        title = "Image"
+        scene = new Scene {
+          root = new BorderPane {
+            padding = Insets(25)
+            center = node
+            bottom = new Button {
+              text = "OK"
+              onAction = handle { outer.close() }
+            }
+          }
+        }
+      }
+
+      // Show dialog and wait till it is closed
+      dialogStage.showAndWait()
+      //System.exit(0)
+    }
+  }
   
   private[image] def repr(s: String): String = {
     if (s == null) "null"

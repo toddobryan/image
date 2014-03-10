@@ -1,5 +1,7 @@
 package org.dupontmanual.image
 
+/*
+
 import java.awt.{Graphics2D, RenderingHints}
 import java.awt.Shape
 import java.awt.geom.Rectangle2D
@@ -29,4 +31,4 @@ private[image] abstract class FigureOutlined(val pen: Pen) extends Figure {
   override def penWidth: Double = pen.width
 }
 
-
+*/

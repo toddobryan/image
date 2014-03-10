@@ -3,6 +3,8 @@ package org.dupontmanual.image
 import scala.math.{min, Pi}
 import java.awt.Shape
 
+/*
+
 /** a class with convenience methods for polygons */
 private[image] object Poly {
   def topLeft(pts: List[Point]): Point = pts match {
@@ -201,3 +203,5 @@ object SquareOutlined {
   def apply(paint: Paint, side: Double): Image =
     new SquareOutlined(Pen(paint), side)
 }
+
+*/

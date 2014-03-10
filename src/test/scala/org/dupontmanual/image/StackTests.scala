@@ -2,6 +2,8 @@ package org.dupontmanual.image
 
 import org.scalatest.{ FunSuite, Matchers }
 
+/*
+
 class StackTests extends FunSuite with Matchers {
   val e1 = EllipseFilled(Color.DeepSkyBlue, 70, 40)
   val e2 = EllipseFilled(Color.DarkGray, 20, 80)
@@ -40,3 +42,5 @@ class StackTests extends FunSuite with Matchers {
   }
 
 }
+
+*/

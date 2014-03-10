@@ -8,9 +8,9 @@ organization := "org.dupontmanual"
 
 organizationName := "duPont Manual High School"
 
-version := "0.1-SNAPSHOT"
+version := "0.5-SNAPSHOT"
 
-scalaVersion := "2.10.2"
+scalaVersion := "2.10.3"
 
 scalacOptions ++= Seq("-deprecation", "-feature")
 
@@ -21,7 +21,7 @@ unmanagedSourceDirectories in Test <<= Seq(scalaSource in Test).join
 unmanagedJars in Compile += Attributed.blank(
     file(scala.util.Properties.javaHome) / "lib" / "jfxrt.jar")
 
-fork in run := true
+fork := true
 
 libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.0",

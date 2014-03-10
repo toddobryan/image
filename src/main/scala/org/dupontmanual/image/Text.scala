@@ -11,6 +11,8 @@ import java.awt.geom.AffineTransform
 import java.awt.geom.Rectangle2D
 import java.awt.geom.Path2D
 
+/*
+
 /** represents a font that can be used to draw text images */
 class Font private[image] (private[image] val javaFont: JFont) {
   /** returns a representation of the font, including name, style, and size */
@@ -123,3 +125,5 @@ object Text {
   /** returns a text image in Font.Serif, size 18, black */
   def apply(text: String): Image = Text(Color.Black, defaultFont, text)
 }
+
+*/

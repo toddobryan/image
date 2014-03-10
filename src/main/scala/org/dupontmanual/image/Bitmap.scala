@@ -2,19 +2,22 @@ package org.dupontmanual.image
 
 import java.io.File
 import java.net.URL
-import scalafx.scene.image.{ Image => SfxImage }
+import scalafx.scene.Node
+import scalafx.scene.image.{ Image => SfxImage, ImageView }
 
 /**
  * represents a bitmap image
  */
 class Bitmap private[image](val pathOrUrl: Either[File, URL], val name: Option[String] = None) extends Image {
-  private[image] val img: SfxImage = {
+  private[this] lazy val imgCache: Node = {
     val temp = Option(pathOrUrl match {
       case Left(path) => new SfxImage(path.getCanonicalPath())
-      case Right(url) => new SfxImage(url.getPath())
+      case Right(url) => new SfxImage(url.toString)
     })
-    temp.getOrElse(throw new IllegalArgumentException("no image at the source indicated"))
+    temp.map(sImage => new ImageView(sImage)).getOrElse(throw new IllegalArgumentException("no image at the source indicated"))
   }
+  
+  private[image] def img: Node = imgCache
     
   override def toString: String = name match {
     case Some(str) => str
