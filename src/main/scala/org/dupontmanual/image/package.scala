@@ -2,7 +2,6 @@ package org.dupontmanual
 
 import scala.language.implicitConversions
 import org.scalautils.Equality
-import javafx.embed.swing.JFXPanel
 import scalafx.Includes._
 import scalafx.scene.Node
 import scalafx.application.Platform
@@ -23,9 +22,6 @@ import scalafx.scene.control.Button
 package object image {
   import AngleUnit._
   
-  // initializes the toolkit when the object is imported
-  new JFXPanel()
-
   /**
    * converts a `Double` to an `[[AngleBuilder]]`.
    *

@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream
 import org.apache.commons.codec.binary.Base64
 import java.io.FileInputStream
 import java.util.Arrays
+import javafx.application.{ Application => JfxApplication }
 import scalafx.Includes._
 import scalafx.scene.Scene
 import scalafx.scene.Node
@@ -20,6 +21,7 @@ import scalafx.scene.Group
 import javax.imageio.ImageIO
 import javafx.embed.swing.SwingFXUtils
 import java.awt.image.RenderedImage
+import javafx.embed.swing.JFXPanel
 import scalafx.geometry.BoundingBox
 import scalafx.geometry.Bounds
 import scalafx.scene.shape.Shape
@@ -34,28 +36,27 @@ abstract class Image private[image] () {
 
   /** displays the image in a dialog box */
   def display() {
-    Platform.runLater {
-
-      // Create dialog
-      val dialogStage = new Stage(StageStyle.UTILITY) {
-        outer =>
-        title = "Image"
-        scene = new Scene {
-          root = new BorderPane {
-            padding = Insets(25)
-            center = img
-            bottom = new Button {
-              text = "OK"
-              onAction = handle { outer.close() }
+    class DisplayApp extends JfxApplication {
+      def start(stage: javafx.stage.Stage) {
+        val dialogStage = new Stage(StageStyle.UTILITY) {
+          outer =>
+          title = "Image"
+          scene = new Scene {
+            root = new BorderPane {
+              padding = Insets(25)
+              center = img
+              bottom = new Button {
+                text = "OK"
+                onAction = handle { outer.close() }
+              }
             }
           }
         }
+        dialogStage.showAndWait()
+        Platform.exit()
       }
-
-      // Show dialog and wait till it is closed
-      dialogStage.showAndWait()
-      //System.exit(0)
     }
+    JfxApplication.launch(classOf[DisplayApp])
   }
 
   private[image] lazy val writableImg: WritableImage = new Scene {
