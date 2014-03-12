@@ -36,27 +36,23 @@ abstract class Image private[image] () {
 
   /** displays the image in a dialog box */
   def display() {
-    class DisplayApp extends JfxApplication {
-      def start(stage: javafx.stage.Stage) {
-        val dialogStage = new Stage(StageStyle.UTILITY) {
-          outer =>
-          title = "Image"
-          scene = new Scene {
-            root = new BorderPane {
-              padding = Insets(25)
-              center = img
-              bottom = new Button {
-                text = "OK"
-                onAction = handle { outer.close() }
-              }
+    Platform.runLater {
+      val dialogStage = new Stage(StageStyle.UTILITY) {
+        outer =>
+        title = "Image"
+        scene = new Scene {
+          root = new BorderPane {
+            padding = Insets(25)
+            center = img
+            bottom = new Button {
+              text = "OK"
+              onAction = handle { outer.close() }
             }
           }
         }
-        dialogStage.showAndWait()
-        Platform.exit()
       }
+      dialogStage.showAndWait()
     }
-    JfxApplication.launch(classOf[DisplayApp])
   }
 
   private[image] lazy val writableImg: WritableImage = new Scene {
@@ -65,10 +61,9 @@ abstract class Image private[image] () {
 
   private[image] lazy val savableImg: RenderedImage = SwingFXUtils.fromFXImage(writableImg, null)
 
-  /**
-   * saves the image as a `.png` file. If the filename doesn't already end
-   * in `.png`, the extension is added.
-   */
+  /** saves the image as a `.png` file. If the filename doesn't already end
+    * in `.png`, the extension is added.
+    */
   def saveAsDisplayed(filename: String) {
     val filenameWithExt = if (filename.endsWith(".png")) filename else filename + ".png"
     ImageIO.write(savableImg, "png", new File(filenameWithExt))
@@ -106,24 +101,21 @@ abstract class Image private[image] () {
   /** returns a new `Image` with this `Image` centered and superimposed on `img` */
   def stackOn(img: Image): Image = Stack(this, img)
 
-  /**
-   * returns a new `Image` with this `Image` superimposed on `img` and aligned
-   * according to `xAlign` and `yAlign`
-   */
+  /** returns a new `Image` with this `Image` superimposed on `img` and aligned
+    * according to `xAlign` and `yAlign`
+    */
   def stackOn(img: Image, xAlign: XAlign, yAlign: YAlign): Image = Stack(this, img, xAlign, yAlign)
 
-  /**
-   * returns a new `Image` with this `Image` superimposed on `img` and moved
-   * `dx` pixels to the right and `dy` pixels down from center. `dx` and
-   * `dy` may be negative to translate this `Image` to the left and up.
-   */
+  /** returns a new `Image` with this `Image` superimposed on `img` and moved
+    * `dx` pixels to the right and `dy` pixels down from center. `dx` and
+    * `dy` may be negative to translate this `Image` to the left and up.
+    */
   def stackOn(img: Image, dx: Double, dy: Double): Image = Stack(this, img, dx, dy)
 
-  /**
-   * returns a new `Image` with this `Image` superimposed on `img`, aligned
-   * according to `xAlign` and `yAlign` and translated `dx` pixels to
-   * the right and `dy` pixels down.
-   */
+  /** returns a new `Image` with this `Image` superimposed on `img`, aligned
+    * according to `xAlign` and `yAlign` and translated `dx` pixels to
+    * the right and `dy` pixels down.
+    */
   def stackOn(img: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double): Image =
     Stack(this, img, xAlign, yAlign, dx, dy)
 
@@ -137,21 +129,19 @@ abstract class Image private[image] () {
   def slideUnder(img: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double): Image =
     Stack(img, this, xAlign, yAlign, dx, dy)
 
-  /**
-   * produces a new `Image` by placing `img` on this `Image`. `x` and `y` represent how far
-   *  to the right and down the `img` is placed. The final image is restricted to the portion
-   *  that would have shown on this `Image`, so you're guaranteed that the new `Image` created
-   *  will be exactly the same size as this `Image`. The center of `img` is placed at the point
-   *  (`x`, `y`) on the new `Image`.
-   */
+  /** produces a new `Image` by placing `img` on this `Image`. `x` and `y` represent how far
+    * to the right and down the `img` is placed. The final image is restricted to the portion
+    * that would have shown on this `Image`, so you're guaranteed that the new `Image` created
+    * will be exactly the same size as this `Image`. The center of `img` is placed at the point
+    * (`x`, `y`) on the new `Image`.
+    */
   def placeImage(img: Image, x: Double, y: Double): Image = this.placeImage(img, x, y, XAlign.Center, YAlign.Center)
-  /**
-   * produces a new `Image` by placing `img` on this `Image`. `x` and `y` represent how far
-   *  to the right and down the point designated by `xAlign` and `yAlign` are offset from the
-   *  top left of this `Image`. Any portion of `img` that would extend outside the bounds of
-   *  this `Image` is not retained, so you're guaranteed that the new `Image` will be exactly
-   *  the same size as this `Image`.
-   */
+  /** produces a new `Image` by placing `img` on this `Image`. `x` and `y` represent how far
+    * to the right and down the point designated by `xAlign` and `yAlign` are offset from the
+    * top left of this `Image`. Any portion of `img` that would extend outside the bounds of
+    * this `Image` is not retained, so you're guaranteed that the new `Image` will be exactly
+    * the same size as this `Image`.
+    */
   def placeImage(img: Image, x: Double, y: Double, xAlign: XAlign, yAlign: YAlign): Image = {
     val xOffset: Double = img.width * (xAlign match {
       case XAlign.Left => 0.0
@@ -192,10 +182,9 @@ abstract class Image private[image] () {
   def flipVertical(): Image =
     new Transform(this, List(SfxTransform.translate(0, height), SfxTransform.scale(1, -1)))
 
-  /**
-   * produces the `Image` obtained by scaling this `Image` horizontally
-   * by `xFactor` and vertically by `yFactor`
-   */
+  /** produces the `Image` obtained by scaling this `Image` horizontally
+    * by `xFactor` and vertically by `yFactor`
+    */
   def scale(xFactor: Double, yFactor: Double): Image =
     new Transform(this, List(SfxTransform.scale(xFactor, yFactor)))
 
@@ -204,35 +193,31 @@ abstract class Image private[image] () {
   /** produces the `Image` obtained by scaling this `Image` vertically by `yFactor` */
   def scaleY(yFactor: Double): Image = scale(1.0, yFactor)
 
-  /**
-   * produces the `Image` obtained by rotating this `Image` by the angle `factor`
-   * around the point (`pivotX`, `pivotY`)
-   */
+  /** produces the `Image` obtained by rotating this `Image` by the angle `factor`
+    * around the point (`pivotX`, `pivotY`)
+    */
   def rotate(factor: Angle, pivotX: Double, pivotY: Double): Image =
     new Transform(this, List(SfxTransform.rotate(factor.toDegrees.magnitude, pivotX, pivotY)))
-  /**
-   * produces the `Image` obtained by rotating this `Image` by the angle `factor`
-   * around its center
-   */
+  /** produces the `Image` obtained by rotating this `Image` by the angle `factor`
+    * around its center
+    */
   def rotate(factor: Angle): Image = {
     val pivotX = (bounds.minX + bounds.maxX) / 2.0
     val pivotY = (bounds.minY + bounds.maxY) / 2.0
     new Transform(this, List(SfxTransform.rotate(factor.toDegrees.magnitude, pivotX, pivotY)))
   }
 
-  /**
-   * produces the `Image` obtained by moving this `Image` `x` pixels right
-   * and `y` pixels down. (`x` and `y` may be negative.)
-   */
+  /** produces the `Image` obtained by moving this `Image` `x` pixels right
+    * and `y` pixels down. (`x` and `y` may be negative.)
+    */
   def translate(x: Double, y: Double): Image =
     new Transform(this, List(SfxTransform.translate(x, y)))
 
-  /**
-   * produces the `Image` obtained by cutting a rectangle `cropWidth` pixels
-   * wide and `cropHeight` pixels tall out of this `Image` starting at a
-   * point `x` pixels to the right of and `y` pixels down from the top left
-   * corner
-   */
+  /** produces the `Image` obtained by cutting a rectangle `cropWidth` pixels
+    * wide and `cropHeight` pixels tall out of this `Image` starting at a
+    * point `x` pixels to the right of and `y` pixels down from the top left
+    * corner
+    */
   def crop(x: Double, y: Double, cropWidth: Double, cropHeight: Double): Image = {
     new Cropped(this, x, y, cropWidth, cropHeight)
   }
