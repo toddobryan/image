@@ -11,6 +11,10 @@ import scalafx.scene.Scene
 import scalafx.scene.layout.BorderPane
 import scalafx.geometry.Insets
 import scalafx.scene.control.Button
+import javafx.embed.swing.JFXPanel
+import javax.swing.JFrame
+import java.awt.Frame
+import java.util.Arrays
 
 /**
  * A Scala port (mostly) of the image library created in Racket by Robby Findler,
@@ -21,6 +25,25 @@ import scalafx.scene.control.Button
  */
 package object image {
   import AngleUnit._
+  
+  var masterFrame: JFrame = _
+  
+  def initialize() {
+    masterFrame = new JFrame()
+    masterFrame.add(new JFXPanel())
+    masterFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+  }
+  
+  def cleanUp() {
+    println("exiting platform")
+    Platform.exit()
+    println("disposing of frames")
+    Frame.getFrames().foreach {
+      _.dispose()
+    }
+    println("frames all disposed")
+    System.exit(0);
+  }
   
   /**
    * converts a `Double` to an `[[AngleBuilder]]`.

@@ -29,6 +29,9 @@ import scalafx.scene.transform.{ Transform => SfxTransform }
 import scalafx.application.Platform
 import scalafx.stage.StageStyle
 import scalafx.geometry.Insets
+import javax.swing.JFrame
+import scalafx.application.JFXApp
+import scalafx.application.JFXApp.PrimaryStage
 
 /** represents an image */
 abstract class Image private[image] () {
@@ -36,27 +39,27 @@ abstract class Image private[image] () {
 
   /** displays the image in a dialog box */
   def display() {
-    class DisplayApp extends JfxApplication {
-      def start(stage: javafx.stage.Stage) {
-        val dialogStage = new Stage(StageStyle.UTILITY) {
-          outer =>
-          title = "Image"
-          scene = new Scene {
-            root = new BorderPane {
-              padding = Insets(25)
-              center = img
-              bottom = new Button {
-                text = "OK"
-                onAction = handle { outer.close() }
-              }
-            }
-          }
-        }
-        dialogStage.showAndWait()
-        Platform.exit()
-      }
+	Platform.runLater {
+	  // Create dialog
+	  val dialogStage = new Stage(StageStyle.UTILITY) {
+	    outer => {
+	      title = "Image"
+	      scene = new Scene {
+	        root = new BorderPane {
+	          padding = Insets(25)
+	          center = img
+	          bottom = new Button {
+	            text = "OK"
+	            onAction = handle { outer.close() }
+	          }
+	        }
+	      }
+	    }
+	  }
+      // Show dialog and wait till it is closed
+	  dialogStage.show()
+	  dialogStage.requestFocus()
     }
-    JfxApplication.launch(classOf[DisplayApp])
   }
 
   private[image] lazy val writableImg: WritableImage = new Scene {
