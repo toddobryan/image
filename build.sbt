@@ -23,6 +23,10 @@ unmanagedJars in Compile += Attributed.blank(
 
 fork := true
 
+initialCommands in console := """import org.dupontmanual.image._; org.dupontmanual.image.initialize()"""
+
+cleanupCommands in console := """org.dupontmanual.image.cleanUp()"""
+
 libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.0",
   "commons-codec" % "commons-codec" % "1.8",

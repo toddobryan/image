@@ -9,15 +9,13 @@ import scalafx.scene.image.{ Image => SfxImage, ImageView }
  * represents a bitmap image
  */
 class Bitmap private[image](val pathOrUrl: Either[File, URL], val name: Option[String] = None) extends Image {
-  private[this] lazy val imgCache: Node = {
+  private[image] def img: Node = {
     val temp = Option(pathOrUrl match {
       case Left(path) => new SfxImage(path.getCanonicalPath())
       case Right(url) => new SfxImage(url.toString)
     })
     temp.map(sImage => new ImageView(sImage)).getOrElse(throw new IllegalArgumentException("no image at the source indicated"))
   }
-  
-  private[image] def img: Node = imgCache
     
   override def toString: String = name match {
     case Some(str) => str
