@@ -3,12 +3,16 @@ package org.dupontmanual.image
 import org.scalatest.{ FunSuite, Matchers }
 
 class StackTests extends FunSuite with Matchers {
-  val e1 = EllipseFilled(Color.DeepSkyBlue, 70, 40)
-  val e2 = EllipseFilled(Color.DarkGray, 20, 80)
-  val bg = RectangleFilled(Color.Gray, 300, 200)
-  val c = CircleFilled(Color.Aqua, 25)
+  val e1 = Ellipse(Color.DeepSkyBlue, 70, 40)
+  val e2 = Ellipse(Color.DarkGray, 20, 80)
+  val bg = Rectangle(Color.Gray, 300, 200)
+  val c = Circle(Color.Aqua, 25)
   
   test("dimensions") {
+    // Hacker is 48x48, TrainEngine is 129x44
+    val s1 = Hacker.stackOn(TrainEngine, XAlign.Left, YAlign.Top)
+    s1.width shouldEqual 129.0
+    s1.height shouldEqual 48.0
     
   }
   
@@ -42,5 +46,4 @@ class StackTests extends FunSuite with Matchers {
     bg.placeImage(c, 5, 100, XAlign.Right, YAlign.Center) shouldEqual Bitmap.fromWorkspace("/stacked/bg-c-right-at-5,100.png")
     bg.placeImage(c, 275, 25, XAlign.Left, YAlign.Bottom) shouldEqual Bitmap.fromWorkspace("/stacked/bg-c-bottom-left-at-275,25.png")    
   }
-
 }

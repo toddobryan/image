@@ -1,32 +1,14 @@
 package org.dupontmanual.image
 
 import scala.math.{min, Pi}
-import java.awt.Shape
-
-/*
+import scalafx.scene.shape.{ Polygon => SfxPolygon, Polyline, Rectangle => SfxRectangle, Shape }
 
 /** a class with convenience methods for polygons */
 private[image] object Poly {
-  def topLeft(pts: List[Point]): Point = pts match {
-    case Nil => throw new Exception("can't create Polygon with no vertices")
-    case p :: Nil => p
-    case p :: rest => {
-      val tlOfRest = topLeft(rest)
-      Point(min(p.x, tlOfRest.x), min(p.y, tlOfRest.y))
-    }
-  }
-
-  def shape(vertices: List[Point], close: Boolean): Shape = {
-    val tl = Poly.topLeft(vertices)
-    val path = new java.awt.geom.Path2D.Double
-    val transVs = vertices.map(p => p.translate(-tl.x, -tl.y))
-    val start = transVs.head
-    path.moveTo(start.x, start.y)
-    for (v <- transVs.tail) {
-      path.lineTo(v.x, v.y)
-    }
-    if (close) path.closePath()
-    path    
+   def shape(vertices: List[Point], isClosed: Boolean): Shape = {
+    val coords: List[Double] = vertices.flatMap{ p => List(p.x, p.y) }
+    if (isClosed) SfxPolygon(coords: _*)
+    else Polyline(coords: _*)
   }
   
   def regular(sideLength: Double, numSides: Int): List[Point] = {
@@ -43,13 +25,15 @@ private[image] object Poly {
 }
 
 /** the parent class for filled polygons */
-private[image] class PolygonFilled(paint: Paint, vertices: List[Point]) extends FigureFilled(paint) {
-  val awtShape = Poly.shape(vertices, true)
+private[image] class Polygon(paint: Option[Paint], pen: Option[Pen], vertices: List[Point]) extends 
+    Figure(Poly.shape(vertices, true), paint, pen) {
+
+  //TODO: this doesn't work if pen isn't default
   override def toString = s"Polygon($paint, ${vertices.mkString(", ")})"
 }
 
 /** a factory for creating filled polygons */
-object PolygonFilled {
+object Polygon {
   /**
    * returns a polygon filled with the given `paint`. Since the polygon
    * is filled, the last vertex is automatically connected to the first vertex.
@@ -58,150 +42,113 @@ object PolygonFilled {
    * to 3.
    */
   def apply(
-      paint: Paint, 
+      paint: Option[Paint], pen: Option[Pen], 
       vertex1: Point, vertex2: Point, vertex3: Point, 
       restOfVertices: Point*): Image = {
-    new PolygonFilled(paint, vertex1 :: vertex2 :: vertex3 :: restOfVertices.toList) 
+    new Polygon(paint, pen, vertex1 :: vertex2 :: vertex3 :: restOfVertices.toList) 
   }
+  def apply(paint: Paint, pen: Pen, v1: Point, v2: Point, v3: Point, restOfVertices: Point*): Image = {
+    Polygon(Some(paint), Some(pen), v1, v2, v3, restOfVertices: _*)
+  }
+  def apply(paint: Paint, v1: Point, v2: Point, v3: Point, restOfVertices: Point*): Image = {
+    Polygon(Some(paint), None, v1, v2, v3, restOfVertices: _*)
+  }
+  def apply(pen: Pen, v1: Point, v2: Point, v3: Point, restOfVertices: Point*): Image = {
+    Polygon(None, Some(pen), v1, v2, v3, restOfVertices: _*)
+  }
+  def outlined(penColor: Paint, v1: Point, v2: Point, v3: Point, restOfVertices: Point*): Image = {
+    Polygon(None, Some(Pen(penColor)), v1, v2, v3, restOfVertices: _*)
+  }  
 }
 
 /** the parent class for connected lines */
-private[image] class LineDrawing(pen: Pen, vertices: List[Point], isClosed: Boolean) extends FigureOutlined(pen) {
-  val awtShape = Poly.shape(vertices, isClosed)
+private[image] class LineDrawing(paint: Option[Paint], pen: Option[Pen], vertices: List[Point]) extends 
+    Figure(Poly.shape(vertices, false), paint, pen) {
+  
+  //TODO: fix the toString method
   override def toString = {
-    val verts = if (isClosed) vertices.last :: vertices else vertices
-    s"LineDrawing($pen, ${verts.mkString(", ")})"
+    s"LineDrawing($pen, ${vertices.mkString(", ")})"
   }
 }
 
 /** a factory for creating an image consisting of connected lines */
 object LineDrawing {
-  /**
-   * returns an image consisting of lines connecting the vertices in order,
-   * drawn with the given `pen`.
-   * 
-   * This method requires at least two `Point` arguments, but will accept more.
-   */
-  def apply(pen: Pen, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
-    val vertices = vertex1 :: vertex2 :: restOfVertices.toList
-    val isClosed = vertices.head == vertices.last
-    val neededVertices = if (isClosed) vertices.init else vertices
-    new LineDrawing(pen, neededVertices, isClosed)
+  def apply(paint: Option[Paint], pen: Option[Pen], vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
+    new LineDrawing(paint, pen, vertex1 :: vertex2 :: restOfVertices.toList)
   }
-  /**
-   * returns an image consisting of lines connecting the vertices in order, drawn
-   * with `Pen(paint)`.
-   * 
-   * This method requires at least two `Point` arguments, but will accept more.
-   */
+  def apply(paint: Paint, pen: Pen, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
+    new LineDrawing(Some(paint), Some(pen), vertex1 :: vertex2 :: restOfVertices.toList)
+  }
   def apply(paint: Paint, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
-    LineDrawing(Pen(paint), vertex1, vertex2, restOfVertices: _*)
+    new LineDrawing(Some(paint), None, vertex1 :: vertex2 :: restOfVertices.toList)
+  }
+  def apply(pen: Pen, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
+    new LineDrawing(None, Some(pen), vertex1 :: vertex2 :: restOfVertices.toList)
+  }
+  def outlined(penColor: Paint, vertex1: Point, vertex2: Point, restOfVertices: Point*): Image = {
+    new LineDrawing(None, Some(Pen(penColor)), vertex1 :: vertex2 :: restOfVertices.toList)
   }
 }
 
 /** factory for filled regular polygons */
-object RegularPolygonFilled {
+object RegularPolygon {
   /**
    * returns an image of a filled regular polygon with the given characteristics.
    * 
    * The polygon is drawn so that the bottom edge is horizontal. `numSides`
    * must be greater than 2.
    */
-  def apply(paint: Paint, sideLength: Double, numSides: Int): Image = {
-    new PolygonFilled(paint, Poly.regular(sideLength, numSides))
+  def apply(paint: Option[Paint], pen: Option[Pen], sideLength: Double, numSides: Int): Image = {
+    new Polygon(paint, pen, Poly.regular(sideLength, numSides))
   }
-}
-
-/** factory for outlined regular polygons */
-object RegularPolygonOutlined {
-  /**
-   * returns an image of an outlined regular polygon with the given characteristics.
-   * 
-   * The polygon is drawn so that the bottom edge is horizontal. `numSides`
-   * must be greater than 2.
-   */
+  def apply(paint: Paint, pen: Pen, sideLength: Double, numSides: Int): Image = {
+    RegularPolygon(Some(paint), Some(pen), sideLength, numSides)
+  }
+  def apply(paint: Paint, sideLength: Double, numSides: Int): Image = {
+    RegularPolygon(Some(paint), None, sideLength, numSides)
+  }
   def apply(pen: Pen, sideLength: Double, numSides: Int): Image = {
-    require(numSides > 2, "a polygon must have more than 2 sides")
-    val vts = Poly.regular(sideLength, numSides)
-    LineDrawing(pen, vts.last, vts.head, vts.tail: _*)
+    RegularPolygon(None, Some(pen), sideLength, numSides)
   }
-  /**
-   * returns an image of an outlined regular polygon drawn in `Pen(paint)`.
-   * 
-   * The polygon is drawn so that the bottom edge is horizontal. `numSides`
-   * must be greater than 2.
-   */
-  def apply(paint: Paint, sideLength: Double, numSides: Int): Image = {
-    RegularPolygonOutlined(Pen(paint), sideLength, numSides)
+  def outlined(penColor: Paint, sideLength: Double, numSides: Int): Image = {
+    RegularPolygon(None, Some(Pen(penColor)), sideLength, numSides)
   }
 }
 
 /** class with a convenience method for rectangles */
-private[image] object Rectangle {
-  def shape(width: Double, height: Double) = new java.awt.geom.Rectangle2D.Double(0, 0, width, height)
-}
-
-/** the parent class for filled rectangles */
-private[image] class RectangleFilled(paint: Paint, width: Double, height: Double) extends FigureFilled(paint) {
-  val awtShape = Rectangle.shape(width, height)
-}
+private[image] class Rectangle(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double) extends
+    Figure(SfxRectangle(0, 0, width, height), paint, pen)
 
 /** factory for filled rectangles */
-object RectangleFilled {
+object Rectangle {
   /** returns an image of a filled rectangle with the given characteristics */
+  def apply(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double): Image =
+    new Rectangle(paint, pen, width, height)
+  def apply(paint: Paint, pen: Pen, width: Double, height: Double): Image =
+    Rectangle(Some(paint), Some(pen), width, height)
   def apply(paint: Paint, width: Double, height: Double): Image =
-    new RectangleFilled(paint, width, height)
-}
-
-/** the parent class for outlined rectangles */
-private[image] class RectangleOutlined(pen: Pen, width: Double, height: Double) extends FigureOutlined(pen) {
-  val awtShape = Rectangle.shape(width, height)
-}
-
-/** factory for outlined rectangles */
-object RectangleOutlined {
-  /** returns an image of an outlined rectangle with the given characteristics. */
-  def apply(pen: Pen, width: Double, height: Double): Image = {
-    new RectangleOutlined(pen, width, height)
-  }
-  
-  /** returns an image of an outlined rectangle drawn with `Pen(paint)`. */
-  def apply(paint: Paint, width: Double, height: Double): Image = {
-    new RectangleOutlined(Pen(paint), width, height)
-  }
+    Rectangle(Some(paint), None, width, height)
+  def apply(pen: Pen, width: Double, height: Double): Image =
+    Rectangle(None, Some(pen), width, height)
+  def outlined(penColor: Paint, width: Double, height: Double): Image =
+    Rectangle(None, Some(Pen(penColor)), width, height)
 }
 
 /** object with convenience method for squares */
-private[image] object Square {
-  def shape(side: Double) = new java.awt.geom.Rectangle2D.Double(0, 0, side, side)
-}
-
-/** the parent class for filled squares */
-private[image] class SquareFilled(paint: Paint, side: Double) extends FigureFilled(paint) {
-  val awtShape = Square.shape(side)
-}
+private[image] class Square(paint: Option[Paint], pen: Option[Pen], side: Double) extends 
+    Figure(SfxRectangle(0, 0, side, side), paint, pen)
 
 /** factory for creating filled squares */
-object SquareFilled {
+object Square {
   /** returns an image of a filled square with the given characteristics */
+  def apply(paint: Option[Paint], pen: Option[Pen], side: Double): Image = 
+    new Square(paint, pen, side)
+  def apply(paint: Paint, pen: Pen, side: Double): Image = 
+    Square(Some(paint), Some(pen), side)
   def apply(paint: Paint, side: Double): Image = 
-    new SquareFilled(paint, side)
+    Square(Some(paint), None, side)
+  def apply(pen: Pen, side: Double): Image = 
+    Square(None, Some(pen), side)
+  def outlined(penColor: Paint, side: Double): Image = 
+    Square(None, Some(Pen(penColor)), side)
 }
-
-/** the parent class for outlined squares */
-private[image] class SquareOutlined(pen: Pen, side: Double) extends FigureOutlined(pen) {
-  val awtShape = Square.shape(side)
-}
-
-/** factory for outlined squares */
-object SquareOutlined {
-  /** returns an image of an outlined square with the given characteristics. */
-  def apply(pen: Pen, side: Double): Image =
-    new SquareOutlined(pen, side)
-  
-  /** returns an image of an outlined square drawn with `Pen(paint)`. */
-  def apply(paint: Paint, side: Double): Image =
-    new SquareOutlined(Pen(paint), side)
-}
-
-*/

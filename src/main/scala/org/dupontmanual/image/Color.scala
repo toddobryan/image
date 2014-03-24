@@ -1,12 +1,23 @@
 package org.dupontmanual.image
 
+import scalafx.scene.paint.{ Color => SfxColor, Paint => SfxPaint }
+
 /**
  * represents RGB(A) colors. Use the companion object to construct `Color` instances.
  */
-class Color private[image] (private[this] val hex: Int, hasAlpha: Boolean = false) extends Paint {
-  private[this] lazy val awtColor: java.awt.Color = new java.awt.Color(hex, hasAlpha)
+class Color private[image] (val red: Int, val green: Int, val blue: Int, val opacity: Double = 1.0) extends Paint {
+  require(red >= 0 && red <= 255, s"Illegal red value $red is outside the allowed range 0 to 255")
+  require(green >= 0 && green <= 255, s"Illegal green value $green is outside the allowed range 0 to 255")
+  require(blue >= 0 && blue <= 255, s"Illegal blue value $blue is outside the allowed range 0 to 255")
+  require(opacity >= 0 && opacity <= 1.0, s"Illegal opacity value $opacity is outside the allowed range 0.0 to 1.0")
+  
+  private[Color] def this(hex: Int) = {
+    this(hex >> 16 & 0x000000ff, hex >> 8 & 0x000000ff, hex & 0x000000ff, 1.0)
+  }
+  
+  private[this] lazy val fxColor: SfxColor = SfxColor.rgb(red, green, blue, opacity)
 
-  private[image] def awtPaint: java.awt.Paint = awtColor
+  private[image] def fxPaint: SfxPaint = fxColor
   
   /**
    * returns this `Color` as a `String`.
@@ -22,12 +33,10 @@ class Color private[image] (private[this] val hex: Int, hasAlpha: Boolean = fals
    * alpha value is anything else, it will be displayed after the blue value.
    */
   override def toString: String = {
-    if (!hasAlpha && Color.hexToName.contains(hex)) s"Color.${Color.hexToName(hex)}"
+    val hex: Int = red << 16 | green << 8 | blue
+    if (opacity == 255 && Color.hexToName.contains(hex)) s"Color.${Color.hexToName(hex)}"
     else {
-      val red = awtColor.getRed
-      val green = awtColor.getGreen
-      val blue = awtColor.getBlue
-      val alpha = if (!hasAlpha) "" else f", alpha = ${awtColor.getAlpha}%d"
+      val alpha = if (opacity == 1.0) "" else f", opacity = ${opacity}%f"
       f"Color(red = $red%d, green = $green%d, blue = $blue%d$alpha%s)"
     }
   }
@@ -43,16 +52,12 @@ object Color {
    * be `Int`s from `0` to `255` inclusive, and an error will occur if 
    * values outside that range are provided.
    */
-  def apply(red: Int = 0, green: Int = 0, blue: Int = 0, alpha: Int = 255): Color = {
+  def apply(red: Int = 0, green: Int = 0, blue: Int = 0, opacity: Int = 255): Color = {
     require(0 <= red && red <= 255, "red value must be between 0 and 255 inclusive")
     require(0 <= green && green <= 255, "green value must be between 0 and 255 inclusive")
     require(0 <= blue && blue <= 255, "blue value must be between 0 and 255 inclusive")
-    require(0 <= alpha && alpha <= 255, "alpha value must be between 0 and 255 inclusive")
-    if (alpha != 255) {
-      new Color(alpha << 24 | red << 16 | green << 8 | blue, true)
-    } else {
-      new Color(red << 16 | green << 8 | blue)
-    }
+    require(0 <= opacity && opacity <= 255, "opacity value must be between 0 and 255 inclusive")
+    new Color(red, green, blue, opacity)
   }
   
   private[this] val hexNameTuples = List(
@@ -342,4 +347,6 @@ object Color {
   val WhiteSmoke: Color = new Color(0xf5f5f5)
   val Yellow: Color = new Color(0xffff00)
   val YellowGreen: Color = new Color(0x9acd32)
+  
+  val Transparent: Color = new Color(255, 255, 255, 0)
 }

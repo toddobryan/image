@@ -4,18 +4,20 @@ import java.io.File
 import java.net.URL
 import scalafx.scene.Node
 import scalafx.scene.image.{ Image => SfxImage, ImageView }
+import scalafx.scene.shape.{ Shape, Rectangle => SfxRectangle }
 
 /**
  * represents a bitmap image
  */
 class Bitmap private[image](val pathOrUrl: Either[File, URL], val name: Option[String] = None) extends Image {
-  private[image] def img: Node = {
-    val temp = Option(pathOrUrl match {
-      case Left(path) => new SfxImage(path.getCanonicalPath())
+  def bounds: Shape = SfxRectangle(0, 0, bitmap.width.value, bitmap.height.value)
+  
+  val bitmap: SfxImage = Option(pathOrUrl match {
+      case Left(path) => new SfxImage(path.toURI.toURL.toString)
       case Right(url) => new SfxImage(url.toString)
-    })
-    temp.map(sImage => new ImageView(sImage)).getOrElse(throw new IllegalArgumentException("no image at the source indicated"))
-  }
+  }).getOrElse(throw new IllegalArgumentException("no image at the source indicated"))
+  
+  private[image] val img: Node = new ImageView(bitmap)
     
   override def toString: String = name match {
     case Some(str) => str

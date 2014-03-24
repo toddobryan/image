@@ -32,10 +32,14 @@ import scalafx.geometry.Insets
 import javax.swing.JFrame
 import scalafx.application.JFXApp
 import scalafx.application.JFXApp.PrimaryStage
+import scalafx.concurrent.Task
+import scala.concurrent.{ Await, future, promise }
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._
 
 /** represents an image */
 abstract class Image private[image] () {
-  private[image] def img: Node
+  private[image] val img: Node
 
   /** displays the image in a dialog box */
   def display() {
@@ -46,7 +50,7 @@ abstract class Image private[image] () {
 	      title = "Image"
 	      scene = new Scene {
 	        root = new BorderPane {
-	          padding = Insets(25)
+	          padding = Insets(0)
 	          center = img
 	          bottom = new Button {
 	            text = "OK"
@@ -61,12 +65,16 @@ abstract class Image private[image] () {
 	  dialogStage.requestFocus()
     }
   }
+  
+  /* private[image] */ lazy val writableImg: WritableImage = {
+    val wrImg = Task[WritableImage] {
+      new Scene { root = new Group(img) }.snapshot(null)
+    }
+    Platform.runLater(wrImg)
+    wrImg.get()
+  }
 
-  private[image] lazy val writableImg: WritableImage = new Scene {
-    root = new Group(img)
-  }.snapshot(null)
-
-  private[image] lazy val savableImg: RenderedImage = SwingFXUtils.fromFXImage(writableImg, null)
+  /* private[image] */ lazy val savableImg: RenderedImage = SwingFXUtils.fromFXImage(writableImg, null)
 
   /**
    * saves the image as a `.png` file. If the filename doesn't already end
@@ -96,10 +104,12 @@ abstract class Image private[image] () {
   private[image] def penWidth: Double = 0.0
 
   /** the actual bounds of the image (may not be rectangular) */
-  /*private[image]*/ def bounds: Bounds = img.layoutBounds.value
+  /*private[image]*/ def bounds: Shape
   /** the bounding box */
-  /*private[image]*/ def displayBounds: BoundingBox =
-    new BoundingBox(bounds.minX, bounds.minY, bounds.width, bounds.height)
+  /*private[image]*/ def displayBounds: BoundingBox = {
+    val bds = bounds.boundsInParent.value
+    new BoundingBox(bds.minX, bds.minY, bds.width, bds.height)
+  }
 
   /** returns the width of this `Image` */
   def width: Double = displayBounds.width
@@ -170,7 +180,7 @@ abstract class Image private[image] () {
     // check to see if img even appears in the new scene; if not, we'll return the old one
     val bg = scene.backBounds
     if (scene.frontBounds.intersects(bg)) {
-      val btl = scene.backTopLeft
+      val btl = Point(scene.newBounds.minX, scene.newBounds.minY)
       scene.crop(btl.x, btl.y, bg.getWidth, bg.getHeight)
     } else {
       this
@@ -218,8 +228,8 @@ abstract class Image private[image] () {
    * around its center
    */
   def rotate(factor: Angle): Image = {
-    val pivotX = (bounds.minX + bounds.maxX) / 2.0
-    val pivotY = (bounds.minY + bounds.maxY) / 2.0
+    val pivotX = (displayBounds.minX + displayBounds.maxX) / 2.0
+    val pivotY = (displayBounds.minY + displayBounds.maxY) / 2.0
     new Transform(this, List(SfxTransform.rotate(factor.toDegrees.magnitude, pivotX, pivotY)))
   }
 
