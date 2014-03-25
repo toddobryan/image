@@ -39,7 +39,7 @@ import scala.concurrent.duration._
 
 /** represents an image */
 abstract class Image private[image] () {
-  private[image] val img: Node
+  /* private[image] */ val img: Node
 
   /** displays the image in a dialog box */
   def display() {

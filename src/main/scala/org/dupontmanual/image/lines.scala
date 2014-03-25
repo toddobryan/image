@@ -6,9 +6,11 @@ import scalafx.scene.shape.{ Polygon => SfxPolygon, Polyline, Rectangle => SfxRe
 /** a class with convenience methods for polygons */
 private[image] object Poly {
    def shape(vertices: List[Point], isClosed: Boolean): Shape = {
-    val coords: List[Double] = vertices.flatMap{ p => List(p.x, p.y) }
-    if (isClosed) SfxPolygon(coords: _*)
-    else Polyline(coords: _*)
+     val minX = vertices.map(_.x).min
+     val minY = vertices.map(_.y).min
+     val coords: List[Double] = vertices.flatMap{ p => List(p.x - minX, p.y - minY) }
+     if (isClosed) SfxPolygon(coords: _*)
+     else Polyline(coords: _*)
   }
   
   def regular(sideLength: Double, numSides: Int): List[Point] = {

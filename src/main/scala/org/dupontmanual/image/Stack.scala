@@ -70,14 +70,14 @@ object Alignment {
   val frontDy = Stack.dy(frontBounds, newBounds, yAlign) + dy
   val backTransform = SfxTransform.translate(backDx, backDy)
   val frontTransform = SfxTransform.translate(frontDx, frontDy)
-  
-  def bounds: Shape = SfxRectangle(newBounds.minX, newBounds.minY, newBounds.width, newBounds.height)
-  
+
   val img: Node = {
-    val backView = new Node(back.img) { transforms = List(backTransform) }
-    val frontView = new Node(front.img) { transforms = List(frontTransform) }
+    val backView = new Group(back.img) { transforms = List(backTransform) }
+    val frontView = new Group(front.img) { transforms = List(frontTransform) }
     new Group(backView, frontView)
   }
+      
+  def bounds: Shape = SfxRectangle(newBounds.minX, newBounds.minY, newBounds.width, newBounds.height)
 }
 
 private[image] object Stack {

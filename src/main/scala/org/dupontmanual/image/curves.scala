@@ -1,15 +1,21 @@
 package org.dupontmanual.image
 
+import scalafx.Includes._
 import scalafx.scene.shape.{ Arc => SfxArc, ArcType, Circle => SfxCircle, Ellipse => SfxEllipse, Shape }
 
 /** a convenience object with a shape method for java.awt.geom.Ellipse2D */
-private[image] class Ellipse(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double) extends Figure(SfxEllipse(width, height), paint, pen)
+private[image] class Ellipse(paint: Option[Paint], pen: Option[Pen], centerX: Double, centerY: Double, width: Double, height: Double) extends 
+    Figure(SfxEllipse(centerX, centerY, width / 2, height / 2), paint, pen)
 
 object Ellipse {
-  def apply(paint: Paint, pen: Pen, width: Double, height: Double): Image = new Ellipse(Some(paint), Some(pen), width, height)
-  def apply(paint: Paint, width: Double, height: Double): Image = new Ellipse(Some(paint), None, width, height)
-  def apply(pen: Pen, width: Double, height: Double): Image = new Ellipse(None, Some(pen), width, height)
-  def outlined(penColor: Paint, width: Double, height: Double): Image = new Ellipse(None, Some(Pen(penColor)), width, height)
+  private[Ellipse] def apply(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double): Image = {
+    val (minX, minY) = Figure.offsets(SfxEllipse(width / 2, height / 2), paint, pen)
+    new Ellipse(paint, pen, -minX, -minY, width, height)
+  }
+  def apply(paint: Paint, pen: Pen, width: Double, height: Double): Image = Ellipse(Some(paint), Some(pen), width, height)
+  def apply(paint: Paint, width: Double, height: Double): Image = Ellipse(Some(paint), None, width, height)
+  def apply(pen: Pen, width: Double, height: Double): Image = Ellipse(None, Some(pen), width, height)
+  def outlined(penColor: Paint, width: Double, height: Double): Image = Ellipse(None, Some(Pen(penColor)), width, height)
 }
 
 /** a factory for filled ellipses */
@@ -38,13 +44,18 @@ object EllipseOutlined {
  
 
 /** the parent class for filled circles */
-private[image] class Circle(paint: Option[Paint], pen: Option[Pen], radius: Double) extends Figure(SfxCircle(radius), paint, pen)
+private[image] class Circle(paint: Option[Paint], pen: Option[Pen], centerX: Double, centerY: Double, radius: Double) extends 
+    Figure(SfxCircle(centerX, centerY, radius), paint, pen)
 
 object Circle {
-  def apply(paint: Paint, pen: Pen, radius: Double): Image = new Circle(Some(paint), Some(pen), radius)
-  def apply(paint: Paint, radius: Double): Image = new Circle(Some(paint), None, radius)
-  def apply(pen: Pen, radius: Double): Image = new Circle(None, Some(pen), radius)
-  def outlined(penColor: Paint, radius: Double): Image = new Circle(None, Some(Pen(penColor)), radius)
+  private[Circle] def apply(paint: Option[Paint], pen: Option[Pen], radius: Double): Image = {
+    val (minX, minY) = Figure.offsets(SfxCircle(radius), paint, pen)
+    new Circle(paint, pen, -minX, -minY, radius)
+  }
+  def apply(paint: Paint, pen: Pen, radius: Double): Image = Circle(Some(paint), Some(pen), radius)
+  def apply(paint: Paint, radius: Double): Image = Circle(Some(paint), None, radius)
+  def apply(pen: Pen, radius: Double): Image = Circle(None, Some(pen), radius)
+  def outlined(penColor: Paint, radius: Double): Image = Circle(None, Some(Pen(penColor)), radius)
 }
 
 /** a factory for filled circles */
@@ -68,12 +79,21 @@ object CircleOutlined {
 
 /** an object with convenience methods for arcs */
 private[image] object Arc {  
-  def shape(width: Double, height: Double, start: Angle, extent: Angle, arcType: ArcType): Shape = {
-    new SfxArc {
+  def shape(width: Double, height: Double, start: Angle, extent: Angle, arcType: ArcType, paint: Option[Paint], pen: Option[Pen]): Shape = {
+    val (minX, minY) = Figure.offsets(new SfxArc {
       centerX = 0
       centerY = 0
-      radiusX = width
-      radiusY = height
+      radiusX = width / 2
+      radiusY = height / 2
+      startAngle = start.toDegrees.magnitude
+      length = extent.toDegrees.magnitude
+      `type` = arcType
+    }, paint, pen)
+    new SfxArc {
+      centerX = -minX
+      centerY = -minY
+      radiusX = width / 2
+      radiusY = height / 2
       startAngle = start.toDegrees.magnitude
       length = extent.toDegrees.magnitude
       `type` = arcType
@@ -83,7 +103,7 @@ private[image] object Arc {
 
 /** the parent class for circular arcs. */
 private[image] class CircularArc(paint: Option[Paint], pen: Option[Pen], radius: Double, start: Angle, extent: Angle)
-    extends Figure(Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.OPEN), paint, pen)
+    extends Figure(Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.OPEN, paint, pen), paint, pen)
 
 /** a factory for creating circular arcs. */
 object CircularArc {
@@ -114,7 +134,7 @@ object CircularArc {
 
 /** the parent class for circular segments */
 private[image] class CircularSegment(paint: Option[Paint], pen: Option[Pen], radius: Double, start: Angle, extent: Angle)
-    extends Figure(Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.CHORD), paint, pen)
+    extends Figure(Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.CHORD, paint, pen), paint, pen)
 
 /** 
  * a factory for circular segments. These are the portion of the circle 
@@ -142,7 +162,7 @@ object CircularSegment {
 
 /** the parent class for circular sectors */
 private[image] class CircularSector(paint: Option[Paint], pen: Option[Pen], radius: Double, start: Angle, extent: Angle)
-    extends Figure(Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.ROUND), paint, pen) 
+    extends Figure(Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.ROUND, paint, pen), paint, pen) 
 
 /** 
  * a factory for circular wedges. These are the portion of the circle
@@ -169,7 +189,7 @@ object CircularSector {
 
 /** the parent class for elliptical arcs */
 private[image] class EllipticalArc(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double, start: Angle, extent: Angle)
-    extends Figure(Arc.shape(width, height, start, extent, ArcType.OPEN), paint, pen)
+    extends Figure(Arc.shape(width, height, start, extent, ArcType.OPEN, paint, pen), paint, pen)
 
 /** a factory for elliptical arcs */
 object EllipticalArc {
@@ -193,7 +213,7 @@ object EllipticalArc {
 
 /** the parent class for elliptical segments */
 private[image] class EllipticalSegment(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double, start: Angle, extent: Angle)
-    extends Figure(Arc.shape(width, height, start, extent, ArcType.CHORD), paint, pen)
+    extends Figure(Arc.shape(width, height, start, extent, ArcType.CHORD, paint, pen), paint, pen)
 
 /** 
  * a factory for elliptical segments. These represent the area enclosed by a chord
@@ -221,7 +241,7 @@ object EllipticalSegment {
 
 /** the parent class for elliptical sectors */
 private[image] class EllipticalSector(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double, start: Angle, extent: Angle)
-    extends Figure(Arc.shape(width, height, start, extent, ArcType.ROUND), paint, pen)
+    extends Figure(Arc.shape(width, height, start, extent, ArcType.ROUND, paint, pen), paint, pen)
 
 /** 
  * a factory for elliptical sectors. These represent the area enclosed by a

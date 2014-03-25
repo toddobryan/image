@@ -17,7 +17,7 @@ class Bitmap private[image](val pathOrUrl: Either[File, URL], val name: Option[S
       case Right(url) => new SfxImage(url.toString)
   }).getOrElse(throw new IllegalArgumentException("no image at the source indicated"))
   
-  private[image] val img: Node = new ImageView(bitmap)
+  /* private[image] */ val img: Node = new ImageView(bitmap)
     
   override def toString: String = name match {
     case Some(str) => str
