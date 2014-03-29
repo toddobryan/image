@@ -36,14 +36,11 @@ package object image {
   }
   
   def cleanUp() {
-    println("exiting platform")
-    Platform.exit()
     println("disposing of frames")
     Frame.getFrames().foreach {
       _.dispose()
     }
     println("frames all disposed")
-    System.exit(0);
   }
   
   /**
@@ -76,32 +73,7 @@ package object image {
 
   /** a 129x44 pixel picture of an old-fashioned train engine with a coal car */
   lazy val TrainEngine: Image = Bitmap.fromWorkspace("/train_engine.png", name = Some("TrainEngine"))
-  
-  def displayNode(node: Node) = {
-    Platform.runLater {
-
-      // Create dialog
-      val dialogStage = new Stage(StageStyle.UTILITY) {
-        outer =>
-        title = "Image"
-        scene = new Scene {
-          root = new BorderPane {
-            padding = Insets(25)
-            center = node
-            bottom = new Button {
-              text = "OK"
-              onAction = handle { outer.close() }
-            }
-          }
-        }
-      }
-
-      // Show dialog and wait till it is closed
-      dialogStage.showAndWait()
-      //System.exit(0)
-    }
-  }
-  
+    
   private[image] def repr(s: String): String = {
     if (s == null) "null"
     else s.toList.map {

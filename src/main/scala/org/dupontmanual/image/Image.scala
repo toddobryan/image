@@ -43,8 +43,7 @@ abstract class Image private[image] () {
 
   /** displays the image in a dialog box */
   def display() {
-	Platform.runLater {
-	  // Create dialog
+    def showDialog() {
 	  val dialogStage = new Stage(StageStyle.UTILITY) {
 	    outer => {
 	      title = "Image"
@@ -64,14 +63,23 @@ abstract class Image private[image] () {
 	  dialogStage.show()
 	  dialogStage.requestFocus()
     }
+    if (Platform.isFxApplicationThread) {
+      showDialog()
+    } else {
+	  Platform.runLater(showDialog())
+    }
   }
   
   /* private[image] */ lazy val writableImg: WritableImage = {
-    val wrImg = Task[WritableImage] {
+    if (Platform.isFxApplicationThread) {
       new Scene { root = new Group(img) }.snapshot(null)
+    } else {
+      val wrImg = Task[WritableImage] {
+        new Scene { root = new Group(img) }.snapshot(null)
+      }
+      Platform.runLater(wrImg)
+      wrImg.get()
     }
-    Platform.runLater(wrImg)
-    wrImg.get()
   }
 
   /* private[image] */ lazy val savableImg: RenderedImage = SwingFXUtils.fromFXImage(writableImg, null)
