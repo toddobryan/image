@@ -36,10 +36,14 @@ import scalafx.concurrent.Task
 import scala.concurrent.{ Await, future, promise }
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
+import scalafx.scene.layout.VBox
+import scalafx.geometry.Pos
 
 /** represents an image */
 abstract class Image private[image] () {
-  /* private[image] */ val img: Node
+  // because JavaFX doesn't allow you to have two copies of a Node in a scene graph, we have to grab a new Node
+  // each time we need one. This is obviously not ideal. :-(
+  /* private[image] */ def buildImage(): Node
 
   /** displays the image in a dialog box */
   def display() {
@@ -48,13 +52,14 @@ abstract class Image private[image] () {
 	    outer => {
 	      title = "Image"
 	      scene = new Scene {
-	        root = new BorderPane {
-	          padding = Insets(0)
-	          center = img
-	          bottom = new Button {
-	            text = "OK"
-	            onAction = handle { outer.close() }
-	          }
+	        root = new VBox {
+	          alignment = Pos.TOP_CENTER
+	          content = List(
+	              buildImage(), 
+	              new Button {
+	                text = "OK"
+	                onAction = handle { outer.close() }
+	              })
 	        }
 	      }
 	    }
@@ -71,11 +76,15 @@ abstract class Image private[image] () {
   }
   
   /* private[image] */ lazy val writableImg: WritableImage = {
+    def scene: WritableImage = {
+      val img = buildImage()
+      new Scene { root = new Group(img) }.snapshot(null)      
+    }
     if (Platform.isFxApplicationThread) {
-      new Scene { root = new Group(img) }.snapshot(null)
+      scene
     } else {
       val wrImg = Task[WritableImage] {
-        new Scene { root = new Group(img) }.snapshot(null)
+        scene
       }
       Platform.runLater(wrImg)
       wrImg.get()
@@ -147,6 +156,9 @@ abstract class Image private[image] () {
    */
   def stackOn(img: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double): Image =
     Stack(this, img, xAlign, yAlign, dx, dy)
+    
+  def stackOn(img: Image, align: Align): Image = Stack(this, img, align)
+  def stackOn(img: Image, align: Align, dx: Double, dy: Double): Image = Stack(this, img, align, dx, dy)
 
   /** equivalent to `img.stackOn(this)` */
   def slideUnder(img: Image): Image = Stack(img, this)
@@ -157,6 +169,9 @@ abstract class Image private[image] () {
   /** equivalent to `img.stackOn(this, xAlign, yAlign, dx, dy)` */
   def slideUnder(img: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double): Image =
     Stack(img, this, xAlign, yAlign, dx, dy)
+    
+  def slideUnder(img: Image, align: Align): Image = Stack(img, this, align)
+  def slideUnder(img: Image, align: Align, dx: Double, dy: Double): Image = Stack(img, this, align, dx, dy)
 
   /**
    * produces a new `Image` by placing `img` on this `Image`. `x` and `y` represent how far
@@ -188,12 +203,14 @@ abstract class Image private[image] () {
     // check to see if img even appears in the new scene; if not, we'll return the old one
     val bg = scene.backBounds
     if (scene.frontBounds.intersects(bg)) {
-      val btl = Point(scene.newBounds.minX, scene.newBounds.minY)
-      scene.crop(btl.x, btl.y, bg.getWidth, bg.getHeight)
+      scene.crop(-scene.newBounds.minX, -scene.newBounds.minY, bg.width, bg.height)
     } else {
       this
     }
   }
+  
+  def placeImage(img: Image, x: Double, y: Double, align: Align): Image =
+    placeImage(img, x, y, align.xAlign, align.yAlign)
 
   /** produces a new `Image` with `img` to the right of this `Image`, centered vertically */
   def beside(img: Image): Image = this.beside(img, YAlign.Center)

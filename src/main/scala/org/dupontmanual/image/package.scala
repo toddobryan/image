@@ -25,7 +25,7 @@ import java.util.Arrays
  */
 package object image {
   import AngleUnit._
-  import Alignment._
+  import Align._
   
   var masterFrame: JFrame = _
   

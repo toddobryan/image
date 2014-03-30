@@ -10,15 +10,15 @@ import scalafx.scene.shape.{ Shape, Rectangle => SfxRectangle }
  * represents a bitmap image
  */
 class Bitmap private[image](val pathOrUrl: Either[File, URL], val name: Option[String] = None) extends Image {
-  def bounds: Shape = SfxRectangle(0, 0, bitmap.width.value, bitmap.height.value)
-  
   val bitmap: SfxImage = Option(pathOrUrl match {
       case Left(path) => new SfxImage(path.toURI.toURL.toString)
       case Right(url) => new SfxImage(url.toString)
   }).getOrElse(throw new IllegalArgumentException("no image at the source indicated"))
   
-  /* private[image] */ val img: Node = new ImageView(bitmap)
+  /* private[image] */ def buildImage(): Node = new ImageView(bitmap)
     
+  def bounds: Shape = SfxRectangle(0, 0, bitmap.width.value, bitmap.height.value)
+  
   override def toString: String = name match {
     case Some(str) => str
     case None => pathOrUrl match {

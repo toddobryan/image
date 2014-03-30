@@ -5,16 +5,17 @@ import scalafx.scene.shape.Shape
 import scalafx.scene.Node
 import scalafx.scene.transform.Translate
 
-private[image] class Figure(shape: Shape, val paint: Option[Paint], val pen: Option[Pen]) extends Image {
-  val fxShape = {
+private[image] abstract class Figure(val paint: Option[Paint], val pen: Option[Pen]) extends Image {
+  private[image] def fxShape(): Shape
+  
+  def bounds(): Shape = fxShape()
+  
+  def buildImage(): Node = {
+    val shape = fxShape()
     shape.fill = paint.getOrElse(Color.Transparent).fxPaint
     pen.getOrElse(Pen.Transparent).applyToShape(shape)
-    val bds = shape.boundsInParent.value
     shape
   }
-  def bounds: Shape = fxShape
-  
-  val img: Node = fxShape
 }
 
 private[image] object Figure {
@@ -28,6 +29,6 @@ private[image] object Figure {
   }
 }
 
-private[image] abstract class FigureFilled(shape: Shape, paint: Paint) extends Figure(shape, Some(paint), None)
+private[image] abstract class FigureFilled(paint: Paint) extends Figure(Some(paint), None)
 
-private[image] abstract class FigureOutlined(shape: Shape, pen: Pen) extends Figure(shape, None, Some(pen))
+private[image] abstract class FigureOutlined(pen: Pen) extends Figure(None, Some(pen))

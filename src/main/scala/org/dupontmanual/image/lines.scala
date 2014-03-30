@@ -28,7 +28,8 @@ private[image] object Poly {
 
 /** the parent class for filled polygons */
 private[image] class Polygon(paint: Option[Paint], pen: Option[Pen], vertices: List[Point]) extends 
-    Figure(Poly.shape(vertices, true), paint, pen) {
+    Figure(paint, pen) {
+  private[image] def fxShape(): Shape = Poly.shape(vertices, true)
 
   //TODO: this doesn't work if pen isn't default
   override def toString = s"Polygon($paint, ${vertices.mkString(", ")})"
@@ -65,7 +66,8 @@ object Polygon {
 
 /** the parent class for connected lines */
 private[image] class LineDrawing(paint: Option[Paint], pen: Option[Pen], vertices: List[Point]) extends 
-    Figure(Poly.shape(vertices, false), paint, pen) {
+    Figure(paint, pen) {
+  private[image] def fxShape(): Shape = Poly.shape(vertices, false)
   
   //TODO: fix the toString method
   override def toString = {
@@ -119,7 +121,9 @@ object RegularPolygon {
 
 /** class with a convenience method for rectangles */
 private[image] class Rectangle(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double) extends
-    Figure(SfxRectangle(0, 0, width, height), paint, pen)
+    Figure(paint, pen) {
+  private[image] def fxShape(): Shape = SfxRectangle(0, 0, width, height)
+}
 
 /** factory for filled rectangles */
 object Rectangle {
@@ -138,7 +142,9 @@ object Rectangle {
 
 /** object with convenience method for squares */
 private[image] class Square(paint: Option[Paint], pen: Option[Pen], side: Double) extends 
-    Figure(SfxRectangle(0, 0, side, side), paint, pen)
+    Figure(paint, pen) {
+  private[image] def fxShape(): Shape = SfxRectangle(0, 0, side, side)
+}
 
 /** factory for creating filled squares */
 object Square {

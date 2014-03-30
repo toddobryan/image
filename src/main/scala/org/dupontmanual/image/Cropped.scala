@@ -13,7 +13,7 @@ private[image] class Cropped(val theImg: Image, val x: Double, val y: Double, va
   require(w >= 0 && x + w <= theImg.width, f"Illegal width $w (must be at least zero and $x + width must be less than ${theImg.width}).")
   require(h >= 0 && y + h <= theImg.height, f"Illegal height $h (must be at least zero and $y + height must be less than ${theImg.height}).")
   
-  override lazy val img: Node = new ImageView(new Scene { root = new Group(img) }.snapshot(null)) {
+  def buildImage(): Node = new ImageView(new Scene { root = new Group(theImg.buildImage()) }.snapshot(null)) {
     viewport = new Rectangle2D(Cropped.this.x, Cropped.this.y, w, h)
   }
 

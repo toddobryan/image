@@ -3,20 +3,28 @@ package org.dupontmanual.image
 import scalafx.Includes._
 import scalafx.geometry.Bounds
 import scalafx.scene.image.ImageView
+import scalafx.scene.layout.Pane
 import scalafx.scene.transform.{ Transform => SfxTransform }
-import scalafx.scene.Node
-import scalafx.scene.Group
+import scalafx.scene.{ Group, Node, Parent }
 import scalafx.scene.shape.{ Rectangle => SfxRectangle, Shape }
 import scalafx.application.Platform
 import scalafx.concurrent.Task
 
 /** represents an image with a `Transform` applied */
 private[image] class Transform(image: Image, tforms: Iterable[SfxTransform]) extends Image {
-  val img: Node = {
+  private[this] val bds = new Pane() {
+    content = image.bounds
+    transforms = tforms
+  }.boundsInParent.value
+
+  
+  def buildImage(): Node = {
     def newNode(): Node = {
-      new Group {
-        content = image.img
+      new Pane {
+        content = image.buildImage()
         transforms = tforms
+        prefWidth = bds.width
+        prefHeight = bds.height
       }
     }
     if (Platform.isFxApplicationThread) {
@@ -28,8 +36,5 @@ private[image] class Transform(image: Image, tforms: Iterable[SfxTransform]) ext
     }
   }
   
-  def bounds: Shape = {
-    val bds = img.boundsInParent.value
-    SfxRectangle(bds.minX, bds.minY, bds.width, bds.height)
-  }
+  def bounds: Shape = SfxRectangle(bds.minX, bds.minY, bds.width, bds.height)
 }

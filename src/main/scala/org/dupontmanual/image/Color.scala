@@ -34,9 +34,9 @@ class Color private[image] (val red: Int, val green: Int, val blue: Int, val opa
    */
   override def toString: String = {
     val hex: Int = red << 16 | green << 8 | blue
-    if (opacity == 255 && Color.hexToName.contains(hex)) s"Color.${Color.hexToName(hex)}"
+    if (opacity == 1.0 && Color.hexToName.contains(hex)) s"Color.${Color.hexToName(hex)}"
     else {
-      val alpha = if (opacity == 1.0) "" else f", opacity = ${opacity}%f"
+      val alpha = if (opacity == 1.0) "" else s", opacity = ${opacity}"
       f"Color(red = $red%d, green = $green%d, blue = $blue%d$alpha%s)"
     }
   }
@@ -52,11 +52,11 @@ object Color {
    * be `Int`s from `0` to `255` inclusive, and an error will occur if 
    * values outside that range are provided.
    */
-  def apply(red: Int = 0, green: Int = 0, blue: Int = 0, opacity: Int = 255): Color = {
+  def apply(red: Int = 0, green: Int = 0, blue: Int = 0, opacity: Double = 1.0): Color = {
     require(0 <= red && red <= 255, "red value must be between 0 and 255 inclusive")
     require(0 <= green && green <= 255, "green value must be between 0 and 255 inclusive")
     require(0 <= blue && blue <= 255, "blue value must be between 0 and 255 inclusive")
-    require(0 <= opacity && opacity <= 255, "opacity value must be between 0 and 255 inclusive")
+    require(0.0 <= opacity && opacity <= 1.0, "opacity value must be between 0.0 and 1.0 inclusive")
     new Color(red, green, blue, opacity)
   }
   

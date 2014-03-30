@@ -5,7 +5,9 @@ import scalafx.scene.shape.{ Arc => SfxArc, ArcType, Circle => SfxCircle, Ellips
 
 /** a convenience object with a shape method for java.awt.geom.Ellipse2D */
 private[image] class Ellipse(paint: Option[Paint], pen: Option[Pen], centerX: Double, centerY: Double, width: Double, height: Double) extends 
-    Figure(SfxEllipse(centerX, centerY, width / 2, height / 2), paint, pen)
+    Figure(paint, pen) {
+  private[image] def fxShape(): Shape = SfxEllipse(centerX, centerY, width / 2, height / 2)
+}
 
 object Ellipse {
   private[Ellipse] def apply(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double): Image = {
@@ -45,7 +47,9 @@ object EllipseOutlined {
 
 /** the parent class for filled circles */
 private[image] class Circle(paint: Option[Paint], pen: Option[Pen], centerX: Double, centerY: Double, radius: Double) extends 
-    Figure(SfxCircle(centerX, centerY, radius), paint, pen)
+    Figure(paint, pen) {
+  private[image] def fxShape(): Shape = SfxCircle(centerX, centerY, radius)
+}
 
 object Circle {
   private[Circle] def apply(paint: Option[Paint], pen: Option[Pen], radius: Double): Image = {
@@ -103,7 +107,9 @@ private[image] object Arc {
 
 /** the parent class for circular arcs. */
 private[image] class CircularArc(paint: Option[Paint], pen: Option[Pen], radius: Double, start: Angle, extent: Angle)
-    extends Figure(Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.OPEN, paint, pen), paint, pen)
+    extends Figure(paint, pen) {
+  private[image] def fxShape(): Shape = Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.OPEN, paint, pen)
+}
 
 /** a factory for creating circular arcs. */
 object CircularArc {
@@ -134,7 +140,9 @@ object CircularArc {
 
 /** the parent class for circular segments */
 private[image] class CircularSegment(paint: Option[Paint], pen: Option[Pen], radius: Double, start: Angle, extent: Angle)
-    extends Figure(Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.CHORD, paint, pen), paint, pen)
+    extends Figure(paint, pen) {
+  private[image] def fxShape(): Shape = Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.CHORD, paint, pen)
+}
 
 /** 
  * a factory for circular segments. These are the portion of the circle 
@@ -162,7 +170,9 @@ object CircularSegment {
 
 /** the parent class for circular sectors */
 private[image] class CircularSector(paint: Option[Paint], pen: Option[Pen], radius: Double, start: Angle, extent: Angle)
-    extends Figure(Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.ROUND, paint, pen), paint, pen) 
+    extends Figure(paint, pen) {
+  private[image] def fxShape(): Shape = Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.ROUND, paint, pen)
+} 
 
 /** 
  * a factory for circular wedges. These are the portion of the circle
@@ -189,7 +199,9 @@ object CircularSector {
 
 /** the parent class for elliptical arcs */
 private[image] class EllipticalArc(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double, start: Angle, extent: Angle)
-    extends Figure(Arc.shape(width, height, start, extent, ArcType.OPEN, paint, pen), paint, pen)
+    extends Figure(paint, pen) {
+  private[image] def fxShape(): Shape = Arc.shape(width, height, start, extent, ArcType.OPEN, paint, pen)
+}
 
 /** a factory for elliptical arcs */
 object EllipticalArc {
@@ -213,7 +225,9 @@ object EllipticalArc {
 
 /** the parent class for elliptical segments */
 private[image] class EllipticalSegment(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double, start: Angle, extent: Angle)
-    extends Figure(Arc.shape(width, height, start, extent, ArcType.CHORD, paint, pen), paint, pen)
+    extends Figure(paint, pen) {
+  private[image] def fxShape(): Shape = Arc.shape(width, height, start, extent, ArcType.CHORD, paint, pen)
+}
 
 /** 
  * a factory for elliptical segments. These represent the area enclosed by a chord
@@ -241,7 +255,9 @@ object EllipticalSegment {
 
 /** the parent class for elliptical sectors */
 private[image] class EllipticalSector(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double, start: Angle, extent: Angle)
-    extends Figure(Arc.shape(width, height, start, extent, ArcType.ROUND, paint, pen), paint, pen)
+    extends Figure(paint, pen) {
+  private[image] def fxShape(): Shape = Arc.shape(width, height, start, extent, ArcType.ROUND, paint, pen)
+}
 
 /** 
  * a factory for elliptical sectors. These represent the area enclosed by a
