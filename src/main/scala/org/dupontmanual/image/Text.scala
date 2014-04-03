@@ -1,5 +1,6 @@
 package org.dupontmanual.image
 
+import scalafx.Includes._
 import scalafx.scene.text.{ Font => SfxFont, FontPosture, FontWeight, Text => SfxText }
 import scalafx.scene.shape.Shape
 
@@ -10,20 +11,24 @@ class Font /* private[image] */ (/* private[image] */ val fxFont: SfxFont) {
     s"Font($name, $style, ${fxFont.size})"
   }
   
-  private[this] def name: String = fxFont.family match {
-    case "Serif" => "Font.Serif"
-    case "SansSerif" => "Font.SansSerif"
-    case "Monospaced" => "Font.Monospaced"
-    case _ => repr(fxFont.family)
-  }
+  private[image] def name: String = repr(fxFont.family)
   
-  private[this] def style: String = (fxFont.style.contains("Italic"), fxFont.style.contains("Bold")) match {
+  private[image] def style: String = (fxFont.style.contains("Italic"), fxFont.style.contains("Bold")) match {
     case (false, false) => "Font.Plain"
     case (true, false) => "Font.Italic"
     case (false, true) => "Font.Bold"
     case (true, true) => "Font.BoldItalic"
   }
 }
+
+class IncludedFont(fxFont: SfxFont) extends Font(fxFont) {
+  private[image] override def name: String = fxFont.family match {
+    case "DejaVu Serif" => "Font.Serif"
+    case "DejaVu Sans" => "Font.SansSerif"
+    case "DejaVu Sans Mono" => "Font.Monospaced"
+  }
+}
+
 
 /** 
  *  contains objects representing built-in fonts, different text styles,
@@ -45,20 +50,26 @@ object Font {
   case object BoldItalic extends Style(FontWeight.BOLD, FontPosture.ITALIC)
   
   /** represents one of the fonts you're guaranteed to have */
-  sealed abstract class BuiltIn private[image] (private[image] val asString: String)
+  sealed abstract class BuiltIn private[image](private[image] val systemFont: String)
   /** the built-in serif font */
-  case object Serif extends BuiltIn("Serif")
+  case object Serif extends BuiltIn("DejaVuSerif")
   /** the built-in sans serif font */
-  case object SansSerif extends BuiltIn("SansSerif")
+  case object SansSerif extends BuiltIn("DejaVuSans")
   /** the built-in monospaced font */
-  case object Monospaced extends BuiltIn("Monospaced")
+  case object Monospaced extends BuiltIn("DejaVuSansMono")
   
   /**
    * returns a built-in font in the given style and size 
    */
-  def apply(name: BuiltIn, style: Style, size: Int): Font = {
+  def apply(name: BuiltIn, style: Style, size: Double): Font = {
     require(size > 0, "the font size must be non-negative")
-    new Font(SfxFont(name.asString, style.weight, style.posture, size))
+    val fontStyle = style match {
+      case Plain => ""
+      case Italic => "-Oblique"
+      case Bold => "-Bold"
+      case BoldItalic => "-BoldOblique"
+    }
+    new IncludedFont(SfxFont.loadFont(this.getClass.getResource(s"/${name.systemFont}${fontStyle}.ttf").toExternalForm, size))
   }
   
   /**
@@ -66,7 +77,7 @@ object Font {
    *  style and size. If there is no font with the given
    *  name, an exception will be thrown.
    */
-  def apply(name: String, style: Style, size: Int): Font = {
+  def apply(name: String, style: Style, size: Double): Font = {
     require(allFonts.contains(name), s"the font ${repr(name)} is not available")
     require(size > 0, "the font size must be non-negative")
     new Font(SfxFont(name, style.weight, style.posture, size))

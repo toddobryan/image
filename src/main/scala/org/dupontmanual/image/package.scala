@@ -41,6 +41,7 @@ package object image {
       _.dispose()
     }
     println("frames all disposed")
+    Platform.exit()
   }
   
   /**
