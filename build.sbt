@@ -8,9 +8,9 @@ organization := "org.dupontmanual"
 
 organizationName := "duPont Manual High School"
 
-version := "0.1-SNAPSHOT"
+version := "0.2"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.10.4"
 
 scalacOptions ++= Seq("-deprecation", "-feature")
 
@@ -19,9 +19,9 @@ unmanagedSourceDirectories in Compile <<= Seq(scalaSource in Compile).join
 unmanagedSourceDirectories in Test <<= Seq(scalaSource in Test).join
 
 libraryDependencies ++= Seq(
-  "org.scala-lang" % "scala-swing" % "2.10.3",
-  "org.scalatest" %% "scalatest" % "2.0",
-  "commons-codec" % "commons-codec" % "1.8"
+  "org.scala-lang" % "scala-swing" % "2.10.4",
+  "org.scalatest" %% "scalatest" % "2.1.2",
+  "commons-codec" % "commons-codec" % "1.9"
 )
 
 site.settings

@@ -27,12 +27,12 @@ class ColorTests extends FunSuite with Matchers {
   }
   
   test("RGB values from 0-255") {
-    val e1 = evaluating { Color(red = -5) } should produce [IllegalArgumentException]
-    e1.getMessage shouldEqual "requirement failed: red value must be between 0 and 255 inclusive"
-    val e2 = evaluating { Color(red = 0, green = 260, blue = 125) } should produce [IllegalArgumentException]
-    e2.getMessage shouldEqual "requirement failed: green value must be between 0 and 255 inclusive"
-    val e3 = evaluating { Color(blue = 256) } should produce [IllegalArgumentException]
-    e3.getMessage shouldEqual "requirement failed: blue value must be between 0 and 255 inclusive"
+    the [IllegalArgumentException] thrownBy { Color(red = -5) } should have message 
+        "requirement failed: red value must be between 0 and 255 inclusive"
+    the [IllegalArgumentException] thrownBy { Color(red = 0, green = 260, blue = 125) } should have message 
+        "requirement failed: green value must be between 0 and 255 inclusive"
+    the [IllegalArgumentException] thrownBy { Color(blue = 256) } should have message
+        "requirement failed: blue value must be between 0 and 255 inclusive"
   }
 
 }
