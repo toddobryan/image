@@ -1,32 +1,34 @@
 package org.dupontmanual.image
 
-import java.awt.{Graphics2D, RenderingHints}
-import java.awt.Shape
-import java.awt.geom.Rectangle2D
+import scalafx.Includes._
+import scalafx.scene.shape.Shape
+import scalafx.scene.Node
+import scalafx.scene.transform.Translate
 
-private[image] abstract class Figure extends Image {
-  val awtShape: Shape
-  def bounds: Shape = awtShape
-}
-
-private[image] abstract class FigureFilled(val paint: Paint) extends Figure {
-  def render(g2: Graphics2D) = {
-    g2.setPaint(paint.awtPaint)
-    g2.fill(awtShape)
+private[image] abstract class Figure(val paint: Option[Paint], val pen: Option[Pen]) extends Image {
+  private[image] def fxShape(): Shape
+  
+  def bounds(): Shape = fxShape()
+  
+  def buildImage(): Node = {
+    val shape = fxShape()
+    shape.fill = paint.getOrElse(Color.Transparent).fxPaint
+    pen.getOrElse(Pen.Transparent).applyToShape(shape)
+    shape
   }
 }
 
-private[image] abstract class FigureOutlined(val pen: Pen) extends Figure {
-  def render(g2: Graphics2D) = {
-    g2.setPaint(pen.paint.awtPaint)
-    g2.setStroke(pen.asStroke)
-    g2.draw(awtShape)
+private[image] object Figure {
+  def offsets(shape: Shape, paint: Option[Paint], pen: Option[Pen]): (Double, Double) = {
+    val bounds = {
+      shape.fill = paint.getOrElse(Color.Transparent).fxPaint
+      pen.getOrElse(Pen.Transparent).applyToShape(shape)
+      shape.boundsInParent.value
+    }
+    (bounds.minX, bounds.minY)
   }
-  override def displayBounds: Rectangle2D = {
-    val myPen = if (pen.width == 0.0) pen.copy(width=1.0) else pen
-    myPen.asStroke.createStrokedShape(awtShape).getBounds2D()
-  }
-  override def penWidth: Double = pen.width
 }
 
+private[image] abstract class FigureFilled(paint: Paint) extends Figure(Some(paint), None)
 
+private[image] abstract class FigureOutlined(pen: Pen) extends Figure(None, Some(pen))

@@ -22,8 +22,8 @@ class ColorTests extends FunSuite with Matchers {
     Color(35, 0, 255).toString shouldEqual "Color(red = 35, green = 0, blue = 255)"
   }
   
-  test("RGBA values if alpha is not 255") {
-    Color(50, 60, 70, 123).toString shouldEqual "Color(red = 50, green = 60, blue = 70, alpha = 123)"
+  test("RGBA values if opacity is not 1.0") {
+    Color(50, 60, 70, 0.5).toString shouldEqual "Color(red = 50, green = 60, blue = 70, opacity = 0.5)"
   }
   
   test("RGB values from 0-255") {

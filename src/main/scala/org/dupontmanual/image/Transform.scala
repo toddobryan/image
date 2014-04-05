@@ -1,20 +1,40 @@
 package org.dupontmanual.image
 
-import java.awt.image.BufferedImage
-import java.awt.geom._
-import java.awt.image._
-import java.awt.{Graphics2D, RenderingHints}
-import java.awt.Shape
+import scalafx.Includes._
+import scalafx.geometry.Bounds
+import scalafx.scene.image.ImageView
+import scalafx.scene.layout.Pane
+import scalafx.scene.transform.{ Transform => SfxTransform }
+import scalafx.scene.{ Group, Node, Parent }
+import scalafx.scene.shape.{ Rectangle => SfxRectangle, Shape }
+import scalafx.application.Platform
+import scalafx.concurrent.Task
 
-/** represents an image with an `AffineTransform` applied */
-private[image] class Transform(image: Image, transform: AffineTransform) extends Image {
-  def render(g2: Graphics2D) = {
-    val inverse = new AffineTransform(transform)
-    inverse.invert
-    g2.transform(transform)
-    image.render(g2)
-    g2.transform(inverse)
+/** represents an image with a `Transform` applied */
+private[image] class Transform(image: Image, tforms: Iterable[SfxTransform]) extends Image {
+  private[this] val bds = new Pane() {
+    content = image.bounds
+    transforms = tforms
+  }.boundsInParent.value
+
+  
+  def buildImage(): Node = {
+    def newNode(): Node = {
+      new Pane {
+        content = image.buildImage()
+        transforms = tforms
+        prefWidth = bds.width
+        prefHeight = bds.height
+      }
+    }
+    if (Platform.isFxApplicationThread) {
+      newNode()
+    } else {
+      val theNode = Task[Node] { newNode() }
+      Platform.runLater(theNode)
+      theNode.get()
+    }
   }
   
-  def bounds: Shape = transform.createTransformedShape(image.displayBounds)
+  def bounds: Shape = SfxRectangle(bds.minX, bds.minY, bds.width, bds.height)
 }

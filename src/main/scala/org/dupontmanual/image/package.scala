@@ -2,6 +2,19 @@ package org.dupontmanual
 
 import scala.language.implicitConversions
 import org.scalautils.Equality
+import scalafx.Includes._
+import scalafx.scene.Node
+import scalafx.application.Platform
+import scalafx.stage.Stage
+import scalafx.stage.StageStyle
+import scalafx.scene.Scene
+import scalafx.scene.layout.BorderPane
+import scalafx.geometry.Insets
+import scalafx.scene.control.Button
+import javafx.embed.swing.JFXPanel
+import javax.swing.JFrame
+import java.awt.Frame
+import java.util.Arrays
 
 /**
  * A Scala port (mostly) of the image library created in Racket by Robby Findler,
@@ -12,7 +25,25 @@ import org.scalautils.Equality
  */
 package object image {
   import AngleUnit._
-
+  import Align._
+  
+  var masterFrame: JFrame = _
+  
+  def initialize() {
+    masterFrame = new JFrame()
+    masterFrame.add(new JFXPanel())
+    masterFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+  }
+  
+  def cleanUp() {
+    println("disposing of frames")
+    Frame.getFrames().foreach {
+      _.dispose()
+    }
+    println("frames all disposed")
+    Platform.exit()
+  }
+  
   /**
    * converts a `Double` to an `[[AngleBuilder]]`.
    *
@@ -24,26 +55,26 @@ package object image {
   implicit def doubleToAngleBuilder(d: Double) = new AngleBuilder(d)
 
   /** a 33x31 pixel picture of a calendar */
-  lazy val Calendar = Bitmap.fromWorkspace("/calendar.png", name = Some("Calendar"))
+  lazy val Calendar: Image = Bitmap.fromWorkspace("/calendar.png", name = Some("Calendar"))
 
   /** a 48x48 pixel picture of a frustrated computer operator */
-  lazy val Hacker = Bitmap.fromWorkspace("/mad_hacker.png", name = Some("Hacker"))
+  lazy val Hacker: Image = Bitmap.fromWorkspace("/mad_hacker.png", name = Some("Hacker"))
 
   /** a 45x68 pixel picture of a tablet with hieroglyphics */
-  lazy val Glyphs = Bitmap.fromWorkspace("/hieroglyphics.png", name = Some("Glyphs"))
+  lazy val Glyphs: Image = Bitmap.fromWorkspace("/hieroglyphics.png", name = Some("Glyphs"))
 
   /** a 67x39 pixel picture of book with a large question mark over it */
-  lazy val Book = Bitmap.fromWorkspace("/qbook.png", name = Some("Book"))
+  lazy val Book: Image = Bitmap.fromWorkspace("/qbook.png", name = Some("Book"))
 
   /** a 38x39 pixel picture of a very blocky person */
-  lazy val StickPerson = Bitmap.fromWorkspace("/stick-figure.png", name = Some("StickPerson"))
+  lazy val StickPerson: Image = Bitmap.fromWorkspace("/stick-figure.png", name = Some("StickPerson"))
 
   /** an 85x44 pixel picture of a train car */
-  lazy val TrainCar = Bitmap.fromWorkspace("/train_car.png", name = Some("TrainCar"))
+  lazy val TrainCar: Image = Bitmap.fromWorkspace("/train_car.png", name = Some("TrainCar"))
 
   /** a 129x44 pixel picture of an old-fashioned train engine with a coal car */
-  lazy val TrainEngine = Bitmap.fromWorkspace("/train_engine.png", name = Some("TrainEngine"))
-  
+  lazy val TrainEngine: Image = Bitmap.fromWorkspace("/train_engine.png", name = Some("TrainEngine"))
+    
   private[image] def repr(s: String): String = {
     if (s == null) "null"
     else s.toList.map {

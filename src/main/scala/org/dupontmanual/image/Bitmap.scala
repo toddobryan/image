@@ -1,29 +1,23 @@
 package org.dupontmanual.image
 
-import java.io.InputStream
-import javax.imageio.ImageIO
-import java.awt.Graphics2D
-import java.awt.geom.AffineTransform
-import java.io.FileInputStream
 import java.io.File
-import java.awt.image.BufferedImage
-import java.awt.geom.Rectangle2D
 import java.net.URL
+import scalafx.scene.Node
+import scalafx.scene.image.{ Image => SfxImage, ImageView }
+import scalafx.scene.shape.{ Shape, Rectangle => SfxRectangle }
 
 /**
  * represents a bitmap image
  */
 class Bitmap private[image](val pathOrUrl: Either[File, URL], val name: Option[String] = None) extends Image {
-  override protected lazy val img: BufferedImage = {
-    val temp = Option(pathOrUrl match {
-      case Left(path) => ImageIO.read(path)
-      case Right(url) => ImageIO.read(url)
-    })
-    temp.getOrElse(throw new IllegalArgumentException("no image at the source indicated"))
-  }
+  val bitmap: SfxImage = Option(pathOrUrl match {
+      case Left(path) => new SfxImage(path.toURI.toURL.toString)
+      case Right(url) => new SfxImage(url.toString)
+  }).getOrElse(throw new IllegalArgumentException("no image at the source indicated"))
   
-  /*private[image]*/ def bounds = new Rectangle2D.Double(0, 0, img.getWidth, img.getHeight)
-  private[image] def render(g2: Graphics2D) = g2.drawRenderedImage(img, new AffineTransform())
+  /* private[image] */ def buildImage(): Node = new ImageView(bitmap)
+    
+  def bounds: Shape = SfxRectangle(0, 0, bitmap.width.value, bitmap.height.value)
   
   override def toString: String = name match {
     case Some(str) => str

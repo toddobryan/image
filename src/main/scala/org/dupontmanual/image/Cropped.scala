@@ -1,20 +1,21 @@
 package org.dupontmanual.image
-import java.awt.Graphics2D
-import java.awt.geom.Rectangle2D
-import java.awt.geom.AffineTransform
-import java.awt.Shape
 
-private[image] class Cropped(val image: Image, val x: Double, val y: Double, val w: Double, val h: Double) extends Image {
-  require(x >= 0 && x <= image.width, f"Illegal x value $x is outside the image, which is ${image.width} pixels wide.")
-  require(y >= 0 && y <= image.height, f"Illegal y value $y is outside the image, which is ${image.height} pixels tall.")
-  require(w >= 0 && x + w <= image.width, f"Illegal width $w (must be at least zero and $x + width must be less than ${image.width}).")
-  require(h >= 0 && y + h <= image.height, f"Illegal height $h (must be at least zero and $y + height must be less than ${image.height}).")
+import scalafx.geometry.{ Bounds, BoundingBox }
+import scalafx.scene.image.{ ImageView }
+import scalafx.scene.{ Group, Node, Scene }
+import scalafx.scene.shape.{ Rectangle => SfxRectangle, Shape }
+import scalafx.geometry.Rectangle2D
 
-  private[image] def render(g2: Graphics2D) = {
-    val origClip = g2.getClip
-    g2.setClip(new Rectangle2D.Double(0, 0, w, h))
-    g2.drawRenderedImage(image.displayedImg, AffineTransform.getTranslateInstance(-x, -y))
-    g2.setClip(origClip)
+
+private[image] class Cropped(val theImg: Image, val x: Double, val y: Double, val w: Double, val h: Double) extends Image {
+  require(x >= 0 && x <= theImg.width, f"Illegal x value $x is outside the image, which is ${theImg.width} pixels wide.")
+  require(y >= 0 && y <= theImg.height, f"Illegal y value $y is outside the image, which is ${theImg.height} pixels tall.")
+  require(w >= 0 && x + w <= theImg.width, f"Illegal width $w (must be at least zero and $x + width must be less than ${theImg.width}).")
+  require(h >= 0 && y + h <= theImg.height, f"Illegal height $h (must be at least zero and $y + height must be less than ${theImg.height}).")
+  
+  def buildImage(): Node = new ImageView(new Scene { root = new Group(theImg.buildImage()) }.snapshot(null)) {
+    viewport = new Rectangle2D(Cropped.this.x, Cropped.this.y, w, h)
   }
-  /*private[image]*/ def bounds: Shape = new Rectangle2D.Double(0, 0, w, h)
+
+  /*private[image]*/ def bounds: Shape = SfxRectangle(0, 0, w, h)
 }

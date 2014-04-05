@@ -8,7 +8,7 @@ organization := "org.dupontmanual"
 
 organizationName := "duPont Manual High School"
 
-version := "0.2"
+version := "0.9-SNAPSHOT"
 
 scalaVersion := "2.10.4"
 
@@ -17,6 +17,15 @@ scalacOptions ++= Seq("-deprecation", "-feature")
 unmanagedSourceDirectories in Compile <<= Seq(scalaSource in Compile).join
 
 unmanagedSourceDirectories in Test <<= Seq(scalaSource in Test).join
+
+unmanagedJars in Compile += Attributed.blank(
+    file(scala.util.Properties.javaHome) / "lib" / "jfxrt.jar")
+
+fork := true
+
+initialCommands in console := """import org.dupontmanual.image._; org.dupontmanual.image.initialize()"""
+
+cleanupCommands in console := """org.dupontmanual.image.cleanUp()"""
 
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-swing" % "2.10.4",

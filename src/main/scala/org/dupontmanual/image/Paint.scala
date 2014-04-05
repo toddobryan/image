@@ -7,5 +7,5 @@ package org.dupontmanual.image
  * extended to patterns and gradients in the future.
  */
 abstract class Paint private[image]() {
-  private[image] def awtPaint: java.awt.Paint
+  private[image] def fxPaint: scalafx.scene.paint.Paint
 }
