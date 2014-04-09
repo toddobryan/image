@@ -31,6 +31,8 @@ Here are some examples::
     
 |CircularArc-Black-100-0-180|
 
+::
+
     scala> EllipticalArc(Pen(Color.Magenta, 3), 200, 100, -90.degrees, -45.degrees)
     
 |EllipticalArc-Magenta3-200-100-neg90-neg45|

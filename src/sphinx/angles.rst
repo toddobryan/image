@@ -31,7 +31,7 @@ if you're more comfortable with one unit than another.\ [#angleApprox]_
 
 
 You can find the sine, cosine, or tangent of an `Angle` using ``.sin``, 
-``.cos`, or ``.tan``. (Note that, if the  tangent is undefined, you'll get
+``.cos``, or ``.tan``. (Note that, if the  tangent is undefined, you'll get
 the ``Double`` value ``NaN``, which stands for "Not a Number".) You can 
 also add ``Angle``\ s using ``+``. The resulting ``Angle``\'s units are the
 same as the units of of the first ``Angle`` in the addition.

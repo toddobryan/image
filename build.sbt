@@ -28,7 +28,7 @@ initialCommands in console := """import org.dupontmanual.image._; org.dupontmanu
 cleanupCommands in console := """org.dupontmanual.image.cleanUp()"""
 
 libraryDependencies ++= Seq(
-  "org.scala-lang" % "scala-swing" % "2.10.4",
+  "org.scalafx" %% "scalafx" % "1.0.0-R8",
   "org.scalatest" %% "scalatest" % "2.1.2",
   "commons-codec" % "commons-codec" % "1.9"
 )

@@ -19,10 +19,11 @@ private[image] class Transform(image: Image, tforms: Iterable[SfxTransform]) ext
 
   
   def buildImage(): Node = {
+    val correction = SfxTransform.translate(-bds.minX, -bds.minY)
     def newNode(): Node = {
       new Pane {
         content = image.buildImage()
-        transforms = tforms
+        transforms = Iterable(correction) ++ tforms
         prefWidth = bds.width
         prefHeight = bds.height
       }

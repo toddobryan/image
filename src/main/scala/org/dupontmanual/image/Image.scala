@@ -1,51 +1,28 @@
 package org.dupontmanual.image
 
-import scala.xml.NodeSeq
-
-import math.ceil
-import math.Pi
-import java.awt.{Graphics2D, RenderingHints}
-import java.awt.image.BufferedImage
-import java.awt.geom._
-import java.awt.image._
-import javax.swing.ImageIcon
-import scala.swing.Dialog
-import javax.imageio.ImageIO
-import java.io.File
-import java.io.ByteArrayOutputStream
-import org.apache.commons.codec.binary.Base64
-import java.io.FileInputStream
-import java.util.Arrays
-import javafx.application.{ Application => JfxApplication }
-import scalafx.Includes._
-import scalafx.scene.Scene
-import scalafx.scene.Node
-import scalafx.stage.Stage
-import scalafx.scene.Parent
-import scalafx.scene.layout.BorderPane
-import scalafx.scene.control.Button
-import scalafx.scene.image.{ Image => SfxImage, ImageView, WritableImage }
-import scalafx.scene.Group
-import javax.imageio.ImageIO
-import javafx.embed.swing.SwingFXUtils
 import java.awt.image.RenderedImage
-import javafx.embed.swing.JFXPanel
-import scalafx.geometry.BoundingBox
-import scalafx.geometry.Bounds
-import scalafx.scene.shape.Shape
-import scalafx.scene.transform.{ Transform => SfxTransform }
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.util.Arrays
+import scala.xml.NodeSeq
+import org.apache.commons.codec.binary.Base64
+import javafx.embed.swing.SwingFXUtils
+import javax.imageio.ImageIO
+import scalafx.Includes._
 import scalafx.application.Platform
-import scalafx.stage.StageStyle
-import scalafx.geometry.Insets
-import javax.swing.JFrame
-import scalafx.application.JFXApp
-import scalafx.application.JFXApp.PrimaryStage
 import scalafx.concurrent.Task
-import scala.concurrent.{ Await, future, promise }
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration._
-import scalafx.scene.layout.VBox
+import scalafx.geometry.BoundingBox
 import scalafx.geometry.Pos
+import scalafx.scene.Group
+import scalafx.scene.Node
+import scalafx.scene.Scene
+import scalafx.scene.control.Button
+import scalafx.scene.image.WritableImage
+import scalafx.scene.layout.VBox
+import scalafx.scene.shape.Shape
+import scalafx.scene.transform.{Transform => SfxTransform}
+import scalafx.stage.Stage
+import scalafx.stage.StageStyle
 
 /** represents an image */
 abstract class Image private[image] () {
@@ -221,14 +198,14 @@ abstract class Image private[image] () {
     placeImage(img, x, y, align.xAlign, align.yAlign)
 
   /** produces a new `Image` with `img` to the right of this `Image`, centered vertically */
-  def beside(img: Image): Image = this.beside(img, YAlign.Center)
+  def beside(img: Image): Image = this.beside(img, Align.Center)
   /** produces a new `Image` with `img` to the right of this `Image`, aligned according to `yAlign` */
-  def beside(img: Image, yAlign: YAlign): Image = Stack(img, this, XAlign.Left, yAlign, this.width, 0)
+  def beside(img: Image, yAlign: Align): Image = Stack(img, this, XAlign.Left, yAlign.yAlign, this.width, 0)
 
   /** produces a new `Image` with `img` vertically below this `Image`, centered horizontally */
-  def above(img: Image): Image = this.above(img, XAlign.Center)
+  def above(img: Image): Image = this.above(img, Align.Center)
   /** produces a new `Image` with `img` vertically below this `Image`, aligned according to `xAlign` */
-  def above(img: Image, xAlign: XAlign): Image = Stack(img, this, xAlign, YAlign.Top, 0, this.height)
+  def above(img: Image, xAlign: Align): Image = Stack(img, this, xAlign.xAlign, YAlign.Top, 0, this.height)
 
   /** produces the `Image` obtained by reflecting this `Image` left to right */
   def flipHorizontal(): Image =

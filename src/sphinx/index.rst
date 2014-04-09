@@ -11,7 +11,8 @@ for Racket by Robby Findler. It also includes some extensions created by Stephen
 Bloch and some images included in Stephen's book *Picturing Programs*.
 
 The library allows users to functionally create images based on geometric
-figures and bitmaps.
+figures and bitmaps, and to use those images to create animations and responsive
+simulations, including simple games.
 
 Contents:
 
