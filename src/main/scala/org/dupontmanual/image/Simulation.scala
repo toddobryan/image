@@ -17,8 +17,8 @@ import javafx.scene.input.KeyCode
 
 trait World[W <: World[_]] {
   self: W =>
-  val width: Int = 200
-  val height: Int = 200
+  val width: Int = 100
+  val height: Int = 100
 
   def asImage(): Image = Rectangle(Color.White, width, height)
 

@@ -13,7 +13,7 @@ Library Dependency
 
 To use ``dm-image`` in your own SBT project, the library dependency is::
 
-    "org.dupontmanual" %% "dm-image" % "0.1-SNAPSHOT"
+    "org.dupontmanual" %% "dm-image" % "0.9-SNAPSHOT"
     
 For the latest version as of this writing.
 
