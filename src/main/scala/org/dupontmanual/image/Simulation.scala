@@ -82,7 +82,7 @@ class Simulation[W <: World[W]](val startWorld: W, val fps: Int) {
 
   val keyFrame: KeyFrame = KeyFrame(Duration(1000 / fps), onFinished = new EventHandler[ActionEvent]() {
     def handle(e: ActionEvent) {
-      world = world.afterTick
+      world = world.afterTick()
       animationPane.content = world.asImage.buildImage()
     }
   })

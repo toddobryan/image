@@ -13,8 +13,8 @@ import scalafx.geometry.Insets
 import scalafx.scene.control.Button
 import javafx.embed.swing.JFXPanel
 import javax.swing.JFrame
-import java.awt.Frame
-import java.util.Arrays
+import _root_.java.awt.Frame
+import _root_.java.util.Arrays
 
 /**
  * A Scala port (mostly) of the image library created in Racket by Robby Findler,

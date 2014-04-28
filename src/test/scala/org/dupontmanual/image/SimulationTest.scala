@@ -20,6 +20,22 @@ case class StationaryBall(point: Point) extends World[StationaryBall] {
   }
 }
 
-class SimulationTest {
+case class BouncingBall(n: Int) extends World[BouncingBall] {
+  override val width: Int = 500
+  override val height: Int = 500
+  
+  override def asImage(): Image = {
+    val frame = n % 900
+    val y = if (frame < 450) frame + 25 else 475 - frame % 450
+    Rectangle(Color.Blue, this.width, this.height).placeImage(Circle(Color.Green, 25), 250, y)
+  }
+  
+  override def afterTick(): BouncingBall = {
+    BouncingBall(n + 2)
+  }
+}
 
+object SimulationTest extends App {
+  initialize()
+  new Simulation(new BouncingBall(0), 5).run()
 }
