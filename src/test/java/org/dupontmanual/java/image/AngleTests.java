@@ -33,7 +33,15 @@ public class AngleTests {
 	public void angleAddition() {
 		assertEquals(Angle.fromDegrees(60).plus(Angle.fromRadians(Math.PI / 2)), Angle.fromDegrees(150));
 		assertEquals(Angle.fromDegrees(90).plus(Angle.fromRadians(-Math.PI / 6)), Angle.fromDegrees(60));
-		assertEquals(Angle.fromRadians(Math.PI))
+		assertEquals(Angle.fromRadians(Math.PI).plus(Angle.fromRadians(3 * Math.PI)), Angle.fromRadians(4 * Math.PI));
+	}
+	
+	@Test
+	public void angleEquals() {
+		assertTrue(Angle.fromDegrees(45).equals(Angle.fromDegrees(45)));
+		assertTrue(Angle.fromDegrees(45).equals(Angle.fromRadians(Math.PI / 4)));
+		assertFalse(Angle.fromDegrees(45).equals(Angle.fromRadians(Math.PI / 2)));
+		assertFalse(Angle.fromDegrees(45).equals("a dog"));
 	}
 
 }

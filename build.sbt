@@ -14,10 +14,6 @@ scalaVersion := "2.10.4"
 
 scalacOptions ++= Seq("-deprecation", "-feature")
 
-unmanagedSourceDirectories in Compile <<= Seq(scalaSource in Compile).join
-
-unmanagedSourceDirectories in Test <<= Seq(scalaSource in Test).join
-
 unmanagedJars in Compile += Attributed.blank(
     file(scala.util.Properties.javaHome) / "lib" / "jfxrt.jar")
 
@@ -30,7 +26,8 @@ cleanupCommands in console := """org.dupontmanual.image.cleanUp()"""
 libraryDependencies ++= Seq(
   "org.scalafx" %% "scalafx" % "1.0.0-R8",
   "org.scalatest" %% "scalatest" % "2.1.2",
-  "commons-codec" % "commons-codec" % "1.9"
+  "commons-codec" % "commons-codec" % "1.9",
+  "com.novocode" % "junit-interface" % "0.11-RC1"
 )
 
 site.settings
