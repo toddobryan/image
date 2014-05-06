@@ -14,6 +14,7 @@ import scalafx.util.Duration
 import javafx.event.ActionEvent
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.KeyCode
+import javafx.embed.swing.JFXPanel
 
 trait World[W <: World[_]] {
   self: W =>
@@ -88,6 +89,7 @@ class Simulation[W <: World[W]](val startWorld: W, val fps: Int) {
   })
   
   def run() {
+    new JFXPanel()
     this.display()
     new Timeline(fps, List(keyFrame)) {
       cycleCount = Timeline.INDEFINITE

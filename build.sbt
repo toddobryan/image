@@ -26,6 +26,7 @@ cleanupCommands in console := """org.dupontmanual.image.cleanUp()"""
 libraryDependencies ++= Seq(
   "org.scalafx" %% "scalafx" % "1.0.0-R8",
   "org.scalatest" %% "scalatest" % "2.1.2",
+  "org.jdom" % "jdom2" % "2.0.5",
   "commons-codec" % "commons-codec" % "1.9",
   "com.novocode" % "junit-interface" % "0.11-RC1"
 )

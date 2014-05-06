@@ -15,6 +15,10 @@ import javafx.embed.swing.JFXPanel
 import javax.swing.JFrame
 import _root_.java.awt.Frame
 import _root_.java.util.Arrays
+import scalafx.scene.control.Label
+import scalafx.scene.Group
+import scalafx.application.JFXApp
+import scalafx.application.JFXApp.PrimaryStage
 
 /**
  * A Scala port (mostly) of the image library created in Racket by Robby Findler,
@@ -27,21 +31,25 @@ package object image {
   import AngleUnit._
   import Align._
   
-  var masterFrame: JFrame = _
+  class BackgroundApp extends javafx.application.Application {
+    def start(stage: javafx.stage.Stage) {
+      stage.setTitle("My JavaFX Application")
+      stage.setScene(new Scene(new Group(new Label("Leave this window open until\n you're ready to quit.")), 200, 50))
+      stage.show()
+    }
+    
+    override def stop() {
+      Platform.exit()
+    }
+  }
   
   def initialize() {
-    masterFrame = new JFrame()
-    masterFrame.add(new JFXPanel())
-    masterFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    new Thread(new Runnable() {
+      def run() { javafx.application.Application.launch(classOf[BackgroundApp]) }
+    }).start()
   }
   
   def cleanUp() {
-    println("disposing of frames")
-    Frame.getFrames().foreach {
-      _.dispose()
-    }
-    println("frames all disposed")
-    Platform.exit()
   }
   
   /**

@@ -103,8 +103,6 @@ abstract class Image private[image] () {
     <img src={ s"data:image/png;base64,${this.base64png}" }/>
   }
 
-  private[image] def penWidth: Double = 0.0
-
   /** the actual bounds of the image (may not be rectangular) */
   /*private[image]*/ def bounds: Shape
   /** the bounding box */
