@@ -4,29 +4,31 @@ import java.awt.{Graphics2D, RenderingHints}
 import java.awt.Shape
 import java.awt.geom.Rectangle2D
 
-private[image] abstract class Figure extends Image {
+private[image] abstract class Figure(val paint: Option[Paint], val pen: Option[Pen]) extends Image {
   val awtShape: Shape
   def bounds: Shape = awtShape
-}
-
-private[image] abstract class FigureFilled(val paint: Paint) extends Figure {
+  
   def render(g2: Graphics2D) = {
-    g2.setPaint(paint.awtPaint)
-    g2.fill(awtShape)
+	paint.foreach { p =>
+	  g2.setPaint(p.awtPaint)
+	  g2.fill(awtShape)
+	}
+	pen.foreach { p =>
+	  g2.setPaint(p.paint.awtPaint)
+	  g2.setStroke(p.asStroke)
+	  g2.draw(awtShape)
+	}
   }
-}
-
-private[image] abstract class FigureOutlined(val pen: Pen) extends Figure {
-  def render(g2: Graphics2D) = {
-    g2.setPaint(pen.paint.awtPaint)
-    g2.setStroke(pen.asStroke)
-    g2.draw(awtShape)
-  }
+  
   override def displayBounds: Rectangle2D = {
-    val myPen = if (pen.width == 0.0) pen.copy(width=1.0) else pen
-    myPen.asStroke.createStrokedShape(awtShape).getBounds2D()
+    pen match {
+      case Some(p) => 
+        val myPen = if (p.width == 0.0) p.copy(width=1.0) else p
+        myPen.asStroke.createStrokedShape(awtShape).getBounds2D()
+      case None => awtShape.getBounds2D()
+    }    
   }
-  override def penWidth: Double = pen.width
+  
+  override def penWidth: Double = pen.map(_.width).getOrElse(0.0)
+
 }
-
-

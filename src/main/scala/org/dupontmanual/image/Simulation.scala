@@ -1,6 +1,6 @@
 package org.dupontmanual.image
 
-import scala.swing.Frame
+import scala.swing.MainFrame
 import java.awt.event.ActionListener
 import javax.swing.Timer
 import scala.swing.Panel
@@ -14,46 +14,42 @@ import scala.swing.event.MouseEvent
 import scala.swing.event.MouseClicked
 import scala.swing.event.KeyPressed
 import java.awt.event.KeyEvent
+import scala.swing.SimpleSwingApplication
+import scala.swing.BorderPanel
 
-class Simulation[W <: World[W]](val startWorld: W, val fps: Int) extends Frame {
+class Simulation[W <: World[W]](val startWorld: W, val fps: Int) extends SimpleSwingApplication {
   var world: W = startWorld
   val ticksBetweenFrames: Int = 1000 / fps
   val timer: ScalaTimer = new ScalaTimer(ticksBetweenFrames)
   
   def getWorld: W = world
   
-  val panel: Panel = new Panel() {
-    def paintComponent(g: Graphics) {
-      getWorld.asImage().render(g.asInstanceOf[Graphics2D])
+  val panel: Panel = new Panel {
+    override def paint(g: Graphics2D) {
+      getWorld.asImage().render(g)
     }
   }
   
-  this.listenTo(timer, panel.mouse.clicks, panel.keys)
-  
-  this.reactions += {
-    case evt: TimerEvent =>
-      world = world.afterTick()
-      panel.repaint()
-    case evt: MouseClicked =>
-      world = world.afterMouseClicked(evt.point.x, evt.point.y)
-      panel.repaint()
-    case evt: KeyPressed =>
-      world = world.afterKeyPressed(KeyEvent.getKeyText(evt.peer.getKeyCode()))
-      panel.repaint()
+  def top = new MainFrame {
+	title = "Simulation"
+	preferredSize = new Dimension(getWorld.width, getWorld.height)
+	contents = panel
+	listenTo(timer, panel.mouse.clicks, panel.keys)
+	reactions += {
+	  case evt: TimerEvent =>
+	    world = world.afterTick()
+	    this.repaint()
+	  case evt: MouseClicked =>
+	    world = world.afterMouseClicked(evt.point.x, evt.point.y)
+	    this.repaint()
+	  case evt: KeyPressed =>
+	    world = world.afterKeyPressed(KeyEvent.getKeyText(evt.peer.getKeyCode()))
+	    this.repaint()
+	}
+    timer.start()
   }
 
   def run() {
-    preferredSize = new Dimension(500, 500)
-    contents = panel
-    pack()
-    visible = true
-    timer.start(); //This starts the animation.
-  }
-
-  def actionPerformed(evt: ActionEvent) {
-    if (evt.source == timer) {
-      world = world.afterTick()
-      panel.repaint()
-    }
+    main(Array())
   }
 }

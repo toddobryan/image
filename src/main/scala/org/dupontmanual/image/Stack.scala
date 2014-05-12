@@ -4,30 +4,6 @@ import java.awt.Graphics2D
 import math.{abs, min, max}
 import java.awt.geom.Rectangle2D
 
-/** the parent class for horizontal alignments */
-sealed abstract class XAlign private[image] ()
-/** an object with the three types of horizontal alignments */
-object XAlign {
-  /** represents alignment to the left */
-  object Left extends XAlign
-  /** represents alignment on the center */
-  object Center extends XAlign
-  /** represents alignment to the right */
-  object Right extends XAlign
-}
-
-/** the parent class for vertical alignments */
-sealed abstract class YAlign
-/** an object with the three types of vertical alignments */
-object YAlign {
-  /** represents alignment on the top */
-  object Top extends YAlign
-  /** represents alignment on the center */
-  object Center extends YAlign
-  /** represents alignment on the bottom */
-  object Bottom extends YAlign
-}
-
 /** represent two images, one in front of the other */
 private[image] class Stack(front: Image, back: Image, xAlign: XAlign, yAlign: YAlign, dx: Double, dy: Double) extends Image {
   val backBounds = Stack.translateRect(back.displayBounds, 

@@ -1,42 +1,16 @@
 package org.dupontmanual.image
 
-/** an convenience object with a shape method for java.awt.geom.Ellipse2D */
-private[image] object Ellipse {
-  def shape(width: Double, height: Double) = new java.awt.geom.Ellipse2D.Double(0, 0, width, height)
-}
-
 /** the parent class of filled ellipses */
-private[image] class EllipseFilled(paint: Paint, width: Double, height: Double) extends FigureFilled(paint) {
-  val awtShape = Ellipse.shape(width, height)
+private[image] class Ellipse(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double) extends Figure(paint, pen) {
+  val awtShape = new java.awt.geom.Ellipse2D.Double(0, 0, width, height)
 }
 
 /** a factory for filled ellipses */
-object EllipseFilled {
+object Ellipse {
+  private[Ellipse] def apply(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double): Image = {
+    new Ellipse(paint, pen, width, height)
+  }
   /** returns a filled ellipse with the given characteristics */
-  def apply(paint: Paint, width: Double, height: Double): Image = {
-    new EllipseFilled(paint, width, height)
-  }
-}
-
-/** the parent class of outlined ellipses. */
-private[image] class EllipseOutlined(pen: Pen, width: Double, height: Double) extends FigureOutlined(pen) {
-  val awtShape = Ellipse.shape(width, height)
-}
-
-/** a factory for outlined ellipses */
-object EllipseOutlined {
-  /** returns an outlined ellipse with the given characteristics. */
-  def apply(pen: Pen, width: Double, height: Double): Image = {
-    new EllipseOutlined(pen, width, height)
-  }
-  
-  /** 
-   * returns an outlined ellipse with the given characteristics.
-   * It is drawn with `Pen(paint)`.
-   */
-  def apply(paint: Paint, width: Double, height: Double): Image = {
-    new EllipseOutlined(Pen(paint), width, height)
-  }
 }
 
 /** the parent class for filled circles */

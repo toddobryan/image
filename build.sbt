@@ -18,6 +18,8 @@ unmanagedSourceDirectories in Compile <<= Seq(scalaSource in Compile).join
 
 unmanagedSourceDirectories in Test <<= Seq(scalaSource in Test).join
 
+fork := true
+
 libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-swing" % "2.10.4",
   "org.scalatest" %% "scalatest" % "2.1.2",
