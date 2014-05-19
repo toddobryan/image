@@ -43,7 +43,7 @@ class Simulation[W <: World[W]](val startWorld: W, val fps: Int) extends SimpleS
 	    world = world.afterMouseClicked(evt.point.x, evt.point.y)
 	    this.repaint()
 	  case evt: KeyPressed =>
-	    world = world.afterKeyPressed(KeyEvent.getKeyText(evt.peer.getKeyCode()))
+	    world = world.afterKeyPressed(KeyEvent.getKeyText(evt.peer.getKeyCode()).toUpperCase())
 	    this.repaint()
 	}
 	panel.requestFocusInWindow()
