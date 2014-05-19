@@ -85,7 +85,7 @@ object Font {
   }
 }
 
-private[image] class Text(paint: Paint, font: JFont, string: String) extends FigureFilled(paint) {
+private[image] class Text(paint: Paint, font: JFont, string: String) extends Figure(Some(paint), None) {
   val awtShape: Shape = {
     val sampGraphics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).getGraphics().asInstanceOf[Graphics2D]
     sampGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)

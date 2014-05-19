@@ -46,6 +46,7 @@ class Simulation[W <: World[W]](val startWorld: W, val fps: Int) extends SimpleS
 	    world = world.afterKeyPressed(KeyEvent.getKeyText(evt.peer.getKeyCode()))
 	    this.repaint()
 	}
+	panel.requestFocusInWindow()
     timer.start()
   }
 

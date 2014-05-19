@@ -3,10 +3,10 @@ package org.dupontmanual.image
 import org.scalatest.{ FunSuite, Matchers }
 
 class StackTests extends FunSuite with Matchers {
-  val e1 = EllipseFilled(Color.DeepSkyBlue, 70, 40)
-  val e2 = EllipseFilled(Color.DarkGray, 20, 80)
-  val bg = RectangleFilled(Color.Gray, 300, 200)
-  val c = CircleFilled(Color.Aqua, 25)
+  val e1 = Ellipse(Color.DeepSkyBlue, 70, 40)
+  val e2 = Ellipse(Color.DarkGray, 20, 80)
+  val bg = Rectangle(Color.Gray, 300, 200)
+  val c = Circle(Color.Aqua, 25)
   
   test("centered") {
     e1.stackOn(e2) shouldEqual Bitmap.fromWorkspace("/stacked/e1-e2.png")

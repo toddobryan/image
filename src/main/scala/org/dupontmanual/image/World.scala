@@ -5,7 +5,7 @@ trait World[W <: World[_]] {
   val width: Int = 200
   val height: Int = 200
 
-  def asImage(): Image = RectangleFilled(Color.White, width, height)
+  def asImage(): Image = Rectangle(Color.White, width, height)
 
   def afterTick(): W = this
 

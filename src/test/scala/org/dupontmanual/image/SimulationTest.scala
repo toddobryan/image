@@ -2,7 +2,7 @@ package org.dupontmanual.image
 
 case class BallWorld(pt: Point) extends World[BallWorld] {
   override def asImage(): Image = {
-    RectangleFilled(Color.White, this.width, this.height).placeImage(CircleFilled(Color.Blue, 10), pt.x, pt.y)
+    Rectangle(Color.White, this.width, this.height).placeImage(Circle(Color.Blue, 10), pt.x, pt.y)
   }
   
   override def afterTick(): BallWorld = {
