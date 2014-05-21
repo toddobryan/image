@@ -69,18 +69,28 @@ Cropping
      cropBottom(numPixels: Double): Image
 
 These methods return an image that is ``this`` image with a given number of 
-pixels cut from the indicated edge.
+pixels cut from the indicated edge.::
 
-TODO: examples
+    scala> Hacker.cropLeft(20)
+
+|HackerCropLeft20|
+
+::
+
+    scala> Glyphs.cropBottom(30)
+    
+|GlyphsCropBottom30|
 
 ::
 
      crop(x: Double, y: Double, cropWidth: Double, cropHeight: Double): Image
 
 This method returns an image that is a rectangle cut from ``this``
-image, with a top corner at (x, y) and given width and height.
+image, with a top corner at (x, y) and given width and height.::
 
-TODO: examples
+    scala> Book.crop(24, 0, 17, 31)
+    
+|BookCrop24-0-17-31|
 
 Reflections
 ^^^^^^^^^^^
@@ -245,3 +255,6 @@ according to ``xAlign`` and ``yAlign``, but offset ``dx`` pixels to the right an
 pixels down. (Use negative numbers for left and up.) Whether you use ``stackOn`` or
 ``slideUnder``, it is the top image that is moved the given number of pixels.
 
+.. |HackerCropLeft20| image:: images/image/hacker-crop-left-20.png
+.. |GlyphsCropBottom30| image:: images/image/glyphs-crop-bottom-30.png
+.. |BookCrop24-0-17-31| image:: images/image/book-crop-24-0-17-31.png

@@ -13,7 +13,7 @@ case class SnakeWorld(segLocs: List[Point], dir: String, foodLoc: Point) extends
   
   override def afterKeyPressed(key: String): SnakeWorld = {
     println(key)
-    if (List("Up", "Down", "Left", "Right").contains(key)) {
+    if (List("UP", "DOWN", "LEFT", "RIGHT").contains(key)) {
       this.copy(dir = key)
     } else {
       this
@@ -23,10 +23,10 @@ case class SnakeWorld(segLocs: List[Point], dir: String, foodLoc: Point) extends
   override def afterTick(): SnakeWorld = {
     val oldHead = this.segLocs.head
     val newHead = this.dir match {
-      case "Up" => Point(oldHead.x, oldHead.y - 20)
-      case "Down" => Point(oldHead.x, oldHead.y + 20)
-      case "Left" => Point(oldHead.x - 20, oldHead.y)
-      case "Right" => Point(oldHead.x + 20, oldHead.y)
+      case "UP" => Point(oldHead.x, oldHead.y - 20)
+      case "DOWN" => Point(oldHead.x, oldHead.y + 20)
+      case "LEFT" => Point(oldHead.x - 20, oldHead.y)
+      case "RIGHT" => Point(oldHead.x + 20, oldHead.y)
       case _ => oldHead
     }
     if (canEatFood()) {

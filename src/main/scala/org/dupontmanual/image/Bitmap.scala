@@ -14,12 +14,11 @@ import java.net.URL
  * represents a bitmap image
  */
 class Bitmap private[image](val pathOrUrl: Either[File, URL], val name: Option[String] = None) extends Image {
-  override protected lazy val img: BufferedImage = {
-    val temp = Option(pathOrUrl match {
-      case Left(path) => ImageIO.read(path)
-      case Right(url) => ImageIO.read(url)
-    })
-    temp.getOrElse(throw new IllegalArgumentException("no image at the source indicated"))
+  override protected lazy val img: BufferedImage = theImg
+    
+  private[Bitmap] val theImg: BufferedImage = pathOrUrl match {
+    case Left(path) => ImageIO.read(path)
+    case Right(url) => ImageIO.read(url)
   }
   
   /*private[image]*/ def bounds = new Rectangle2D.Double(0, 0, img.getWidth, img.getHeight)
