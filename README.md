@@ -3,6 +3,6 @@ dm-image
 
 Check out the documentation at:
 
-https://dupontmanual.github.io/dm-image/
+https://dupontmanualhs.github.io/dm-image/
 
 
