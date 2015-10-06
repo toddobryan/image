@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Basic Shapes &mdash; dM Image 0.1-SNAPSHOT documentation</title>
+    
+    <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1-SNAPSHOT',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="dM Image 0.1-SNAPSHOT documentation" href="index.html" />
+    <link rel="next" title="Text" href="text.html" />
+    <link rel="prev" title="Bitmaps" href="bitmaps.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper">
+      <div class="header">
+        <div class="headertitle"><a
+          href="index.html">dM Image 0.1-SNAPSHOT documentation</a></div>
+        <div class="rel">
+          <a href="bitmaps.html" title="Bitmaps"
+             accesskey="P">previous</a> |
+          <a href="text.html" title="Text"
+             accesskey="N">next</a> |
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="basic-shapes">
+<h1>Basic Shapes<a class="headerlink" href="#basic-shapes" title="Permalink to this headline">¶</a></h1>
+<p>Most shapes have filled and outlined versions and are created by using the
+<tt class="docutils literal"><span class="pre">apply()</span></tt> method of a convenience object. In other words, to create a shape,
+you use code that looks like <tt class="docutils literal"><span class="pre">ShapeFilled(...)</span></tt> or <tt class="docutils literal"><span class="pre">ShapeOutlined(...)</span></tt>
+for some <tt class="docutils literal"><span class="pre">Shape</span></tt>.</p>
+<p>The first argument for a filled shape is always a <tt class="docutils literal"><span class="pre">Paint</span></tt>. Currently, the only
+kind of <tt class="docutils literal"><span class="pre">Paint</span></tt> available is a <tt class="docutils literal"><span class="pre">Color</span></tt>. (Hopefully this will be enhanced later
+to allow for patterns and gradients.) Unsurprisingly, this argument
+represents the color in which the shape will be filled.</p>
+<p>We explain more about <tt class="docutils literal"><span class="pre">Color</span></tt>s later, but for right now, know that you can use
+all of the HTML color names by writing <tt class="docutils literal"><span class="pre">Color.Name</span></tt>. If you just have to know
+all of the possible colors, go to the <a class="reference external" href="latest/api/">Scaladoc API</a> and click on
+the <cite>Color</cite> object to see the complete list. Or just keep reading and you&#8217;ll
+see several in the examples below.</p>
+<p>The first argument to an outlined shape is either a <tt class="docutils literal"><span class="pre">Paint</span></tt> or a <tt class="docutils literal"><span class="pre">Pen</span></tt>. By
+default, all outlines are drawn so that they appear exactly one pixel wide,
+no matter how large or small you magnify the image. If you&#8217;d like a beefier
+line, create a <tt class="docutils literal"><span class="pre">Pen(paint,</span> <span class="pre">width)</span></tt>, where <tt class="docutils literal"><span class="pre">paint</span></tt> is the pen&#8217;s color and
+<tt class="docutils literal"><span class="pre">width</span></tt> is how wide the line will appear in pixels.</p>
+<p>Sizes are always expressed in pixels. Since the sizes are <tt class="docutils literal"><span class="pre">Double</span></tt>s, fractional
+pixels are allowed, but they&#8217;ll be fit into the pixels of your display device,
+so they might do something different than you expect.</p>
+<div class="section" id="curves">
+<h2>Curves<a class="headerlink" href="#curves" title="Permalink to this headline">¶</a></h2>
+<p>There are four basic curvy shapes: circles and ellipses, filled and outlined.</p>
+<div class="section" id="circles">
+<h3>Circles<a class="headerlink" href="#circles" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-scala"><div class="highlight"><pre><span class="nc">CircleFilled</span><span class="o">(</span><span class="n">paint</span><span class="k">:</span> <span class="kt">Paint</span><span class="o">,</span> <span class="n">radius</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Image</span>
+<span class="nc">CircleOutlined</span><span class="o">(</span><span class="n">paint</span><span class="k">:</span> <span class="kt">Paint</span><span class="o">,</span> <span class="n">radius</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Image</span>
+<span class="nc">CircleOutlined</span><span class="o">(</span><span class="n">pen</span><span class="k">:</span> <span class="kt">Pen</span><span class="o">,</span> <span class="n">radius</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Image</span>
+</pre></div>
+</div>
+<p>For circles, the two required arguments are a <tt class="docutils literal"><span class="pre">Paint</span></tt> or <tt class="docutils literal"><span class="pre">Pen</span></tt> and the size of
+the radius. (In the examples that follow, I&#8217;m going to show you the code you&#8217;d
+use to create an <tt class="docutils literal"><span class="pre">Image</span></tt> and the image that would result. Remember that if you
+actually want to see the image, you&#8217;ll have to call its <tt class="docutils literal"><span class="pre">.display()</span></tt> method.)</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">CircleFilled</span><span class="o">(</span><span class="nc">Color</span><span class="o">.</span><span class="nc">Blue</span><span class="o">,</span> <span class="mi">30</span><span class="o">)</span>
+</pre></div>
+</div>
+<p><img alt="CircleFilled-Blue-30" src="_images/circlefilled-blue-30.png" /></p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">CircleOutlined</span><span class="o">(</span><span class="nc">Color</span><span class="o">.</span><span class="nc">Red</span><span class="o">,</span> <span class="mi">25</span><span class="o">)</span>
+</pre></div>
+</div>
+<p><img alt="CircleOutlined-Red-25" src="_images/circleoutlined-red-25.png" /></p>
+</div>
+<div class="section" id="ellipses">
+<h3>Ellipses<a class="headerlink" href="#ellipses" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-scala"><div class="highlight"><pre><span class="nc">EllipseFilled</span><span class="o">(</span><span class="n">paint</span><span class="k">:</span> <span class="kt">Paint</span><span class="o">,</span> <span class="n">width</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span> <span class="n">height</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Image</span>
+<span class="nc">EllipseOutlined</span><span class="o">(</span><span class="n">paint</span><span class="k">:</span> <span class="kt">Paint</span><span class="o">,</span> <span class="n">width</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span> <span class="n">height</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Image</span>
+<span class="nc">EllipseOutlined</span><span class="o">(</span><span class="n">pen</span><span class="k">:</span> <span class="kt">Pen</span><span class="o">,</span> <span class="n">width</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span> <span class="n">height</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Image</span>
+</pre></div>
+</div>
+<p>For ellipses, there are three required arguments, the color, the width, and
+the height. Note that these are the total width and height, so a circle with
+radius 30 would have a width and height of 60.</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">EllipseFilled</span><span class="o">(</span><span class="nc">Color</span><span class="o">.</span><span class="nc">Aquamarine</span><span class="o">,</span> <span class="mi">50</span><span class="o">,</span> <span class="mi">100</span><span class="o">)</span>
+</pre></div>
+</div>
+<p><img alt="EllipseFilled-Aquamarine-50-100" src="_images/ellipsefilled-aquamarine-50-100.png" /></p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">EllipseOutlined</span><span class="o">(</span><span class="nc">Pen</span><span class="o">(</span><span class="nc">Color</span><span class="o">.</span><span class="nc">Cyan</span><span class="o">,</span> <span class="mi">5</span><span class="o">),</span> <span class="mi">200</span><span class="o">,</span> <span class="mi">25</span><span class="o">)</span>
+</pre></div>
+</div>
+<p><img alt="EllipseOutlined-Cyan5-200-25" src="_images/ellipseoutlined-cyan5-200-25.png" /></p>
+</div>
+</div>
+<div class="section" id="squares-rectangles-and-regular-polygons">
+<h2>Squares, Rectangles, and Regular Polygons<a class="headerlink" href="#squares-rectangles-and-regular-polygons" title="Permalink to this headline">¶</a></h2>
+<p>Squares, rectangles, and regular polygons get special treatment, and they&#8217;re
+very similar to circles and ellipses.</p>
+<div class="section" id="squares">
+<h3>Squares<a class="headerlink" href="#squares" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-scala"><div class="highlight"><pre><span class="nc">SquareFilled</span><span class="o">(</span><span class="n">paint</span><span class="k">:</span> <span class="kt">Paint</span><span class="o">,</span> <span class="n">side</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Image</span>
+<span class="nc">SquareOutlined</span><span class="o">(</span><span class="n">paint</span><span class="k">:</span> <span class="kt">Paint</span><span class="o">,</span> <span class="n">side</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Image</span>
+<span class="nc">SquareOutlined</span><span class="o">(</span><span class="n">pen</span><span class="k">:</span> <span class="kt">Pen</span><span class="o">,</span> <span class="n">side</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Image</span>
+</pre></div>
+</div>
+<p>The second argument to <tt class="docutils literal"><span class="pre">SquareFilled</span></tt> or <tt class="docutils literal"><span class="pre">SquareOutlined</span></tt> is the square&#8217;s
+side length.</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">SquareFilled</span><span class="o">(</span><span class="nc">Color</span><span class="o">.</span><span class="nc">Goldenrod</span><span class="o">,</span> <span class="mi">40</span><span class="o">)</span>
+</pre></div>
+</div>
+<p><img alt="SquareFilled-Goldenrod-40" src="_images/squarefilled-goldenrod-40.png" /></p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">SquareOutlined</span><span class="o">(</span><span class="nc">Pen</span><span class="o">(</span><span class="nc">Color</span><span class="o">.</span><span class="nc">Purple</span><span class="o">,</span> <span class="mi">3</span><span class="o">),</span> <span class="mi">60</span><span class="o">)</span>
+</pre></div>
+</div>
+<p><img alt="SquareOutlined-Purple3-60" src="_images/squareoutlined-purple3-60.png" /></p>
+</div>
+<div class="section" id="rectangles">
+<h3>Rectangles<a class="headerlink" href="#rectangles" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-scala"><div class="highlight"><pre><span class="nc">RectangleFilled</span><span class="o">(</span><span class="n">paint</span><span class="k">:</span> <span class="kt">Paint</span><span class="o">,</span> <span class="n">width</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span> <span class="n">height</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Image</span>
+<span class="nc">RectangleOutlined</span><span class="o">(</span><span class="n">paint</span><span class="k">:</span> <span class="kt">Paint</span><span class="o">,</span> <span class="n">width</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span> <span class="n">height</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Image</span>
+<span class="nc">RectangleOutlined</span><span class="o">(</span><span class="n">pen</span><span class="k">:</span> <span class="kt">Pen</span><span class="o">,</span> <span class="n">width</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span> <span class="n">height</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Image</span>
+</pre></div>
+</div>
+<p>The second and third arguments to <tt class="docutils literal"><span class="pre">RectangleFilled</span></tt> and <tt class="docutils literal"><span class="pre">RectangleOutlined</span></tt> are
+the width and height of the rectangles.</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">RectangleFilled</span><span class="o">(</span><span class="nc">Color</span><span class="o">.</span><span class="nc">Orange</span><span class="o">,</span> <span class="mi">50</span><span class="o">,</span> <span class="mi">60</span><span class="o">)</span>
+</pre></div>
+</div>
+<p><img alt="RectangleFilled-Orange-50-60" src="_images/rectanglefilled-orange-50-60.png" /></p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">RectangleOutlined</span><span class="o">(</span><span class="nc">Pen</span><span class="o">(</span><span class="nc">Color</span><span class="o">.</span><span class="nc">YellowGreen</span><span class="o">,</span> <span class="mi">3</span><span class="o">),</span> <span class="mi">20</span><span class="o">,</span> <span class="mi">100</span><span class="o">)</span>
+</pre></div>
+</div>
+<p><img alt="RectangleOutlined-YellowGreen3-20-100" src="_images/rectangleoutlined-yellowgreen3-20-100.png" /></p>
+</div>
+<div class="section" id="regularpolygons">
+<h3>RegularPolygons<a class="headerlink" href="#regularpolygons" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-scala"><div class="highlight"><pre><span class="nc">RegularPolygonFilled</span><span class="o">(</span><span class="n">paint</span><span class="k">:</span> <span class="kt">Paint</span><span class="o">,</span> <span class="n">sideLength</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span> <span class="n">numSides</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Image</span>
+<span class="nc">RegularPolygonOutlined</span><span class="o">(</span><span class="n">paint</span><span class="k">:</span> <span class="kt">Paint</span><span class="o">,</span> <span class="n">sideLength</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span> <span class="n">numSides</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Image</span>
+<span class="nc">RegularPolygonOutlined</span><span class="o">(</span><span class="n">pen</span><span class="k">:</span> <span class="kt">Pen</span><span class="o">,</span> <span class="n">sideLength</span><span class="k">:</span> <span class="kt">Double</span><span class="o">,</span> <span class="n">numSides</span><span class="k">:</span> <span class="kt">Double</span><span class="o">)</span><span class="k">:</span> <span class="kt">Image</span>
+</pre></div>
+</div>
+<p>The second and third arguments of <tt class="docutils literal"><span class="pre">RegularPolygonFilled</span></tt> and <tt class="docutils literal"><span class="pre">RegularPolygonOutlined</span></tt>
+are the length of each side and the number of sides. The polygon is situated so
+that the bottom edge is horizontal.</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">RegularPolygonFilled</span><span class="o">(</span><span class="nc">Color</span><span class="o">.</span><span class="nc">Yellow</span><span class="o">,</span> <span class="mi">100</span><span class="o">,</span> <span class="mi">3</span><span class="o">)</span>
+</pre></div>
+</div>
+<p><img alt="RegularPolygonFilled-Yellow-100-3" src="_images/regularpolygonfilled-yellow-100-3.png" /></p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="n">scala</span><span class="o">&gt;</span> <span class="nc">RegularPolygonOutlined</span><span class="o">(</span><span class="nc">Pen</span><span class="o">(</span><span class="nc">Color</span><span class="o">.</span><span class="nc">Black</span><span class="o">,</span> <span class="mi">10</span><span class="o">),</span> <span class="mi">50</span><span class="o">,</span> <span class="mi">10</span><span class="o">)</span>
+</pre></div>
+</div>
+<p><img alt="RegularPolygonOutlined-Black10-50-10" src="_images/regularpolygonoutlined-black10-50-10.png" /></p>
+<p>These are all the basic shapes. But we&#8217;ve only scratched the surface of what the
+library can do. In the next chapter, we talk about text.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bitmaps.html">Bitmaps</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Basic Shapes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#curves">Curves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#squares-rectangles-and-regular-polygons">Squares, Rectangles, and Regular Polygons</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="text.html">Text</a></li>
+</ul>
+
+          <h3 style="margin-top: 1.5em;">Search</h3>
+          <form class="search" action="search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+          </form>
+          <p class="searchtip" style="font-size: 90%">
+            Enter search terms or a module, class or function name.
+          </p>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <a href="bitmaps.html" title="Bitmaps"
+             >previous</a> |
+          <a href="text.html" title="Text"
+             >next</a> |
+          <a href="genindex.html" title="General Index"
+             >index</a>
+            <br/>
+            <a href="_sources/basicShapes.txt"
+               rel="nofollow">Show Source</a>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer">
+        &copy; Copyright 2013, Jim Miller and Todd O&#39;Bryan.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>
