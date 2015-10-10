@@ -19,7 +19,7 @@ If you're using the normal console, you won't see the pretty images when you
 type these::
 
     scala> Hacker
-    res0: org.dupontmanual.image.Bitmap = Hacker
+    res0: net.toddobryan.image.Bitmap = Hacker
 
 However, you can see the image by calling the ``display()`` method on it. This
 method will create a dialog box with the image inside::
@@ -44,12 +44,12 @@ directory as your project with the name `H.png`. You can access it
 with::
 
     scala> Bitmap("H.png")
-    res1: org.dupontmanual.image.Bitmap = Bitmap("H.png")
+    res1: net.toddobryan.image.Bitmap = Bitmap("H.png")
 
 You can save it in a ``val`` and display it, just like the built-in images::
 
     scala> val h: Image = Bitmap("H.png")
-    h: org.dupontmanual.image.Image = Bitmap("H.png")
+    h: net.toddobryan.image.Image = Bitmap("H.png")
 
     scala> h.display()
 
@@ -65,7 +65,7 @@ example, to grab that lovely 'H' from where I found it on the WikiMedia site,
 you do::
 
     scala> val netH: Image = Bitmap.fromUrl("http://upload.wikimedia.org/wikipedia/commons/a/a2/H.png")
-    netH: org.dupontmanual.image.Image = Bitmap.fromUrl("http://upload.wikimedia.org/wikipedia/commons/a/a2/H.png")
+    netH: net.toddobryan.image.Image = Bitmap.fromUrl("http://upload.wikimedia.org/wikipedia/commons/a/a2/H.png")
     
 and then::
 

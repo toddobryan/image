@@ -1,17 +1,17 @@
 Angles
 ======
 
-If you import everything from ``org.dupontmanual.image._``, you can
+If you import everything from ``net.toddobryan.image._``, you can
 call ``.degrees`` or ``.radians`` on a number to create an ``Angle``.
 [#angleBuilder]_
 
 ::
 
     scala> 45.degrees
-    res1: org.dupontmanual.image.Angle = 45.000000 degrees
+    res1: net.toddobryan.image.Angle = 45.000000 degrees
 
     scala> (math.Pi / 2).radians
-    res2: org.dupontmanual.image.Angle = 1.570796 radians
+    res2: net.toddobryan.image.Angle = 1.570796 radians
 
 
 Angles are measured as they normally are in trigonometry. Zero degrees 
@@ -24,10 +24,10 @@ if you're more comfortable with one unit than another.\ [#angleApprox]_
 ::
 
     scala> 180.degrees.toRadians
-    res3: org.dupontmanual.image.Angle = 3.141593 radians
+    res3: net.toddobryan.image.Angle = 3.141593 radians
 
     scala> (math.Pi / 4).radians.toDegrees
-    res4: org.dupontmanual.image.Angle = 45.000000 degrees
+    res4: net.toddobryan.image.Angle = 45.000000 degrees
 
 
 You can find the sine, cosine, or tangent of an `Angle` using ``.sin``, 
@@ -39,10 +39,10 @@ same as the units of of the first ``Angle`` in the addition.
 ::
 
     scala> 60.degrees + (math.Pi / 6).radians
-    res5: org.dupontmanual.image.Angle = 90.000000 degrees
+    res5: net.toddobryan.image.Angle = 90.000000 degrees
 
     scala> (math.Pi / 4).radians + 45.degrees
-    res6: org.dupontmanual.image.Angle = 1.570796 radians
+    res6: net.toddobryan.image.Angle = 1.570796 radians
 
     scala> (math.Pi / 6).radians.sin
     res8: Double = 0.5
@@ -57,7 +57,7 @@ same as the units of of the first ``Angle`` in the addition.
 .. rubric:: Footnotes
 
 .. [#angleBuilder] What actually happens in this case is that there is an
-  implicit conversion in the ``org.dupontmanual.image`` package that turns
+  implicit conversion in the ``net.toddobryan.image`` package that turns
   numbers into something called an ``AngleBuilder``. You're actually calling
   the ``.degrees`` or ``.radians`` method on that ``AngleBuilder`` object,
   but you'll never have to do this explicitly.

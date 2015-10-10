@@ -157,15 +157,15 @@ Rotations
 ^^^^^^^^^
 
 The ``rotate`` method takes an ``Angle`` argument. If you've imported everything
-from the ``org.dupontmanual.image`` package, then the easiest way to make an angle
+from the ``net.toddobryan.image`` package, then the easiest way to make an angle
 is to call the ``degrees`` method on a number. There is also a ``radians`` method
 if you'd prefer to work in radians. For example::
 
     scala> 45.degrees
-    res2: org.dupontmanual.image.Angle = 45.000000 degrees
+    res2: net.toddobryan.image.Angle = 45.000000 degrees
 
     scala> 90.degrees
-    res3: org.dupontmanual.image.Angle = 90.000000 degrees
+    res3: net.toddobryan.image.Angle = 90.000000 degrees
 
     scala> 90.degrees == (math.Pi / 2).radians
     res4: Boolean = true

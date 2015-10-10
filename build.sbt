@@ -8,15 +8,18 @@ organization := "net.toddobryan"
 
 organizationName := "Todd O'Bryan"
 
-version := "0.9-SNAPSHOT"
+version := "0.10-SNAPSHOT"
 
 scalaVersion := "2.11.7"
 
 scalacOptions ++= Seq("-deprecation", "-feature")
 
-fork := true
+unmanagedJars in Compile += Attributed.blank(
+    file(scala.util.Properties.javaHome) / "lib" / "ext" / "jfxrt.jar")
 
-initialCommands in console := """import net.toddobryan.image._; net.toddobryan.image.initialize()"""
+fork in (Test, run) := true
+
+initialCommands in console := """import org.dupontmanual.image._; org.dupontmanual.image.initialize()"""
 
 cleanupCommands in console := """net.toddobryan.image.cleanUp()"""
 

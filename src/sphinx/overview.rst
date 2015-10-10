@@ -4,7 +4,7 @@ Overview
 The most common way to use the library is to just import everything and
 initialize the library::
 
-    scala> import org.dupontmanual.image._
+    scala> import net.toddobryan.image._
     scala> initialize()
 
 Once you've done that, you can happily write all the code in the sections
@@ -14,7 +14,7 @@ If you get tired of entering that line each time you go into the SBT console,
 you can modify your ``build.sbt`` file to automatically include those
 commands whenever you start the console by adding the line::
 
-    initialCommands in console := """import org.dupontmanual.image._; org.dupontmanual.image.initialize()"""
+    initialCommands in console := """import net.toddobryan.image._; net.toddobryan.image.initialize()"""
     
 
 Library Dependency
