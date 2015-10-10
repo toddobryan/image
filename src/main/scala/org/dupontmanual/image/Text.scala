@@ -41,13 +41,13 @@ object Font {
    */
   sealed abstract class Style private[image] (private[image] val weight: FontWeight, private[image] val posture: FontPosture)
   /** plain font style */
-  case object Plain extends Style(FontWeight.NORMAL, FontPosture.REGULAR)
+  case object Plain extends Style(FontWeight.Normal, FontPosture.REGULAR)
   /** italic font style */
-  case object Italic extends Style(FontWeight.NORMAL, FontPosture.ITALIC)
+  case object Italic extends Style(FontWeight.Normal, FontPosture.ITALIC)
   /** bold font style */
-  case object Bold extends Style(FontWeight.BOLD, FontPosture.REGULAR)
+  case object Bold extends Style(FontWeight.Bold, FontPosture.REGULAR)
   /** bold and italic font style */
-  case object BoldItalic extends Style(FontWeight.BOLD, FontPosture.ITALIC)
+  case object BoldItalic extends Style(FontWeight.Bold, FontPosture.ITALIC)
   
   /** represents one of the fonts you're guaranteed to have */
   sealed abstract class BuiltIn private[image](private[image] val systemFont: String)

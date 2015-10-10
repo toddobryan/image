@@ -53,7 +53,7 @@ class Simulation[W <: World[W]](val startWorld: W, val fps: Int) {
         }
       }
       animationPane = new Pane {
-        content = startWorld.asImage.buildImage()
+        children = startWorld.asImage.buildImage()
         prefWidth = startWorld.width
         prefHeight = startWorld.height
       }
@@ -62,7 +62,7 @@ class Simulation[W <: World[W]](val startWorld: W, val fps: Int) {
           title = "Simulation"
           scene = new Scene {
             root = new VBox {
-              alignment = Pos.TOP_CENTER
+              alignment = Pos.TopCenter
               content = List(animationPane)
             }
           }
@@ -84,7 +84,7 @@ class Simulation[W <: World[W]](val startWorld: W, val fps: Int) {
   val keyFrame: KeyFrame = KeyFrame(Duration(1000 / fps), onFinished = new EventHandler[ActionEvent]() {
     def handle(e: ActionEvent) {
       world = world.afterTick()
-      animationPane.content = world.asImage.buildImage()
+      animationPane.children = world.asImage.buildImage()
     }
   })
   
@@ -92,7 +92,7 @@ class Simulation[W <: World[W]](val startWorld: W, val fps: Int) {
     new JFXPanel()
     this.display()
     new Timeline(fps, List(keyFrame)) {
-      cycleCount = Timeline.INDEFINITE
+      cycleCount = Timeline.Indefinite
     }.play()
   }
 }

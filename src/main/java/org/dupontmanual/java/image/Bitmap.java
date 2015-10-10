@@ -20,6 +20,10 @@ public class Bitmap extends Image {
 		return new Rectangle(0, 0, this.bitmap.getWidth(), this.bitmap.getHeight());
 	}
 	
+	public String toString() {
+		return String.format("Bitmap: %s", name);
+	}
+	
 	private Bitmap(File file, String name) {
 		try {
 			this.bitmap = new javafx.scene.image.Image(file.toURI().toURL().toString());
@@ -79,8 +83,4 @@ public class Bitmap extends Image {
 	/** a 129x44 pixel picture of an old-fashioned train engine with a coal car */
 	public static final Image TRAIN_ENGINE = Bitmap.fromWorkspace("/train_engine.png", "TrainEngine");
 	
-	public static void main(String[] args) {
-		Image.initialize();
-		Bitmap.HACKER.display();
-	}
 }

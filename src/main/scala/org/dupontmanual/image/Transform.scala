@@ -13,7 +13,7 @@ import scalafx.concurrent.Task
 /** represents an image with a `Transform` applied */
 private[image] class Transform(image: Image, tforms: Iterable[SfxTransform]) extends Image {
   private[this] val bds = new Pane() {
-    content = image.bounds
+    children = image.bounds
     transforms = tforms
   }.boundsInParent.value
 
@@ -22,7 +22,7 @@ private[image] class Transform(image: Image, tforms: Iterable[SfxTransform]) ext
     val correction = SfxTransform.translate(-bds.minX, -bds.minY)
     def newNode(): Node = {
       new Pane {
-        content = image.buildImage()
+        children = image.buildImage()
         transforms = Iterable(correction) ++ tforms
         prefWidth = bds.width
         prefHeight = bds.height

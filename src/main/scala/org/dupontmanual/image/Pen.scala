@@ -118,17 +118,17 @@ private[image] sealed abstract class Edge {
 
 object Edge {
   object Inside extends Edge {
-    private[image] def toStrokeType = StrokeType.INSIDE
+    private[image] def toStrokeType = StrokeType.Inside
     override def toString = "Edge.Inside"
   }
   
   object Outside extends Edge {
-    private[image] def toStrokeType = StrokeType.OUTSIDE
+    private[image] def toStrokeType = StrokeType.Outside
     override def toString = "Edge.Outside"
   }
   
   object Centered extends Edge {
-    private[image] def toStrokeType = StrokeType.CENTERED
+    private[image] def toStrokeType = StrokeType.Centered
     override def toString = "Edge.Centered"
   }
 }

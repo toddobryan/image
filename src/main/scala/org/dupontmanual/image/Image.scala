@@ -38,7 +38,7 @@ abstract class Image private[image] () {
 	      title = "Image"
 	      scene = new Scene {
 	        root = new VBox {
-	          alignment = Pos.TOP_CENTER
+	          alignment = Pos.TopCenter
 	          content = List(
 	              buildImage(), 
 	              new Button {

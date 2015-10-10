@@ -106,9 +106,16 @@ private[image] object Arc {
 }
 
 /** the parent class for circular arcs. */
-private[image] class CircularArc(paint: Option[Paint], pen: Option[Pen], radius: Double, start: Angle, extent: Angle)
-    extends Figure(paint, pen) {
-  private[image] def fxShape(): Shape = Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.OPEN, paint, pen)
+private[image] class CircularArc(
+    paint: Option[Paint], 
+    pen: Option[Pen], 
+    radius: Double, 
+    start: Angle, 
+    extent: Angle) 
+  extends Figure(paint, pen) {
+  
+  private[image] def fxShape(): Shape = 
+    Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.Open, paint, pen)
 }
 
 /** a factory for creating circular arcs. */
@@ -139,9 +146,16 @@ object CircularArc {
 }
 
 /** the parent class for circular segments */
-private[image] class CircularSegment(paint: Option[Paint], pen: Option[Pen], radius: Double, start: Angle, extent: Angle)
-    extends Figure(paint, pen) {
-  private[image] def fxShape(): Shape = Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.CHORD, paint, pen)
+private[image] class CircularSegment(
+    paint: Option[Paint], 
+    pen: Option[Pen], 
+    radius: Double, 
+    start: Angle, 
+    extent: Angle)
+  extends Figure(paint, pen) {
+
+  private[image] def fxShape(): Shape = 
+    Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.Chord, paint, pen)
 }
 
 /** 
@@ -151,27 +165,33 @@ private[image] class CircularSegment(paint: Option[Paint], pen: Option[Pen], rad
  * the same two points
  */
 object CircularSegment {
-  def apply(paint: Option[Paint], pen: Option[Pen], radius: Double, start: Angle, extent: Angle): Image = {
+  def apply(paint: Option[Paint], pen: Option[Pen], 
+      radius: Double, start: Angle, extent: Angle): Image = {
     new CircularSegment(paint, pen, radius, start, extent)
   }
+  
   def apply(paint: Paint, pen: Pen, radius: Double, start: Angle, extent: Angle): Image = {
     CircularSegment(Some(paint), Some(pen), radius, start, extent)
   }
+  
   def apply(paint: Paint, radius: Double, start: Angle, extent: Angle): Image = {
     CircularSegment(Some(paint), None, radius, start, extent)
   }
+  
   def apply(pen: Pen, radius: Double, start: Angle, extent: Angle): Image = {
     CircularSegment(None, Some(pen), radius, start, extent)
   }
+  
   def outlined(penColor: Paint, radius: Double, start: Angle, extent: Angle): Image = {
     CircularSegment(None, Some(Pen(penColor)), radius, start, extent)
   }
 }
 
 /** the parent class for circular sectors */
-private[image] class CircularSector(paint: Option[Paint], pen: Option[Pen], radius: Double, start: Angle, extent: Angle)
-    extends Figure(paint, pen) {
-  private[image] def fxShape(): Shape = Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.ROUND, paint, pen)
+private[image] class CircularSector(paint: Option[Paint], pen: Option[Pen], 
+    radius: Double, start: Angle, extent: Angle) extends Figure(paint, pen) {
+  private[image] def fxShape(): Shape = 
+    Arc.shape(2 * radius, 2 * radius, start, extent, ArcType.Round, paint, pen)
 } 
 
 /** 
@@ -200,7 +220,7 @@ object CircularSector {
 /** the parent class for elliptical arcs */
 private[image] class EllipticalArc(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double, start: Angle, extent: Angle)
     extends Figure(paint, pen) {
-  private[image] def fxShape(): Shape = Arc.shape(width, height, start, extent, ArcType.OPEN, paint, pen)
+  private[image] def fxShape(): Shape = Arc.shape(width, height, start, extent, ArcType.Open, paint, pen)
 }
 
 /** a factory for elliptical arcs */
@@ -224,9 +244,11 @@ object EllipticalArc {
 }
 
 /** the parent class for elliptical segments */
-private[image] class EllipticalSegment(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double, start: Angle, extent: Angle)
-    extends Figure(paint, pen) {
-  private[image] def fxShape(): Shape = Arc.shape(width, height, start, extent, ArcType.CHORD, paint, pen)
+private[image] class EllipticalSegment(
+    paint: Option[Paint], pen: Option[Pen], 
+    width: Double, height: Double, start: Angle, extent: Angle) extends Figure(paint, pen) {
+  private[image] def fxShape(): Shape = 
+    Arc.shape(width, height, start, extent, ArcType.Chord, paint, pen)
 }
 
 /** 
@@ -256,7 +278,7 @@ object EllipticalSegment {
 /** the parent class for elliptical sectors */
 private[image] class EllipticalSector(paint: Option[Paint], pen: Option[Pen], width: Double, height: Double, start: Angle, extent: Angle)
     extends Figure(paint, pen) {
-  private[image] def fxShape(): Shape = Arc.shape(width, height, start, extent, ArcType.ROUND, paint, pen)
+  private[image] def fxShape(): Shape = Arc.shape(width, height, start, extent, ArcType.Round, paint, pen)
 }
 
 /** 

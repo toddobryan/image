@@ -1,24 +1,18 @@
 package org.dupontmanual
 
 import scala.language.implicitConversions
-import org.scalautils.Equality
-import scalafx.Includes._
-import scalafx.scene.Node
+
+import org.dupontmanual.image.AngleBuilder
+import org.dupontmanual.image.BackgroundApp
+import org.dupontmanual.image.Bitmap
+import org.dupontmanual.image.Image
+import org.scalactic.Equality
+
 import scalafx.application.Platform
-import scalafx.stage.Stage
-import scalafx.stage.StageStyle
-import scalafx.scene.Scene
-import scalafx.scene.layout.BorderPane
-import scalafx.geometry.Insets
-import scalafx.scene.control.Button
-import javafx.embed.swing.JFXPanel
-import javax.swing.JFrame
-import _root_.java.awt.Frame
-import _root_.java.util.Arrays
-import scalafx.scene.control.Label
 import scalafx.scene.Group
-import scalafx.application.JFXApp
-import scalafx.application.JFXApp.PrimaryStage
+import scalafx.scene.Scene
+import scalafx.scene.Scene.sfxScene2jfx
+import scalafx.scene.control.Label
 
 /**
  * A Scala port (mostly) of the image library created in Racket by Robby Findler,
@@ -86,10 +80,11 @@ package object image {
   private[image] def repr(s: String): String = {
     if (s == null) "null"
     else s.toList.map {
-      case '\0' => "\\0"
       case '\t' => "\\t"
+      case '\b' => "\\b"
       case '\n' => "\\n"
       case '\r' => "\\r"
+      case '\f' => "\\f"
       case '\"' => "\\\""
       case '\\' => "\\\\"
       case ch if (' ' <= ch && ch <= '\u007e') => ch.toString

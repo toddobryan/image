@@ -3,6 +3,6 @@ dm-image
 
 Check out the documentation at:
 
-https://dupontmanualhs.github.io/dm-image/
+https://toddobryan.github.io/scala-image/
 
 

@@ -10,3 +10,6 @@ tmp
 .project
 .settings
 .cache
+.cache-main
+.cache-tests
+

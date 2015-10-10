@@ -1,34 +1,31 @@
-name := "dM Image"
+name := "Scala Image"
 
-normalizedName := "dm-image"
+normalizedName := "scala-image"
 
 description := "a Scala port (mostly) of the Racket image library by Robby Findler"
 
-organization := "org.dupontmanual"
+organization := "net.toddobryan"
 
-organizationName := "duPont Manual High School"
+organizationName := "Todd O'Bryan"
 
 version := "0.9-SNAPSHOT"
 
-scalaVersion := "2.10.4"
+scalaVersion := "2.11.7"
 
 scalacOptions ++= Seq("-deprecation", "-feature")
 
-unmanagedJars in Compile += Attributed.blank(
-    file(scala.util.Properties.javaHome) / "lib" / "jfxrt.jar")
-
 fork := true
 
-initialCommands in console := """import org.dupontmanual.image._; org.dupontmanual.image.initialize()"""
+initialCommands in console := """import net.toddobryan.image._; net.toddobryan.image.initialize()"""
 
-cleanupCommands in console := """org.dupontmanual.image.cleanUp()"""
+cleanupCommands in console := """net.toddobryan.image.cleanUp()"""
 
 libraryDependencies ++= Seq(
-  "org.scalafx" %% "scalafx" % "1.0.0-R8",
-  "org.scalatest" %% "scalatest" % "2.1.2",
-  "org.jdom" % "jdom2" % "2.0.5",
-  "commons-codec" % "commons-codec" % "1.9",
-  "com.novocode" % "junit-interface" % "0.11-RC1"
+  "org.scalafx" %% "scalafx" % "8.0.60-R9",
+  "org.scalatest" %% "scalatest" % "2.2.5",
+  "org.jdom" % "jdom2" % "2.0.6",
+  "commons-codec" % "commons-codec" % "1.10",
+  "com.novocode" % "junit-interface" % "0.11"
 )
 
 site.settings
@@ -39,7 +36,7 @@ site.includeScaladoc()
 
 ghpages.settings
 
-git.remoteRepo := "git@github.com:dupontmanual/dm-image.git"
+git.remoteRepo := "git@github.com:toddobryan/scala-image.git"
 
 publishMavenStyle := true
 
@@ -56,7 +53,7 @@ publishArtifact in Test := false
 credentials += Credentials(Path.userHome / ".ssh" / ".credentials")
 
 pomExtra := (
-  <url>http://dupontmanual.github.io/dm-image</url>
+  <url>http://toddobryan.github.io/scala-image</url>
   <licenses>
     <license>
       <name>Apache 2</name>
@@ -64,21 +61,7 @@ pomExtra := (
     </license>
   </licenses>
   <scm>
-    <url>git://github.com/dupontmanual/dm-image.git</url>
-    <connection>scm:git://github.com/dupontmanual/dm-image.git</connection>
+    <url>git://github.com/toddobryan/scala-image.git</url>
+    <connection>scm:git://github.com/toddobryan/scala-image.git</connection>
   </scm>
-  <developers>
-    <developer>
-      <name>Jim Miller</name>
-      <roles>
-        <role>Student, Class of 2014</role>
-      </roles>
-    </developer>
-    <developer>
-      <name>Todd O'Bryan</name>
-      <roles>
-        <role>Teacher</role>
-      </roles>
-    </developer>
-  </developers>
 )

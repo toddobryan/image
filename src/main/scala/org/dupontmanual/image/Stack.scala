@@ -43,7 +43,7 @@ import scalafx.concurrent.Task
       val backView = new Group(back.buildImage()) { transforms = List(backTransform) }
       val frontView = new Group(front.buildImage()) { transforms = List(frontTransform) }
       new Pane {
-        content = new Group(backView, frontView)
+        children = new Group(backView, frontView)
         prefWidth = newBounds.width
         prefHeight = newBounds.height
       }
